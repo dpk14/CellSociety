@@ -30,3 +30,40 @@ Completed by Michael Zhang, Jorge Radd, Daniel Kingsbury
 #### Player (abstract)
 - Can have different types of players who play differently
 - Abstract class so that other player subclasses could extend from it
+
+
+# Planning session Saturday Jan 26
+
+## Classes
+
+1) Simulation (abstract class)
+  - SpreadingFireSimulation subclass
+  - SegregationSimulation subclass
+  - WaTorSimulation subclass
+
+2) Cell (abstract class)
+  - Empty
+  - Burning
+  - Tree
+  - Agent
+  - Fish
+  - Shark
+
+## Class characteristics
+
+- Cell
+  - row index, column index
+  - number of steps
+  - static probability
+
+- Simulation
+  - swap two objects in the grid
+  - replace one object with another
+  - get neighbours
+  - dealing with movement (overridden)
+  -
+
+
+
+
+
