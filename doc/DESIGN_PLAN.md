@@ -19,6 +19,15 @@ own grid position to take the work away from the simulation.
 
 ## Design details
 
+The main class contains all code regarding scene setup, with event methods that take user inputs (like dials, etc) and convert them to constructor parameters for a new simulation. Contains a method that initializes the instance variable myGrid. Contains a step function, which will call a method in the simulation class that updates the Grid according to the rules of the simulation type, and returns the grid as myGrid. Lastly, has a method that iterates through myGrid and adds the new objects in the grid to the scene root.
+
+The simulation class is a superclass with a subclass for each simulation type. Has a main public method, accessed by the main class, with a grid parameter. This method iterates through the grid, asking for the cell type at each index, then performing necessary methods specific to the function of that cell.  Then this cell’s variables are updated and added to an ArrayList “changes.” Once one iteration has been made, a new grid is initialized and built from the changes ArrayList. This grid is returned, and the main class reads it and converts each cell object inside to an imageview with a position corresponding to a location on the grid, and adds this child to the root to be displayed. The simulation class contains all methods that will be used while iterating through the grid to handle cell interactions and additions on the grid.  
+
+There will be a Cell abstract super-class as well as several sub-classes (such as fire, tree, empty cells for Spreading Fire, an agent cell for Segregation, and fish and shark cells for Wa-Tor World) corresponding to the different simulations to be run. The Cell super-class may contain several instance variables (such as x and y coordinates within the grid) and methods that will be applicable to every cell type, but the sub-classes will likely need to have additional instance variables and several overridden methods specific to the simulations they are a part of. We also never have to worry about a method being called on a cell from a different sub-class because each simulation works with only cells specific to it.
+
+See the User Cases section below for more specific insight.
+
+
 #### Use cases
 1) Apply rules to middle cell
 - in `Simulation` class, generate a list of cells and their locations based on the grid
