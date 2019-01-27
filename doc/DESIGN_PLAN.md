@@ -46,3 +46,9 @@ own grid position to take the work away from the simulation.
 ## Design considerations
 
 ## Team responsibilities
+
+The `Simulation` class will take the most work, so we will each be responsible for some methods in the class. Daniel will take ownership of the class and make sure we are on the right track.
+
+Michael will deal with merge conflicts and the coordination between our code.
+
+Jorge and Michael take take ownership of the front-end.
