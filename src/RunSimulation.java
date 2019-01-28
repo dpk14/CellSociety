@@ -41,7 +41,9 @@ public class RunSimulation extends Application {
         return scene;
     }
 
-   private void step(double elapsedTime){}
+   private void step(double elapsedTime){
+
+   }
 
     public static void main(String[] args){
         launch(args);

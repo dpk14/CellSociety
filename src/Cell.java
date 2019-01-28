@@ -3,7 +3,7 @@ public class Cell {
     private int myColumn;
     // ImageView?
 
-    Cell(int row, int column){
+    public Cell(int row, int column){
         myRow = row;
         myColumn = column;
     }
