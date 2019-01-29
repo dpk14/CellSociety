@@ -3,16 +3,24 @@ package mainpackage;
 import java.util.List;
 
 public class SegregationSimulation extends Simulation {
-
     private double mySatisfactionThreshold; // between 0 & 1
     private double myRacePercentage; // between 0 & 1, percentage made up by first Agent
     private double myEmptyPercentage; // between 0 & 1
 
+    /**
+     *
+     * @param numRows - number of rows in desired grid
+     * @param numCols - number of columns in desired grid
+     * @param mySatisfactionThreshold - if ratio of a cell's neighbors is below this number, then it is "unsatisfied" and must move
+     * @param myRacePercentage - ratio of total AgentCells made up by first agent type
+     * @param myEmptyPercentage - ratio of total cells that should be empty
+     */
     public SegregationSimulation(int numRows, int numCols, double mySatisfactionThreshold, double myRacePercentage, double myEmptyPercentage){
         super(numRows,numCols);
         this.mySatisfactionThreshold = mySatisfactionThreshold;
         this.myRacePercentage = myRacePercentage;
         this.myEmptyPercentage = myEmptyPercentage;
+        setupSimulation();
     }
 
     @Override
@@ -20,7 +28,10 @@ public class SegregationSimulation extends Simulation {
         for(int i = 0; i < myGrid.length; i++){ // i = row number
             for(int j = 0; j < myGrid[0].length; j++){ // j = column number
                 Cell cell = myGrid[i][j];
-                List<Cell> neighbors = getNeighbors(cell);
+                if(calculatePercentage(getNeighbors(cell)) < mySatisfactionThreshold){
+                    // change cell's coordinates
+                }
+                myCellList.add(cell);
             }
         }
         return getNewGrid(this.myCellList);
@@ -53,5 +64,20 @@ public class SegregationSimulation extends Simulation {
 
     public void setupSimulation(){
     }
+
+    private double calculatePercentage(List<Cell> neighbors){
+        int sameType = 0;
+        int differentType = 0;
+        for(Cell cell : neighbors){
+            if(true/*cell type is same*/){                                                      // PLACEHOLDER BOOLEAN
+                sameType++;
+            }
+            else if(true/*cell type is not same & NOT EMPTY*/){                                 // PLACEHOLDER BOOLEAN
+                differentType++;
+            }
+        }
+        return (double) sameType/(sameType+differentType);
+    }
+
 
 }
