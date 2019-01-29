@@ -23,16 +23,16 @@ The main class contains all code regarding scene setup, with event methods that 
 
 The simulation class is a superclass with a subclass for each simulation type. Has a main public method, accessed by the main class, with a grid parameter. This method iterates through the grid, asking for the cell type at each index, then performing necessary methods specific to the function of that cell.  Then this cell’s variables are updated and added to an ArrayList “changes.” Once one iteration has been made, a new grid is initialized and built from the changes ArrayList. This grid is returned, and the main class reads it and converts each cell object inside to an imageview with a position corresponding to a location on the grid, and adds this child to the root to be displayed. The simulation class contains all methods that will be used while iterating through the grid to handle cell interactions and additions on the grid.  
 
-There will be a Cell abstract super-class as well as several sub-classes (such as fire, tree, empty cells for Spreading Fire, an agent cell for Segregation, and fish and shark cells for Wa-Tor World) corresponding to the different simulations to be run. The Cell super-class may contain several instance variables (such as x and y coordinates within the grid) and methods that will be applicable to every cell type, but the sub-classes will likely need to have additional instance variables and several overridden methods specific to the simulations they are a part of. We also never have to worry about a method being called on a cell from a different sub-class because each simulation works with only cells specific to it.
+There will be a mainpackage.Cell abstract super-class as well as several sub-classes (such as fire, tree, empty cells for Spreading Fire, an agent cell for Segregation, and fish and shark cells for Wa-Tor World) corresponding to the different simulations to be run. The mainpackage.Cell super-class may contain several instance variables (such as x and y coordinates within the grid) and methods that will be applicable to every cell type, but the sub-classes will likely need to have additional instance variables and several overridden methods specific to the simulations they are a part of. We also never have to worry about a method being called on a cell from a different sub-class because each simulation works with only cells specific to it.
 
 See the User Cases section below for more specific insight.
 
 
 #### Use cases
 1) Apply rules to middle cell
-- in `Simulation` class, generate a list of cells and their locations based on the grid
-- in `Simulation` class, find neighbours of the middle cell
-- in `Simulation` class and in the list of cells, call method that swaps current cell for a empty cell
+- in `mainpackage.Simulation` class, generate a list of cells and their locations based on the grid
+- in `mainpackage.Simulation` class, find neighbours of the middle cell
+- in `mainpackage.Simulation` class and in the list of cells, call method that swaps current cell for a empty cell
 - render the list of cells on the grid
 
 2) Apply rules to edge cell
@@ -40,13 +40,13 @@ See the User Cases section below for more specific insight.
 - bound-checks must be done
 
 3) Move to next generation
-- in `Simulation` class, iterate through the list of cells and render the grid based on these cells' locations
+- in `mainpackage.Simulation` class, iterate through the list of cells and render the grid based on these cells' locations
 - pass this grid to the main class
 - main class will render the visualization by adding to `root` node
 
 4) Set simulation parameter
 - user will change parameter in the UI
-- this will call an update method in the `Simulation` class that will update this parameter
+- this will call an update method in the `mainpackage.Simulation` class that will update this parameter
 
 5) Switch simulations
 - clear all cells in grid
@@ -65,7 +65,7 @@ While we now have a general idea of how classes should be divided, the question 
 
 ## Team responsibilities
 
-The `Simulation` class will take the most work, so we will each be responsible for some methods in the class. Daniel will take ownership of the class and make sure we are on the right track.
+The `mainpackage.Simulation` class will take the most work, so we will each be responsible for some methods in the class. Daniel will take ownership of the class and make sure we are on the right track.
 
 Michael will deal with merge conflicts and the coordination between our code.
 

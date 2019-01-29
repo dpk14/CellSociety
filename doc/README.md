@@ -36,12 +36,12 @@ Completed by Michael Zhang, Jorge Radd, Daniel Kingsbury
 
 ## Classes
 
-1) Simulation (abstract class)
+1) mainpackage.Simulation (abstract class)
   - SpreadingFireSimulation subclass
-  - SegregationSimulation subclass
+  - mainpackage.SegregationSimulation subclass
   - WaTorSimulation subclass
 
-2) Cell (abstract class)
+2) mainpackage.Cell (abstract class)
   - Empty
   - Burning
   - Tree
@@ -51,12 +51,12 @@ Completed by Michael Zhang, Jorge Radd, Daniel Kingsbury
 
 ## Class characteristics
 
-- Cell
+- mainpackage.Cell
   - row index, column index
   - number of steps
   - static probability
 
-- Simulation
+- mainpackage.Simulation
   - swap two objects in the grid
   - replace one object with another
   - get neighbours

@@ -1,3 +1,5 @@
+package mainpackage;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -27,7 +29,8 @@ public class RunSimulation extends Application {
         stage.setScene(myScene);
         stage.setTitle(TITLE);
         stage.show();
-// attach "game loop" to timeline to play it
+
+        // attach "game loop" to timeline to play it
         var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
         var animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
@@ -42,13 +45,13 @@ public class RunSimulation extends Application {
     }
 
    private void step(double elapsedTime){
-
+    //update grid
    }
 
     public static void main(String[] args){
         launch(args);
     }
 
-
+    //create an interface of key and mouse inputs, which toggles a call to mainpackage.Simulation.initializeGrid
 
 }

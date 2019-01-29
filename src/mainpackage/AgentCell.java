@@ -1,3 +1,5 @@
+package mainpackage;
+
 public class AgentCell extends Cell {
 
     public AgentCell(int row, int column){
