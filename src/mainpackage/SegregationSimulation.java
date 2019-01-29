@@ -1,11 +1,15 @@
 package mainpackage;
 
+import java.util.Collections;
 import java.util.List;
 
 public class SegregationSimulation extends Simulation {
     private double mySatisfactionThreshold; // between 0 & 1
     private double myRacePercentage; // between 0 & 1, percentage made up by first Agent
     private double myEmptyPercentage; // between 0 & 1
+
+    private List<Cell> myEmptyCells;
+    private List<Cell> cellsToMove;
 
     /**
      *
@@ -28,12 +32,26 @@ public class SegregationSimulation extends Simulation {
         for(int i = 0; i < myGrid.length; i++){ // i = row number
             for(int j = 0; j < myGrid[0].length; j++){ // j = column number
                 Cell cell = myGrid[i][j];
-                if(calculatePercentage(getNeighbors(cell)) < mySatisfactionThreshold){
-                    // change cell's coordinates
+                if(true/*an empty cell*/){                                                      // PLACEHOLDER BOOLEAN
+                    myEmptyCells.add(cell);
+                    continue;
                 }
-                myCellList.add(cell);
+                else if(calculatePercentage(getNeighbors(cell)) < mySatisfactionThreshold){
+                    cellsToMove.add(cell);
+                }
+                else{ // add satisfied cells to list already to be added first
+                    myCellList.add(cell);
+                }
             }
         }
+        Collections.shuffle(myEmptyCells); // randomize where unsatisfied agents will go
+        for(Cell cell : cellsToMove){ // ONE ASSUMPTION IS THAT # OF EMPTY CELLS > # OF UNSATISFIED CELLS
+            Cell empty = myEmptyCells.remove(0);
+            cell.swapPositions(empty);
+            myCellList.add(cell);
+            myCellList.add(empty);
+        }
+        myCellList.addAll(myEmptyCells);
         return getNewGrid(this.myCellList);
     }
 
