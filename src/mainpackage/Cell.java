@@ -10,7 +10,7 @@ public class Cell {
         myColumn = column;
     }
 
-//    public mainpackage.Cell swapPosition(mainpackage.Cell cell){
+//    public Cell swapPosition(Cell cell){
 //        int tempRow = cell.myRow;
 //        int tempCol = cell.myColumn;
 //        cell.myRow = this.myRow;
@@ -19,6 +19,15 @@ public class Cell {
 //        this.myColumn = tempCol;
 //        return cell;
 //    }
+
+    public void swapPosition(Cell cell){
+        int tempRow = cell.myRow;
+        int tempCol = cell.myColumn;
+        cell.myRow = this.myRow;
+        cell.myColumn = this.myColumn;
+        this.myRow = tempRow;
+        this.myColumn = tempCol;
+    }
 
 
     public int getRow(){
