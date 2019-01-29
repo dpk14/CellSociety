@@ -21,7 +21,7 @@ public class AgentCell extends Cell {
             if(cell instanceof AgentCell && this.getType() == ((AgentCell) cell).getType()){ // cell type is same
                 sameType++;
             }
-            else if(true/*cell type is not same & NOT EMPTY*/){                                 // PLACEHOLDER BOOLEAN
+            else if(cell instanceof AgentCell && this.getType() != ((AgentCell) cell).getType()){
                 differentType++;
             }
         }

@@ -48,7 +48,7 @@ public class SegregationSimulation extends Simulation {
         Collections.shuffle(myEmptyCells); // randomize where unsatisfied agents will go
         for(Cell cell : cellsToMove){ // ONE ASSUMPTION IS THAT # OF EMPTY CELLS > # OF UNSATISFIED CELLS
             Cell empty = myEmptyCells.remove(0);
-            cell.swapPosition(empty);
+            empty = cell.swapPosition(empty);
             myCellList.add(cell);
             myCellList.add(empty);
         }
@@ -81,6 +81,7 @@ public class SegregationSimulation extends Simulation {
         return neighbors;
     }
 
+    @Override
     public void setupSimulation(){
     }
 
