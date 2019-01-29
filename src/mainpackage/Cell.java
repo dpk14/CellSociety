@@ -1,5 +1,6 @@
 package mainpackage;
 
+
 public class Cell {
     private int myRow;
     private int myColumn;
@@ -28,6 +29,8 @@ public class Cell {
     public int getColumn(){
         return myColumn;
     }
+
+
 
 
 }

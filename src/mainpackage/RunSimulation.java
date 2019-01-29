@@ -43,10 +43,12 @@ public class RunSimulation extends Application {
         Scene scene = new Scene(root, width, height, background);
         return scene;
     }
+    private void step(double elapsedTime){
+        // update grid
+        // receive a Node from visualization class
 
-   private void step(double elapsedTime){
-    //update grid
-   }
+        Visualization newVisual = new Visualization(10,10,15,15,1);
+    }
 
     public static void main(String[] args){
         launch(args);
