@@ -32,11 +32,12 @@ public class SegregationSimulation extends Simulation {
         for(int i = 0; i < myGrid.length; i++){ // i = row number
             for(int j = 0; j < myGrid[0].length; j++){ // j = column number
                 Cell cell = myGrid[i][j];
-                if(true/*an empty cell*/){                                                      // PLACEHOLDER BOOLEAN
+                if(cell instanceof EmptyCell){ // if cell is EmptyCell
                     myEmptyCells.add(cell);
                     continue;
                 }
-                else if(calculatePercentage(getNeighbors(cell)) < mySatisfactionThreshold){
+                // ASSUMPTION: ONLY TYPES OF CELLS IN myCellList ARE AgentCell OR EmptyCell
+                else if(((AgentCell) cell).calculatePercentage(getNeighbors(cell)) < mySatisfactionThreshold){
                     cellsToMove.add(cell);
                 }
                 else{ // add satisfied cells to list already to be added first
@@ -47,7 +48,7 @@ public class SegregationSimulation extends Simulation {
         Collections.shuffle(myEmptyCells); // randomize where unsatisfied agents will go
         for(Cell cell : cellsToMove){ // ONE ASSUMPTION IS THAT # OF EMPTY CELLS > # OF UNSATISFIED CELLS
             Cell empty = myEmptyCells.remove(0);
-            cell.swapPositions(empty);
+            cell.swapPosition(empty);
             myCellList.add(cell);
             myCellList.add(empty);
         }
@@ -81,20 +82,6 @@ public class SegregationSimulation extends Simulation {
     }
 
     public void setupSimulation(){
-    }
-
-    private double calculatePercentage(List<Cell> neighbors){
-        int sameType = 0;
-        int differentType = 0;
-        for(Cell cell : neighbors){
-            if(true/*cell type is same*/){                                                      // PLACEHOLDER BOOLEAN
-                sameType++;
-            }
-            else if(true/*cell type is not same & NOT EMPTY*/){                                 // PLACEHOLDER BOOLEAN
-                differentType++;
-            }
-        }
-        return (double) sameType/(sameType+differentType);
     }
 
 
