@@ -76,8 +76,6 @@ public abstract class Simulation {
      * @return
      */
     public Cell[] swapTwoCells(Cell c1, Cell c2) {
-//        System.out.println("c1: " + c1.getRow() + "|" + c1.getColumn());
-//        System.out.println("c2: " + c2.getRow() + "|" + c2.getColumn());
         int tempRow = c1.getRow();
         int tempCol = c1.getColumn();
         c1.setMyRow(c2.getRow());
@@ -85,8 +83,6 @@ public abstract class Simulation {
         c2.setMyRow(tempRow);
         c2.setMyColumn(tempCol);
         Cell[] twoCells = {c1, c2};
-//        System.out.println("c1: " + c1.getRow() + "|" + c1.getColumn());
-//        System.out.println("c2: " + c2.getRow() + "|" + c2.getColumn());
         return twoCells;
     }
 

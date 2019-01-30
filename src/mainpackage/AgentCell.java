@@ -23,14 +23,9 @@ public class AgentCell extends Cell {
             } else if (cell instanceof AgentCell && !((AgentCell) cell).getType().equals(this.getType())) {
                 differentType++;
             }
-            // Michael commented this out
-//            if(cell instanceof AgentCell && this.getType() == ((AgentCell) cell).getType()){ // cell type is same
-//                sameType++;
-//            }
-//            else if(cell instanceof AgentCell && this.getType() != ((AgentCell) cell).getType()){
-//                differentType++;
-//            }
+
         }
+        System.out.print("| " + (double) sameType/(sameType+differentType));
         return (double) sameType/(sameType+differentType);
     }
 }

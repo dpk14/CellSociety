@@ -13,7 +13,7 @@ public class Cell {
 
 
     // Michael: I think we should delete this; i moved it to the simulation class
-//    public Cell swapPosition(Cell cell){
+//    public swapPosition(Cell cell){
 //        int tempRow = cell.myRow;
 //        int tempCol = cell.myColumn;
 //        cell.myRow = this.myRow;

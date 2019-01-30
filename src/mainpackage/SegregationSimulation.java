@@ -30,13 +30,15 @@ public class SegregationSimulation extends Simulation {
 
     @Override
     public Cell[][] updateGrid(){
+        myEmptyCells.clear();
+        cellsToMove.clear();
+        myCellList.clear();
         for(int i = 0; i < myGrid.length; i++){ // i = row number
             for(int j = 0; j < myGrid[0].length; j++){ // j = column number
                 Cell cell = myGrid[i][j];
                 if(cell instanceof EmptyCell){ // if cell is EmptyCell
                     myEmptyCells.add(cell);
                 }
-                // ASSUMPTION: ONLY TYPES OF CELLS IN myCellList ARE AgentCell OR EmptyCell
                 else if(cell instanceof AgentCell && ((AgentCell) cell).calculatePercentage(getNeighbors(cell)) < mySatisfactionThreshold){
                     cellsToMove.add(cell);
                 }
@@ -44,6 +46,7 @@ public class SegregationSimulation extends Simulation {
                     myCellList.add(cell);
                 }
             }
+            System.out.println();
         }
 
         Collections.shuffle(myEmptyCells); // randomize where unsatisfied agents will go
@@ -64,7 +67,8 @@ public class SegregationSimulation extends Simulation {
         }
         myCellList.addAll(myEmptyCells);
         myCellList.addAll(cellsToMove);
-        return getNewGrid(this.myCellList);
+        myGrid = getNewGrid(this.myCellList);
+        return myGrid;
     }
 
     @Override

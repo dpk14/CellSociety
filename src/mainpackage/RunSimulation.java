@@ -59,6 +59,7 @@ public class RunSimulation extends Application {
         SegregationSimulation s = new SegregationSimulation(10,10,0.5,0.5,0.1);
         s.setupSimulation();
         newVisual.getRootNode(s.getMyGrid());
+
         for (int i = 0; i < 5; i++) {
             newVisual.getRootNode(s.updateGrid());
         }
