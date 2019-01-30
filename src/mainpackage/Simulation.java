@@ -5,7 +5,7 @@ import java.util.List;
 
 public abstract class Simulation {
     protected Cell[][] myGrid;
-    protected List<Cell> myCellList;
+    protected List<Cell> myCellList = new ArrayList<Cell>();
 
     public Simulation(int numRows, int numCols){
         myGrid = new Cell[numRows][numCols];
@@ -27,7 +27,7 @@ public abstract class Simulation {
     protected Cell[][] getNewGrid(List<Cell> list){
         Cell[][] newGrid = new Cell[myGrid.length][myGrid[0].length];
         for(Cell cell : list){
-            newGrid[cell.getRow()][ cell.getRow()] = cell;
+            newGrid[cell.getRow()][cell.getColumn()] = cell;
         }
         return newGrid;
     }
@@ -57,6 +57,37 @@ public abstract class Simulation {
             neighbors.add(myGrid[row][column+1]);
         }
         return neighbors;
+    }
+
+    /**
+     * Michael made this for debugging purposes.
+     * Returns grid at start of initialization just so I can check we have the right grid to begin with
+     * @return
+     */
+    public Cell[][] getMyGrid() {
+        return myGrid;
+    }
+
+
+    /**
+     * Michael: this works & I think having it here is cleaner than having it in Cell.java
+     * @param c1
+     * @param c2
+     * @return
+     */
+    public Cell[] swapTwoCells(Cell c1, Cell c2) {
+//        System.out.println("c1: " + c1.getRow() + "|" + c1.getColumn());
+//        System.out.println("c2: " + c2.getRow() + "|" + c2.getColumn());
+        int tempRow = c1.getRow();
+        int tempCol = c1.getColumn();
+        c1.setMyRow(c2.getRow());
+        c1.setMyColumn(c2.getColumn());
+        c2.setMyRow(tempRow);
+        c2.setMyColumn(tempCol);
+        Cell[] twoCells = {c1, c2};
+//        System.out.println("c1: " + c1.getRow() + "|" + c1.getColumn());
+//        System.out.println("c2: " + c2.getRow() + "|" + c2.getColumn());
+        return twoCells;
     }
 
 //    private removeCell(cell toberemoved){

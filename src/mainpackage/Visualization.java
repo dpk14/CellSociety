@@ -22,9 +22,23 @@ public class Visualization {
         Group root = new Group();
         for (int i = 0; i < currentGrid.length; i++) {
             for (int j = 0; j < currentGrid[i].length; j++) {
-
+                Cell c = currentGrid[i][j];
+                if (c instanceof AgentCell && ((AgentCell) c).getType().equals("BLUE")) {
+                    System.out.print("1 ");
+                } else if (c instanceof AgentCell && ((AgentCell) c).getType().equals("RED")) {
+                    System.out.print("2 ");
+                } else if (c instanceof EmptyCell) {
+                    System.out.print("0 ");
+                } else if (c == null) {
+                    System.out.print("6 ");
+                }
+                else {
+                    System.out.print("9 ");
+                }
             }
+            System.out.println();
         }
+        System.out.println("=-=-=-=-=-=-=-=-=-=-=-=-=");
         return root;
     }
 

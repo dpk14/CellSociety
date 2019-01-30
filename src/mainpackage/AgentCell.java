@@ -18,12 +18,18 @@ public class AgentCell extends Cell {
         int sameType = 0;
         int differentType = 0;
         for(Cell cell : neighbors){
-            if(cell instanceof AgentCell && this.getType() == ((AgentCell) cell).getType()){ // cell type is same
+            if (cell instanceof AgentCell && ((AgentCell) cell).getType().equals(this.getType())) {
                 sameType++;
-            }
-            else if(cell instanceof AgentCell && this.getType() != ((AgentCell) cell).getType()){
+            } else if (cell instanceof AgentCell && !((AgentCell) cell).getType().equals(this.getType())) {
                 differentType++;
             }
+            // Michael commented this out
+//            if(cell instanceof AgentCell && this.getType() == ((AgentCell) cell).getType()){ // cell type is same
+//                sameType++;
+//            }
+//            else if(cell instanceof AgentCell && this.getType() != ((AgentCell) cell).getType()){
+//                differentType++;
+//            }
         }
         return (double) sameType/(sameType+differentType);
     }

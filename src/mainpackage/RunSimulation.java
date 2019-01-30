@@ -4,6 +4,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -46,12 +47,22 @@ public class RunSimulation extends Application {
     private void step(double elapsedTime){
         // update grid
         // receive a Node from visualization class
-
-        Visualization newVisual = new Visualization(10,10,15,15,1);
+        //Node n = newVisual.getRootNode()
     }
 
     public static void main(String[] args){
-        launch(args);
+        //launch(args);
+
+
+        // For debugging purposes, just use a for loop for now
+        Visualization newVisual = new Visualization(10,10,15,15,1);
+        SegregationSimulation s = new SegregationSimulation(10,10,0.5,0.5,0.1);
+        s.setupSimulation();
+        newVisual.getRootNode(s.getMyGrid());
+        for (int i = 0; i < 5; i++) {
+            newVisual.getRootNode(s.updateGrid());
+        }
+
     }
 
     //create an interface of key and mouse inputs, which toggles a call to mainpackage.Simulation.initializeGrid
