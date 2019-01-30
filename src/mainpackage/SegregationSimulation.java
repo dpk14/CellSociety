@@ -8,7 +8,7 @@ public class SegregationSimulation extends Simulation {
     private double mySatisfactionThreshold; // between 0 & 1
     private double myRacePercentage; // between 0 & 1, percentage made up by first Agent
     private double myEmptyPercentage; // between 0 & 1
-// EDITED BY JORGE
+// comment by jorge
     private List<Cell> myEmptyCells = new ArrayList<Cell>();
     private List<Cell> cellsToMove = new ArrayList<Cell>();;
 
