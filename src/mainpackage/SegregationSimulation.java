@@ -3,12 +3,12 @@ package mainpackage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+// comment by michael
 public class SegregationSimulation extends Simulation {
     private double mySatisfactionThreshold; // between 0 & 1
     private double myRacePercentage; // between 0 & 1, percentage made up by first Agent
     private double myEmptyPercentage; // between 0 & 1
-
+// comment by jorge
     private List<Cell> myEmptyCells = new ArrayList<Cell>();
     private List<Cell> cellsToMove = new ArrayList<Cell>();;
 
