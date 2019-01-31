@@ -7,6 +7,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -15,6 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -35,9 +37,16 @@ public class RunSimulation extends Application {
     private Visualization newVisual;
 
 
+    // UI components
     private Button myResetButton;
     private Button myStartButton;
     private Button myStopButton;
+    private Button myNextIterationButton;
+    private Button myLoadFileButton;
+    private Slider slider1;
+    private Slider slider2;
+    private Slider slider3;
+    private FileChooser fileChooser;
 
 
 
@@ -49,6 +58,11 @@ public class RunSimulation extends Application {
         stage.setScene(myScene);
         stage.setTitle(TITLE);
         stage.show();
+
+//        fileChooser = new FileChooser();
+//        fileChooser.setTitle("Open Resource File");
+//        fileChooser.showOpenDialog(stage);
+
 
         // attach "game loop" to timeline to play it
         var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
@@ -62,7 +76,38 @@ public class RunSimulation extends Application {
         root = new Group();
         Scene scene = new Scene(root, width, height, background);
 
-        // add other components (i.e. not grid)
+        // add other components (i.e. not grid) MICHAEL: I WILL MOVE THIS TO VISUALIZATION I THINK
+
+        slider1 = new Slider(0,1,1);
+        slider1.setLayoutX(30);
+        slider1.setLayoutY(550);
+        slider1.setDisable(true);
+        root_other.getChildren().add(slider1);
+
+        slider2 = new Slider(0,1,1);
+        slider2.setLayoutX(30);
+        slider2.setLayoutY(580);
+        slider2.setDisable(true);
+        root_other.getChildren().add(slider2);
+
+        slider3 = new Slider(0,1,1);
+        slider3.setLayoutX(30);
+        slider3.setLayoutY(610);
+        slider3.setDisable(true);
+        root_other.getChildren().add(slider3);
+
+        myLoadFileButton = new Button("Load simulation (.xml)");
+        myLoadFileButton.setLayoutX(50);
+        myLoadFileButton.setLayoutY(510);
+        myLoadFileButton.setDisable(true);
+        root_other.getChildren().add(myLoadFileButton);
+
+        myNextIterationButton = new Button(">");
+        myNextIterationButton.setLayoutX(400);
+        myNextIterationButton.setLayoutY(510);
+        myNextIterationButton.setDisable(true);
+        root_other.getChildren().add(myNextIterationButton);
+
         myResetButton = new Button("Reset");
         myResetButton.setLayoutX(450);
         myResetButton.setLayoutY(580);
