@@ -75,7 +75,8 @@ public abstract class Simulation {
      * @param c2
      * @return
      */
-    public Cell[] swapTwoCells(Cell c1, Cell c2) {
+    /*
+    public void swapTwoCells(Cell c1, Cell c2) {
         int tempRow = c1.getRow();
         int tempCol = c1.getColumn();
         c1.setMyRow(c2.getRow());
@@ -85,6 +86,7 @@ public abstract class Simulation {
         Cell[] twoCells = {c1, c2};
         return twoCells;
     }
+    */
 
 //    private removeCell(cell toberemoved){
 //    }
