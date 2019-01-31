@@ -9,8 +9,8 @@ and methods that update the grid in the simulation class.
 
 There is a general simulation superclass, with subclasses that extend these for specific cell interaction instructions.
 We also have a cell superclass with general methods handling location and relocation, with subclass extentions that contain
-methods specific to the simulation, which describe  
- 
+methods specific to the simulation, which contain variables and methods used to track the behavior and characteristics of 
+the same object as it is translated through the grid.
 
  
 * What parts within your area are you trying to make closed and what parts open to take advantage of this polymorphism you are creating?
@@ -19,6 +19,10 @@ The simulation class has two public methods accessible by the visualization, one
 private methods containing simulation-specific rules for cell relations, and the other which handles initializing the grid. 
 
 * What exceptions (error cases) might occur in your area and how will you handle them (or not, by throwing)?
+
+My section is extremely error prone, because it contains every instruction for how the simulation should actually change, and why. 
+I am handling them by having the front end create a temporary basic simulation interface that allows me to click through and follow 
+the changes of each cell on each frame.
 
 * Why do you think your design is good (also define what your measure of good is)?
 
@@ -38,9 +42,9 @@ simulation class regardless of the simulation type. The simulation calls differe
 cell in the simulation, but that is inevitable, as some variables necessary for the simulation 
 are tracked by specific cells. 
 
-How can you minimize these dependencies?
+* How can you minimize these dependencies?
 
-* I believe we have done our best already to minimize dependencies, and I think the dependencies existing are necessary.
+I believe we have done our best already to minimize dependencies, and I think the dependencies existing are necessary.
 
 
 Go over one pair of super/sub classes in detail to see if there is room for improvement 
