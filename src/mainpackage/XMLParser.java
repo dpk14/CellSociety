@@ -2,6 +2,7 @@ package mainpackage;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -41,8 +42,13 @@ public class XMLParser {
         for(int i = 0; i < rows; i++){
             Element row = (Element) grid.getElementsByTagName("row").item(i);
             for(int j = 0; j < columns; j++){
-                String cellType = grid.getElementsByTagName("column").item(j).getTextContent();
-                cells.add(new AgentCell(i, j, cellType));
+                String cellType = row.getElementsByTagName("Cell").item(j).getTextContent();
+                if(cellType.equals("EMPTY")){
+                    cells.add(new EmptyCell(i, j));
+                }
+                else {
+                    cells.add(new AgentCell(i, j, cellType));
+                }
             }
         }
         return cells;
