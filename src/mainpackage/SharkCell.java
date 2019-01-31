@@ -17,4 +17,14 @@ public class SharkCell extends Cell{
         if (myTracker==myMaxTrack) return true;
         return false;
     }
+
+    public void updateEnergy(){
+        this.myEnergy++;
+    }
+
+    public void decrementEnergy(){
+        this.myEnergy--;
+    }
+
+
 }
