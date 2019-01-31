@@ -40,6 +40,7 @@ public class RunSimulation extends Application {
     private Group root_other = new Group();
 
     private Visualization newVisual;
+    private Simulation currentSimulation;
 
 
     // UI components
@@ -80,7 +81,27 @@ public class RunSimulation extends Application {
     private Scene setupGame(int width, int height, Paint background){
         root = new Group();
         Scene scene = new Scene(root, width, height, background);
+        createUIComponents();
 
+        currentSimulation = new XMLParser("simType").getSimulation(new File(DATA_FILE));
+        System.out.println(((SegregationSimulation) currentSimulation).mySatisfactionThreshold);
+        // need to receive speed from xml
+
+        currentSimulation.setupSimulation();
+        Cell[][] initialGrid = currentSimulation.getMyGrid();
+
+        newVisual = new Visualization(initialGrid.length,initialGrid[0].length,1.0);
+        root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
+
+        root.getChildren().add(root_other);
+        root.getChildren().add(root_grid);
+
+
+        scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
+        return scene;
+    }
+
+    private void createUIComponents() {
         // add other components (i.e. not grid) MICHAEL: I WILL MOVE THIS TO VISUALIZATION I THINK
 
         slider1 = new Slider(0,1,1);
@@ -130,22 +151,8 @@ public class RunSimulation extends Application {
         myStopButton.setLayoutY(640);
         myStopButton.setDisable(true);
         root_other.getChildren().add(myStopButton);
-
-        Simulation segregation = new XMLParser("simType").getSimulation(new File(DATA_FILE));
-        System.out.println(((SegregationSimulation) segregation).mySatisfactionThreshold);
-        newVisual = new Visualization(10,10,1);
-        Cell[][] initialGrid = newVisual.getInitialGrid("SEGREGATION");
-        Node currentIterationView = newVisual.getRootNode(initialGrid);
-
-        root_grid.getChildren().add(currentIterationView);
-
-        root.getChildren().add(root_other);
-        root.getChildren().add(root_grid);
-
-
-        scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
-        return scene;
     }
+
     private void step(double elapsedTime){
         // update grid
         // receive a Node from visualization class
@@ -156,7 +163,7 @@ public class RunSimulation extends Application {
     private void handleKeyInput (KeyCode code) {
         if (code == KeyCode.RIGHT) {
             root_grid.getChildren().clear();
-            Node n = newVisual.getRootNode(newVisual.getCurrentSimType().updateGrid());
+            Node n = newVisual.getRootNode(currentSimulation.updateGrid());
             root_grid.getChildren().add(n);
         }
     }
