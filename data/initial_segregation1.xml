@@ -1,8 +1,7 @@
 <data simType = "SegregationSimulation">
-  <title>initial segregation 1</title>
-  <author>group14</author>
-
   <settings>
+    <title>initial segregation 1</title>
+    <author>group14</author>
     <rows>12</rows>
     <columns>12</columns>
     <speed>1.0</speed>

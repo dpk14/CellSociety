@@ -7,9 +7,9 @@ import java.util.List;
 public class SegregationSimulation extends Simulation {
     public static final String DATA_TYPE = "SegregationSimulation";
     public static final List<String> DATA_FIELDS = List.of(
-            "title", "author", "rows", "widths", "height", "satisfaction");
+            "title", "author", "rows", "columns", "speed", "satisfaction");
 
-    private double mySatisfactionThreshold; // between 0 & 1
+    public double mySatisfactionThreshold; // between 0 & 1
     private double myRacePercentage; // between 0 & 1, percentage made up by first Agent
     private double myEmptyPercentage; // between 0 & 1
 // comment by jorge
@@ -36,8 +36,8 @@ public class SegregationSimulation extends Simulation {
      * Constructor needed to initialize from XML
      */
     public SegregationSimulation(List<String> dataValues, List<String> cells){ // pass in list of strings representing rows, columns, sat threshold
-        super(Integer.parseInt(dataValues.get(0)), Integer.parseInt(dataValues.get(1)));
-        this.mySatisfactionThreshold = Double.parseDouble(dataValues.get(2));
+        super(Integer.parseInt(dataValues.get(2)), Integer.parseInt(dataValues.get(3)));
+        this.mySatisfactionThreshold = Double.parseDouble(dataValues.get(5));
     }
 
     @Override
@@ -58,7 +58,7 @@ public class SegregationSimulation extends Simulation {
                     myCellList.add(cell);
                 }
             }
-            System.out.println();
+            //System.out.println();
         }
         Collections.shuffle(myEmptyCells); // randomize where unsatisfied agents will go
         for(Cell c : cellsToMove){

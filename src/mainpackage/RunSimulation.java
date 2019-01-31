@@ -20,7 +20,12 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.File;
+
 public class RunSimulation extends Application {
+    public static final String DATA_FILE = "data/initial_segregation1.xml";
+
+
     public static final String TITLE = "";
     public static final int SIZE = 600;
     public static final int FRAMES_PER_SECOND = 60;
@@ -126,9 +131,8 @@ public class RunSimulation extends Application {
         myStopButton.setDisable(true);
         root_other.getChildren().add(myStopButton);
 
-
-
-
+        Simulation segregation = new XMLParser("simType").getSimulation(new File(DATA_FILE));
+        System.out.println(((SegregationSimulation) segregation).mySatisfactionThreshold);
         newVisual = new Visualization(10,10,1);
         Cell[][] initialGrid = newVisual.getInitialGrid("SEGREGATION");
         Node currentIterationView = newVisual.getRootNode(initialGrid);
