@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -18,6 +19,9 @@ public class RunSimulation extends Application {
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     public static final Paint BACKGROUND = Color.AZURE;
+
+
+
 
     private Scene myScene;
     private Group root;
@@ -42,27 +46,36 @@ public class RunSimulation extends Application {
     private Scene setupGame(int width, int height, Paint background){
         root = new Group();
         Scene scene = new Scene(root, width, height, background);
+
+        Visualization newVisual = new Visualization(10,10,30,30,1);
+        Cell[][] initialGrid = newVisual.getInitialGrid("SEGREGATION");
+        Node currentIterationView = newVisual.getRootNode(initialGrid);
+        root.getChildren().add(currentIterationView);
         return scene;
     }
     private void step(double elapsedTime){
         // update grid
         // receive a Node from visualization class
+
+
+
+
+
+
         //Node n = newVisual.getRootNode()
     }
 
     public static void main(String[] args){
-        //launch(args);
+        launch(args);
 
 
         // For debugging purposes, just use a for loop for now
-        Visualization newVisual = new Visualization(10,10,15,15,1);
-        SegregationSimulation s = new SegregationSimulation(10,10,0.5,0.5,0.1);
-        s.setupSimulation();
-        newVisual.getRootNode(s.getMyGrid());
 
-        for (int i = 0; i < 5; i++) {
-            newVisual.getRootNode(s.updateGrid());
-        }
+
+
+
+        //newVisual.getRootNode(s.updateGrid());
+
 
     }
 
