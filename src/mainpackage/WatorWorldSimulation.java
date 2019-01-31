@@ -4,17 +4,31 @@ import java.util.*;
 
 public class WatorWorldSimulation extends Simulation{
     int myStartEnergy;
+    int myEnergyGain;
     int mySharkReprodMax;
     int myFishReprodMax;
-    int myEnergyGain;
+
+    public static final String DATA_TYPE = "WatorWorldSimulation";
+    public static final List<String> DATA_FIELDS = List.of(
+            "title", "author", "rows", "columns", "speed", "satisfaction", "start energy",
+            "shark reproduction max", "fish reproduction max", "energy gain");
 
     public WatorWorldSimulation(int numRows, int numCols, int startEnergy, int energyGain, int sharkReproductionMax, int fishReproductionMax){
         super(numRows,numCols);
-        mySharkReprodMax=sharkReproductionMax;
-        myFishReprodMax=fishReproductionMax;
         myStartEnergy=startEnergy;
         myEnergyGain=energyGain;
+        mySharkReprodMax=sharkReproductionMax;
+        myFishReprodMax=fishReproductionMax;
         setupSimulation();
+    }
+
+    public WatorWorldSimulation(List<String> dataValues, List<Cell> cells){
+        super(Integer.parseInt(dataValues.get(2)), Integer.parseInt(dataValues.get(3)));
+        myStartEnergy=Integer.parseInt(dataValues.get(4));
+        myEnergyGain=Integer.parseInt(dataValues.get(5));
+        mySharkReprodMax=Integer.parseInt(dataValues.get(6));
+        myFishReprodMax=Integer.parseInt(dataValues.get(7));
+        myGrid = getNewGrid(cells);
     }
 
     @Override
@@ -123,5 +137,15 @@ public class WatorWorldSimulation extends Simulation{
             neighbors.add(myGrid[row][Math.abs(column-myGrid.length-1)]);;
         }
         return neighbors;
+    }
+
+    @Override
+    public List<String> getDataFields(){
+        return DATA_FIELDS;
+    }
+
+    @Override
+    public String getDataType(){
+        return DATA_TYPE;
     }
 }

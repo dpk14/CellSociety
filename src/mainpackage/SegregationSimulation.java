@@ -118,4 +118,14 @@ public class SegregationSimulation extends Simulation {
             }
         }
     }
+
+    @Override
+    public List<String> getDataFields(){
+        return DATA_FIELDS;
+    }
+
+    @Override
+    public String getDataType(){
+        return DATA_TYPE;
+    }
 }

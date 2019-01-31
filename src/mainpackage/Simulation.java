@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Simulation {
+    //https://stackoverflow.com/questions/46820750/java-how-to-choose-what-subclass-to-construct
     protected Cell[][] myGrid;
     protected List<Cell> myCellList = new ArrayList<Cell>();
+
+    public abstract List<String> getDataFields();
+    public abstract String getDataType();
 
     public Simulation(int numRows, int numCols){
         myGrid = new Cell[numRows][numCols];
@@ -67,27 +71,4 @@ public abstract class Simulation {
     public Cell[][] getMyGrid() {
         return myGrid;
     }
-
-
-    /**
-     * Michael: this works & I think having it here is cleaner than having it in Cell.java
-     * @param c1
-     * @param c2
-     * @return
-     */
-    /*
-    public void swapTwoCells(Cell c1, Cell c2) {
-        int tempRow = c1.getRow();
-        int tempCol = c1.getColumn();
-        c1.setMyRow(c2.getRow());
-        c1.setMyColumn(c2.getColumn());
-        c2.setMyRow(tempRow);
-        c2.setMyColumn(tempCol);
-        Cell[] twoCells = {c1, c2};
-        return twoCells;
-    }
-    */
-
-//    private removeCell(cell toberemoved){
-//    }
 }

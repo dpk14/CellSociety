@@ -16,6 +16,34 @@ public class XMLParser {
     public static final String ERROR_MESSAGE = "XML file does not represent %s";
     private final String TYPE_ATTRIBUTE;
     private final DocumentBuilder DOCUMENT_BUILDER;
+    public enum SimulationType{
+        //        GAMEOFLIFE{
+//            public Simulation create(List<String> dataValues, List<Cell> cells){
+//                return new GameOfLifeSimulation(dataValues, cells);
+//            }
+//        },
+//        SPREADINGFIRE{
+//            public Simulation create(List<String> dataValues, List<Cell> cells){
+//                return new SpreadingFireSimulation(dataValues, cells);
+//            }
+//        },
+//        PERCOLATION{
+//            public Simulation create(List<String> dataValues, List<Cell> cells){
+//                return new PercolationSimulation(dataValues, cells);
+//            }
+//        },
+//        WATORWORLD{
+//            public Simulation create(String name){
+//                return new WatorWorldSimulation(dataValues, cells);
+//            }
+//        },
+        SEGREGATION{
+            public Simulation create(List<String> dataValues, List<Cell> cells){
+                return new SegregationSimulation(dataValues, cells);
+            }
+        };
+        abstract Simulation create(List<String> dataValues, List<Cell> cells);
+    }
 
     /**
      * Create a parser for XML files of given type.
@@ -27,14 +55,14 @@ public class XMLParser {
 
     public Simulation getSimulation(File dataFile){
         Element root = getRootElement(dataFile);
-        if (! isValidFile(root, SegregationSimulation.DATA_TYPE)) {
-            throw new XMLException(ERROR_MESSAGE, SegregationSimulation.DATA_TYPE);
-        }
+//        if (! isValidFile(root, simulation.getDataType())) {
+//            throw new XMLException(ERROR_MESSAGE, simulation.getDataType());
+//        }
         Element settings = (Element) root.getElementsByTagName("settings").item(0);
         ArrayList <String> dataValues = getDataValues(settings, SegregationSimulation.DATA_FIELDS);
         Element grid = (Element) root.getElementsByTagName("grid").item(0);
         List<Cell> cells = getCells(grid, Integer.parseInt(dataValues.get(2)), Integer.parseInt(dataValues.get(3))); //
-        return new SegregationSimulation(dataValues, cells);
+        return selectSimType(root.getAttribute(TYPE_ATTRIBUTE), dataValues, cells);
     }
 
     private ArrayList<Cell> getCells(Element grid, int rows, int columns){
@@ -106,4 +134,8 @@ public class XMLParser {
         }
     }
 
+    private Simulation selectSimType(String simType, List<String> dataValues, List<Cell> cells){
+
+        return SimulationType.SEGREGATION.create(dataValues, cells);
+    }
 }
