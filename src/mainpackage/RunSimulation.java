@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -25,6 +26,9 @@ public class RunSimulation extends Application {
 
     private Scene myScene;
     private Group root;
+
+    private Visualization newVisual;
+
 
     @Override
     public void start(Stage stage){
@@ -47,22 +51,29 @@ public class RunSimulation extends Application {
         root = new Group();
         Scene scene = new Scene(root, width, height, background);
 
-        Visualization newVisual = new Visualization(10,10,30,30,1);
+        newVisual = new Visualization(10,10,30,30,1);
         Cell[][] initialGrid = newVisual.getInitialGrid("SEGREGATION");
         Node currentIterationView = newVisual.getRootNode(initialGrid);
+
+
         root.getChildren().add(currentIterationView);
+
+        scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         return scene;
     }
     private void step(double elapsedTime){
         // update grid
         // receive a Node from visualization class
 
-
-
-
-
-
         //Node n = newVisual.getRootNode()
+    }
+
+    private void handleKeyInput (KeyCode code) {
+        if (code == KeyCode.RIGHT) {
+            root.getChildren().clear();
+            Node n = newVisual.getRootNode(newVisual.getCurrentSimType().updateGrid());
+            root.getChildren().add(n);
+        }
     }
 
     public static void main(String[] args){
@@ -74,7 +85,7 @@ public class RunSimulation extends Application {
 
 
 
-        //newVisual.getRootNode(s.updateGrid());
+        //
 
 
     }

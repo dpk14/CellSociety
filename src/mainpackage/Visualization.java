@@ -13,6 +13,7 @@ public class Visualization {
     private double cellWidth = 15.0;
     private double cellHeight = 15.0;
     private double simSpeed = 1.0;
+    private Simulation currentSimType;
 
 
     public static final Paint COLOR_AGENT_RED = Color.RED;
@@ -26,6 +27,10 @@ public class Visualization {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
         this.simSpeed = simSpeed;
+    }
+
+    public Simulation getCurrentSimType() {
+        return currentSimType;
     }
 
     public Node getRootNode (Cell[][] currentGrid) {
@@ -75,9 +80,9 @@ public class Visualization {
     public Cell[][] getInitialGrid(String simulationType) {
         if (simulationType.equals("SEGREGATION")) { }
 
-        SegregationSimulation s = new SegregationSimulation(10,10,0.5,0.5,0.1);
-        s.setupSimulation();
-        return  s.getMyGrid();
+        currentSimType = new SegregationSimulation(10,10,0.5,0.5,0.1);
+        currentSimType.setupSimulation();
+        return  currentSimType.getMyGrid();
     }
 
 
