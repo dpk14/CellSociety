@@ -25,7 +25,7 @@ public class AgentCell extends Cell {
             }
 
         }
-        System.out.print("| " + (double) sameType/(sameType+differentType));
+        //System.out.print("| " + (double) sameType/(sameType+differentType));
         return (double) sameType/(sameType+differentType);
     }
 }

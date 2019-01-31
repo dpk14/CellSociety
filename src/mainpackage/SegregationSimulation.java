@@ -5,7 +5,11 @@ import java.util.Collections;
 import java.util.List;
 // EDITED BY JORGE
 public class SegregationSimulation extends Simulation {
-    private double mySatisfactionThreshold; // between 0 & 1
+    public static final String DATA_TYPE = "SegregationSimulation";
+    public static final List<String> DATA_FIELDS = List.of(
+            "title", "author", "rows", "columns", "speed", "satisfaction");
+
+    public double mySatisfactionThreshold; // between 0 & 1
     private double myRacePercentage; // between 0 & 1, percentage made up by first Agent
     private double myEmptyPercentage; // between 0 & 1
 // comment by jorge
@@ -28,6 +32,14 @@ public class SegregationSimulation extends Simulation {
         setupSimulation();
     }
 
+    /**
+     * Constructor needed to initialize from XML
+     */
+    public SegregationSimulation(List<String> dataValues, List<String> cells){ // pass in list of strings representing rows, columns, sat threshold
+        super(Integer.parseInt(dataValues.get(2)), Integer.parseInt(dataValues.get(3)));
+        this.mySatisfactionThreshold = Double.parseDouble(dataValues.get(5));
+    }
+
     @Override
     public Cell[][] updateGrid(){
         myEmptyCells.clear();
@@ -46,17 +58,14 @@ public class SegregationSimulation extends Simulation {
                     myCellList.add(cell);
                 }
             }
-            System.out.println();
+            //System.out.println();
         }
-
         Collections.shuffle(myEmptyCells); // randomize where unsatisfied agents will go
         for(Cell c : cellsToMove){
-
             // if there's no space for an empty cell to move, then we don't move it
             if (myEmptyCells.size() == 0) {
                 break;
             }
-
             Cell empty = myEmptyCells.get(0);
             myEmptyCells.remove(0);
 
@@ -110,6 +119,5 @@ public class SegregationSimulation extends Simulation {
             }
         }
     }
-
 
 }
