@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
+import javafx.stage.FileChooser;
 
 public class Visualization {
     public final double VISUALIZATION_HEIGHT = 500;
@@ -22,6 +23,9 @@ public class Visualization {
     public static final Paint COLOR_AGENT_BLUE = Color.BLUE;
     public static final Paint COLOR_EMPTY = Color.WHITESMOKE;
     public static final Paint COLOR_BLACK = Color.BLACK;
+    public static final Paint COLOR_SHARK = Color.GREY;
+    public static final Paint COLOR_FISH = Color.ORANGE;
+
 
     public Visualization(int numRows, int numCols, double simSpeed) {
         this.numRows = numRows;
@@ -54,7 +58,12 @@ public class Visualization {
                     addRectangleToRoot(root, currentX, currentY, COLOR_EMPTY);
 
                     //System.out.print("0 ");
-                } else if (c == null) {
+                } else if (c instanceof SharkCell) {
+                    addRectangleToRoot(root, currentX, currentY, COLOR_SHARK);
+                } else if (c instanceof FishCell) {
+                    addRectangleToRoot(root, currentX, currentY, COLOR_FISH);
+                }
+                else if (c == null) {
                     //System.out.print("6 ");
                 }
                 else {
