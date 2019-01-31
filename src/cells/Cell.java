@@ -1,4 +1,4 @@
-package mainpackage;
+package cells;
 
 
 public class Cell {

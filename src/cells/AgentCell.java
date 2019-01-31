@@ -1,13 +1,21 @@
-package mainpackage;
+package cells;
 
 import java.util.List;
 
 public class AgentCell extends Cell {
     private String myType;
+    public static final String DATA_TYPE = "AgentCell";
+    public static final List<String> DATA_FIELDS = List.of(
+            "row", "column", "cellType");
 
     public AgentCell(int row, int column, String myType){
         super(row, column);
         this.myType = myType;
+    }
+
+    public AgentCell(List<String> dataValues){
+        super(Integer.parseInt(dataValues.get(0)), Integer.parseInt(dataValues.get(1)));
+        this.myType = dataValues.get(3);
     }
 
     public String getType(){

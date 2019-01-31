@@ -1,9 +1,13 @@
-package mainpackage;
+package simulations;
+
+import cells.AgentCell;
+import cells.Cell;
+import cells.EmptyCell;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-// EDITED BY JORGE
+
 public class SegregationSimulation extends Simulation {
     public static final String DATA_TYPE = "SegregationSimulation";
     public static final List<String> DATA_FIELDS = List.of(
@@ -12,9 +16,9 @@ public class SegregationSimulation extends Simulation {
     public double mySatisfactionThreshold; // between 0 & 1
     private double myRacePercentage; // between 0 & 1, percentage made up by first Agent
     private double myEmptyPercentage; // between 0 & 1
-// comment by jorge
+
     private List<Cell> myEmptyCells = new ArrayList<Cell>();
-    private List<Cell> cellsToMove = new ArrayList<Cell>();;
+    private List<Cell> myCellsToMove = new ArrayList<Cell>();;
 
     /**
      *
@@ -35,48 +39,48 @@ public class SegregationSimulation extends Simulation {
     /**
      * Constructor needed to initialize from XML
      */
-    public SegregationSimulation(List<String> dataValues, List<String> cells){ // pass in list of strings representing rows, columns, sat threshold
+    public SegregationSimulation(List<String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
         super(Integer.parseInt(dataValues.get(2)), Integer.parseInt(dataValues.get(3)));
         this.mySatisfactionThreshold = Double.parseDouble(dataValues.get(5));
+        myGrid = getNewGrid(cells);
     }
 
     @Override
     public Cell[][] updateGrid(){
         myEmptyCells.clear();
-        cellsToMove.clear();
+        myCellsToMove.clear();
         myCellList.clear();
-        for(int i = 0; i < myGrid.length; i++){ // i = row number
-            for(int j = 0; j < myGrid[0].length; j++){ // j = column number
-                Cell cell = myGrid[i][j];
-                if(cell instanceof EmptyCell){ // if cell is EmptyCell
-                    myEmptyCells.add(cell);
-                }
-                else if(cell instanceof AgentCell && ((AgentCell) cell).calculatePercentage(getNeighbors(cell)) < mySatisfactionThreshold){
-                    cellsToMove.add(cell);
-                }
-                else{ // add satisfied cells to list already to be added first
-                    myCellList.add(cell);
-                }
-            }
-            //System.out.println();
-        }
+        checkAndSortCells(myGrid);
+        Collections.shuffle(myCellsToMove); // randomize order in which unsatisfied agents are moved
         Collections.shuffle(myEmptyCells); // randomize where unsatisfied agents will go
-        for(Cell c : cellsToMove){
-            // if there's no space for an empty cell to move, then we don't move it
-            if (myEmptyCells.size() == 0) {
-                break;
-            }
-            Cell empty = myEmptyCells.get(0);
-            myEmptyCells.remove(0);
-
+        for(Cell c : myCellsToMove){
+            if (myEmptyCells.size() == 0) { break;} // if no space for empty cell to move, then don't move it
+            Cell empty = myEmptyCells.remove(0);
             c.swapPosition(empty);
             myCellList.add(c);
             myCellList.add(empty);
         }
         myCellList.addAll(myEmptyCells);
-        myCellList.addAll(cellsToMove);
+        myCellList.addAll(myCellsToMove);
         myGrid = getNewGrid(this.myCellList);
         return myGrid;
+    }
+
+    private void checkAndSortCells(Cell[][] grid){
+        for(int i = 0; i < grid.length; i++){ // i = row number
+            for(int j = 0; j < grid[0].length; j++){ // j = column number
+                Cell cell = grid[i][j];
+                if(cell instanceof EmptyCell){ // if cell is EmptyCell
+                    myEmptyCells.add(cell);
+                }
+                else if(cell instanceof AgentCell && ((AgentCell) cell).calculatePercentage(getNeighbors(cell)) < mySatisfactionThreshold){
+                    myCellsToMove.add(cell);
+                }
+                else{ // add satisfied cells to list already to be added first
+                    myCellList.add(cell);
+                }
+            }
+        }
     }
 
     @Override
@@ -115,9 +119,17 @@ public class SegregationSimulation extends Simulation {
                 } else {
                     myGrid[i][j] = new AgentCell(i,j,"RED");
                 }
-
             }
         }
     }
 
+    @Override
+    public List<String> getDataFields(){
+        return DATA_FIELDS;
+    }
+
+    @Override
+    public String getDataType(){
+        return DATA_TYPE;
+    }
 }

@@ -1,5 +1,6 @@
 package mainpackage;
 
+import cells.Cell;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -9,16 +10,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import simulations.Simulation;
 
 import java.io.File;
 
@@ -87,20 +84,19 @@ public class RunSimulation extends Application {
         /** This code below words for segregation.
          * Commented out to test Wator
          * **/
-//        currentSimulation = new XMLParser("simType").getSimulation(new File(DATA_FILE));
-//        System.out.println(((SegregationSimulation) currentSimulation).mySatisfactionThreshold);
-//
-//        currentSimulation.setupSimulation();
-//        Cell[][] initialGrid = currentSimulation.getMyGrid();
-//
-//        newVisual = new Visualization(initialGrid.length,initialGrid[0].length,1.0);
-//        root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
+        currentSimulation = new XMLParser("simType").getSimulation(new File(DATA_FILE));
 
-
-        currentSimulation = new WatorWorldSimulation(10,10,7,2,5,5);
+        //currentSimulation.setupSimulation();
         Cell[][] initialGrid = currentSimulation.getMyGrid();
-        newVisual = new Visualization(initialGrid.length, initialGrid[0].length, 1.0);
+
+        newVisual = new Visualization(initialGrid.length,initialGrid[0].length,1.0);
         root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
+
+
+//        currentSimulation = new WatorWorldSimulation(10,10,7,2,5,5);
+//        Cell[][] initialGrid = currentSimulation.getMyGrid();
+//        newVisual = new Visualization(initialGrid.length, initialGrid[0].length, 1.0);
+//        root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
 
         root.getChildren().add(root_other);
         root.getChildren().add(root_grid);

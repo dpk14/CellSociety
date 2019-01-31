@@ -1,12 +1,14 @@
 package mainpackage;
 
+import cells.*;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
-import javafx.stage.FileChooser;
+import simulations.SegregationSimulation;
+import simulations.Simulation;
 
 public class Visualization {
     public final double VISUALIZATION_HEIGHT = 500;

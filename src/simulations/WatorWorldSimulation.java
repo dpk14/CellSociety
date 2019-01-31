@@ -1,20 +1,39 @@
-package mainpackage;
+package simulations;
+
+import cells.Cell;
+import cells.EmptyCell;
+import cells.FishCell;
+import cells.SharkCell;
 
 import java.util.*;
 
-public class WatorWorldSimulation extends Simulation{
-    int myStartEnergy;
-    int mySharkReprodMax;
-    int myFishReprodMax;
-    int myEnergyGain;
+public class WatorWorldSimulation extends Simulation {
+    private int myStartEnergy;
+    private int myEnergyGain;
+    private int mySharkReprodMax;
+    private int myFishReprodMax;
+
+    public static final String DATA_TYPE = "WatorWorldSimulation";
+    public static final List<String> DATA_FIELDS = List.of(
+            "title", "author", "rows", "columns", "speed", "satisfaction", "start energy",
+            "shark reproduction max", "fish reproduction max", "energy gain");
 
     public WatorWorldSimulation(int numRows, int numCols, int startEnergy, int energyGain, int sharkReproductionMax, int fishReproductionMax){
         super(numRows,numCols);
-        mySharkReprodMax=sharkReproductionMax;
-        myFishReprodMax=fishReproductionMax;
         myStartEnergy=startEnergy;
         myEnergyGain=energyGain;
+        mySharkReprodMax=sharkReproductionMax;
+        myFishReprodMax=fishReproductionMax;
         setupSimulation();
+    }
+
+    public WatorWorldSimulation(List<String> dataValues, List<Cell> cells){
+        super(Integer.parseInt(dataValues.get(2)), Integer.parseInt(dataValues.get(3)));
+        myStartEnergy=Integer.parseInt(dataValues.get(4));
+        myEnergyGain=Integer.parseInt(dataValues.get(5));
+        mySharkReprodMax=Integer.parseInt(dataValues.get(6));
+        myFishReprodMax=Integer.parseInt(dataValues.get(7));
+        myGrid = getNewGrid(cells);
     }
 
     @Override
@@ -36,7 +55,7 @@ public class WatorWorldSimulation extends Simulation{
                     cell.swapPosition(otherCell);
                     myCellList.add(cell);
                     if (((FishCell) cell).canReproduce() && cell!=otherCell) {
-                        ((FishCell) cell).myTracker=0;
+                        ((FishCell) cell).setMyTracker(0);
                         myCellList.add(new FishCell(i, j, myFishReprodMax));
                     }
                     else myCellList.add(otherCell);
@@ -52,7 +71,7 @@ public class WatorWorldSimulation extends Simulation{
                     else otherCell=move(emptyNeighbors, cell);
                     cell.swapPosition(otherCell);
                     if (((SharkCell) cell).canReproduce() && cell!=otherCell) {
-                        ((SharkCell) cell).myTracker=0;
+                        ((SharkCell) cell).setMyTracker(0);
                         if (otherCell instanceof FishCell) ((SharkCell) cell).updateEnergy();
                         myCellList.add(new SharkCell(i, j, mySharkReprodMax, myStartEnergy, myEnergyGain));
                     }
@@ -63,7 +82,7 @@ public class WatorWorldSimulation extends Simulation{
                     else myCellList.add(otherCell);
 
                     ((SharkCell) cell).decrementEnergy();
-                    if(((SharkCell) cell).myEnergy==0) myCellList.add(new EmptyCell(cell.getRow(), cell.getColumn()));
+                    if(((SharkCell) cell).getMyEnergy()==0) myCellList.add(new EmptyCell(cell.getRow(), cell.getColumn()));
                     else myCellList.add(cell);
                     emptyNeighbors.clear();
                     fishNeighbors.clear();
@@ -123,5 +142,15 @@ public class WatorWorldSimulation extends Simulation{
             neighbors.add(myGrid[row][Math.abs(column-myGrid.length-1)]);;
         }
         return neighbors;
+    }
+
+    @Override
+    public List<String> getDataFields(){
+        return DATA_FIELDS;
+    }
+
+    @Override
+    public String getDataType(){
+        return DATA_TYPE;
     }
 }

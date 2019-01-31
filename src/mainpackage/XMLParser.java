@@ -1,7 +1,8 @@
 package mainpackage;
 
+import cells.*;
+import simulations.*;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -15,6 +16,34 @@ public class XMLParser {
     public static final String ERROR_MESSAGE = "XML file does not represent %s";
     private final String TYPE_ATTRIBUTE;
     private final DocumentBuilder DOCUMENT_BUILDER;
+    public enum SimulationType{
+        GAMEOFLIFE{
+            public Simulation create(List<String> dataValues, List<Cell> cells){
+                return new GameOfLifeSimulation(dataValues, cells);
+            }
+        },
+        SPREADINGFIRE{
+            public Simulation create(List<String> dataValues, List<Cell> cells){
+                return new SpreadingFireSimulation(dataValues, cells);
+            }
+        },
+        PERCOLATION{
+            public Simulation create(List<String> dataValues, List<Cell> cells){
+                return new PercolationSimulation(dataValues, cells);
+            }
+        },
+        WATORWORLD{
+            public Simulation create(List<String> dataValues, List<Cell> cells){
+                return new WatorWorldSimulation(dataValues, cells);
+            }
+        },
+        SEGREGATION{
+            public Simulation create(List<String> dataValues, List<Cell> cells){
+                return new SegregationSimulation(dataValues, cells);
+            }
+        };
+        abstract Simulation create(List<String> dataValues, List<Cell> cells);
+    }
 
     /**
      * Create a parser for XML files of given type.
@@ -26,16 +55,36 @@ public class XMLParser {
 
     public Simulation getSimulation(File dataFile){
         Element root = getRootElement(dataFile);
-        if (! isValidFile(root, SegregationSimulation.DATA_TYPE)) {
-            throw new XMLException(ERROR_MESSAGE, SegregationSimulation.DATA_TYPE);
-        }
-        List<String> dataValues = new ArrayList<>();
         Element settings = (Element) root.getElementsByTagName("settings").item(0);
-        for(String field : SegregationSimulation.DATA_FIELDS){
+        ArrayList <String> dataValues = getDataValues(settings, SegregationSimulation.DATA_FIELDS);
+        Element grid = (Element) root.getElementsByTagName("grid").item(0);
+        List<Cell> cells = getCells(grid, Integer.parseInt(dataValues.get(2)), Integer.parseInt(dataValues.get(3))); //
+        return selectSimType(root.getAttribute(TYPE_ATTRIBUTE), dataValues, cells);
+    }
+
+    private ArrayList<Cell> getCells(Element grid, int rows, int columns){
+        ArrayList<Cell> cells = new ArrayList<>();
+        for(int i = 0; i < rows; i++){
+            Element row = (Element) grid.getElementsByTagName("row").item(i);
+            for(int j = 0; j < columns; j++){
+                String cellType = row.getElementsByTagName("Cell").item(j).getTextContent();
+                if(cellType.equals("EMPTY")){
+                    cells.add(new EmptyCell(i, j));
+                }
+                else {
+                    cells.add(new AgentCell(i, j, cellType));
+                }
+            }
+        }
+        return cells;
+    }
+
+    private ArrayList<String> getDataValues(Element settings, List<String> dataFields){
+        ArrayList<String> dataValues = new ArrayList<>();
+        for(String field : dataFields){
             dataValues.add(getTextValue(settings, field));
         }
-        List<String> cells = new ArrayList<>();
-        return new SegregationSimulation(dataValues, cells);
+        return dataValues;
     }
 
     // Get root element of an XML file
@@ -82,4 +131,19 @@ public class XMLParser {
         }
     }
 
+    private Simulation selectSimType(String simType, List<String> dataValues, List<Cell> cells){
+        switch (simType) {
+            case SegregationSimulation.DATA_TYPE :
+                return SimulationType.SEGREGATION.create(dataValues, cells);
+            case WatorWorldSimulation.DATA_TYPE :
+                return SimulationType.WATORWORLD.create(dataValues, cells);
+            case PercolationSimulation.DATA_TYPE :
+                return SimulationType.PERCOLATION.create(dataValues, cells);
+            case SpreadingFireSimulation.DATA_TYPE :
+                return SimulationType.SPREADINGFIRE.create(dataValues, cells);
+            case GameOfLifeSimulation.DATA_TYPE :
+                return SimulationType.GAMEOFLIFE.create(dataValues, cells);
+        }
+        throw new XMLException(ERROR_MESSAGE, "any kind of Simulation");
+    }
 }
