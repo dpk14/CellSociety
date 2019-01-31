@@ -5,14 +5,15 @@ public class SharkCell extends Cell{
     int myMaxTrack;
     int myEnergy;
 
-    public SharkCell(int row, int column, int maxtrack) {
+    public SharkCell(int row, int column, int maxtrack, int maxenergy) {
         super(row, column);
         this.myTracker=0;
         this.myMaxTrack=maxtrack;
+        this.myEnergy=maxenergy;
     }
 
     public boolean reproduce(){
-        myTracker++;
+        this.myTracker++;
         if (myTracker==myMaxTrack) return true;
         return false;
     }

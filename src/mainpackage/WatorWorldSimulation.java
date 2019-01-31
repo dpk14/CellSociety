@@ -3,9 +3,14 @@ package mainpackage;
 import java.util.*;
 
 public class WatorWorldSimulation extends Simulation{
+    int myEnergyMax;
+    int mySharkReprodMax;
+    int myFishReprodMax;
 
-    public WatorWorldSimulation(int numRows, int numCols){
+    public WatorWorldSimulation(int numRows, int numCols, int energyMax, int sharkReproductionMax, int fishReproductionMax){
         super(numRows,numCols);
+        mySharkReprodMax=sharkReproductionMax;
+        myFishReprodMax=fishReproductionMax;
         setupSimulation();
     }
 
@@ -18,18 +23,31 @@ public class WatorWorldSimulation extends Simulation{
                 List<Cell> neighbors=new ArrayList<Cell>();
                 List<Cell> fishNeighbors=new ArrayList<Cell>();
                 List<Cell> emptyNeighbors=new ArrayList<Cell>();
+                Cell newlocation;
                 if(cell instanceof EmptyCell){ // if cell is EmptyCell
                     myEmptyCells.add(cell);
                 }
-                else if(cell instanceof FishCell){
-                    neighbors=getNeighbors(cell);
-                    for (Cell neighbor: neighbors) {
+                else if(cell instanceof FishCell) {
+                    neighbors = getNeighbors(cell);
+                    for (Cell neighbor : neighbors) {
                         if (neighbor instanceof EmptyCell) emptyNeighbors.add(neighbor);
                     }
-                    Cell newlocation=move(emptyNeighbors, cell);
+                    newlocation = move(emptyNeighbors, cell);
                     swap(newlocation, cell);
-                    if(reproduce) myGrid[i][j]=new FishCell(i, j, myMaxTrack);
-                    if reproduce, remove cell at current index, insert new fish one instead
+                    if (cell.reproduce()) myGrid[i][j] = new FishCell(i, j, myFishReprodMax);
+                    emptyNeighbors.clear();
+                }
+                else if(cell instanceof SharkCell) {
+                    neighbors = getNeighbors(cell);
+                    for (Cell neighbor : neighbors) {
+                        if (neighbor instanceof EmptyCell) emptyNeighbors.add(neighbor);
+                        else if (neighbor instanceof FishCell) fishNeighbors.add(neighbor);
+                    }
+                    if(fishNeighbors.size()>0) newlocation=move(fishNeighbors, cell);
+                    else newlocation=move(emptyNeighbors, cell);
+                    swap(newlocation, cell);
+                    if (reproduce) myGrid[i][j] = new SharkCell(i, j, mySharkReprodMax);
+                }
 
                     If shark:
 
@@ -51,7 +69,7 @@ public class WatorWorldSimulation extends Simulation{
             newLocation = movable_spots.get(rand.nextInt(movable_spots.size()));
         }
         return newLocation;
-        }
+    }
 
     @Override
     public void setupSimulation() {

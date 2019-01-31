@@ -7,10 +7,11 @@ public class FishCell extends Cell{
     public FishCell(int row, int column, int maxtrack) {
         super(row, column);
         this.myTracker=0;
+        this.myMaxTrack=maxtrack;
     }
 
-    public boolean reproduce(maxtrack){
-        myTracker++;
+    public boolean reproduce(){
+        this.myTracker++;
         if (myTracker==myMaxTrack) return true;
         return false;
     }
