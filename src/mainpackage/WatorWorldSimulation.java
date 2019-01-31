@@ -26,19 +26,20 @@ public class WatorWorldSimulation extends Simulation{
                 List<Cell> neighbors=new ArrayList<Cell>();
                 ArrayList<Cell> fishNeighbors=new ArrayList<Cell>();
                 ArrayList<Cell> emptyNeighbors=new ArrayList<Cell>();
-                Cell newlocation;
+                Cell otherCell;
                 if(cell instanceof FishCell) {
                     neighbors = getNeighbors(cell);
                     for (Cell neighbor : neighbors) {
                         if (neighbor instanceof EmptyCell) emptyNeighbors.add(neighbor);
                     }
-                    newlocation = move(emptyNeighbors, cell);
-                    cell.swapPosition(newlocation);
-                    myCellList.add(newlocation);
+                    otherCell = move(emptyNeighbors, cell);
+                    cell.swapPosition(otherCell);
                     myCellList.add(cell);
-                    if (((FishCell) cell).reproduce()) {
+                    if (((FishCell) cell).canReproduce() && cell!=otherCell) {
+                        ((FishCell) cell).myTracker=0;
                         myCellList.add(new FishCell(i, j, myFishReprodMax));
                     }
+                    else myCellList.add(otherCell);
                     emptyNeighbors.clear();
                 }
                 else if(cell instanceof SharkCell) {
@@ -47,22 +48,21 @@ public class WatorWorldSimulation extends Simulation{
                         if (neighbor instanceof EmptyCell) emptyNeighbors.add(neighbor);
                         else if (neighbor instanceof FishCell) fishNeighbors.add(neighbor);
                     }
-                    if(fishNeighbors.size()>0) newlocation=move(fishNeighbors, cell);
-                    else newlocation=move(emptyNeighbors, cell);
-                    cell.swapPosition(newlocation);
-                    if (((SharkCell) cell).reproduce()) {
+                    if(fishNeighbors.size()>0) otherCell=move(fishNeighbors, cell);
+                    else otherCell=move(emptyNeighbors, cell);
+                    cell.swapPosition(otherCell);
+                    if (((SharkCell) cell).canReproduce() && cell!=otherCell) {
+                        ((SharkCell) cell).myTracker=0;
+                        if (otherCell instanceof FishCell) ((SharkCell) cell).updateEnergy();
                         myCellList.add(new SharkCell(i, j, mySharkReprodMax, myStartEnergy, myEnergyGain));
-                        ((SharkCell) cell).updateEnergy();
                     }
-                    else if (newlocation instanceof FishCell) {
+                    else if (otherCell instanceof FishCell) {
                         myCellList.add(new EmptyCell(i, j));
                         ((SharkCell) cell).updateEnergy();
                     }
-                    else {
-                        ((SharkCell) cell).decrementEnergy();
-                        myCellList.add(newlocation);
-                    }
+                    else myCellList.add(otherCell);
 
+                    ((SharkCell) cell).decrementEnergy();
                     if(((SharkCell) cell).myEnergy==0) myCellList.add(new EmptyCell(cell.getRow(), cell.getColumn()));
                     else myCellList.add(cell);
                     emptyNeighbors.clear();

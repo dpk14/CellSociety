@@ -14,7 +14,7 @@ public class SharkCell extends Cell{
         this.myEnergyGain=energyGain;
     }
 
-    public boolean reproduce(){
+    public boolean canReproduce(){
         this.myTracker++;
         if (myTracker==myMaxTrack) return true;
         return false;

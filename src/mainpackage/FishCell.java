@@ -10,7 +10,7 @@ public class FishCell extends Cell{
         this.myMaxTrack=maxtrack;
     }
 
-    public boolean reproduce(){
+    public boolean canReproduce(){
         this.myTracker++;
         if (myTracker==myMaxTrack) return true;
         return false;
