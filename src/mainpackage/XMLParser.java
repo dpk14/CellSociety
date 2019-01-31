@@ -45,6 +45,29 @@ public class XMLParser {
         abstract Simulation create(List<String> dataValues, List<Cell> cells);
     }
 
+    public enum CellType{
+        AGENT{
+            public Cell create(List<String> parameters){
+                return new AgentCell(Integer.parseInt(parameters.get(0)), Integer.parseInt(parameters.get(1)), parameters.get(2));
+            }
+        },
+        EMPTY{
+            public Cell create(List<String> parameters){
+                return new EmptyCell(Integer.parseInt(parameters.get(0)), Integer.parseInt(parameters.get(1)));
+            }
+        }/*,
+        FISH{
+            public Cell create(List<String> parameters){
+                return new FishCell(Integer.parseInt(parameters.get(0)), Integer.parseInt(parameters.get(1)));
+            }
+        },
+        SHARK{
+            public Cell create(List<String> parameters){
+                return new FishCell(Integer.parseInt(parameters.get(0)), Integer.parseInt(parameters.get(1)));
+            }
+        }*/;
+        abstract Cell create(List<String> parameters);
+    }
     /**
      * Create a parser for XML files of given type.
      */
@@ -143,6 +166,14 @@ public class XMLParser {
                 return SimulationType.SPREADINGFIRE.create(dataValues, cells);
             case GameOfLifeSimulation.DATA_TYPE :
                 return SimulationType.GAMEOFLIFE.create(dataValues, cells);
+        }
+        throw new XMLException(ERROR_MESSAGE, "any kind of Simulation");
+    }
+
+    private Cell selectCellType(String cell, List<String> parameters){
+        switch (simType) {
+            case AgentCell.DATA_TYPE :
+                return CellType.AGENT.create(parameters);
         }
         throw new XMLException(ERROR_MESSAGE, "any kind of Simulation");
     }
