@@ -14,6 +14,7 @@ import java.util.List;
 
 public class XMLParser {
     public static final String ERROR_MESSAGE = "XML file does not represent %s";
+    public static final String CELL_ERROR_MESSAGE = "There is no such thing as a '%s/' cell type";
     private final String TYPE_ATTRIBUTE;
     private final DocumentBuilder DOCUMENT_BUILDER;
     public enum SimulationType{
@@ -94,13 +95,10 @@ public class XMLParser {
         for(int i = 0; i < rows; i++){
             Element row = (Element) grid.getElementsByTagName("row").item(i);
             for(int j = 0; j < columns; j++){
-                String cellType = row.getElementsByTagName("Cell").item(j).getTextContent();
-                if(cellType.equals("EMPTY")){
-                    cells.add(new EmptyCell(i, j));
-                }
-                else {
-                    cells.add(new AgentCell(i, j, cellType));
-                }
+                Element currentCell = (Element)row.getElementsByTagName("Cell").item(j);
+                String cellType = currentCell.getAttribute();
+                ArrayList<String> cellParameters = new ArrayList<>();
+                cells.add(selectCellType(cellType, cellParameters));
             }
         }
         return cells;
@@ -185,6 +183,6 @@ public class XMLParser {
             case SharkCell.DATA_TYPE :
                 return CellType.SHARK.create(parameters);
         }
-        throw new XMLException(ERROR_MESSAGE, "any kind of Simulation");
+        throw new XMLException(CELL_ERROR_MESSAGE, cellType);
     }
 }

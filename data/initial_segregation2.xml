@@ -10,17 +10,18 @@
 
     <grid>
         <row>
-            <AgentCell>
+            <Cell cell = "AgentCell">
                 <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
+            </Cell>
+            <Cell cell = "AgentCell">
                 <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
+            </Cell>
+            <Cell cell = "AgentCell">
                 <cellType>EMPTY</cellType>
-            </AgentCell>
-            <EmptyCell></EmptyCell>
-            <EmptyCell></EmptyCell>
+            </Cell>
+            <Cell cell = "EmptyCell">
+            </Cell>
+            <EmptyCell>EMPTY</EmptyCell>
             <AgentCell>
                 <cellType>RED</cellType>
             </AgentCell>
