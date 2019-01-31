@@ -1,6 +1,6 @@
 # Brian Jordan bjj17 and Michael Zhang sz114 Discussion
 
-## Part One
+## Part  One
 
 1)
   -MZ: visualization part knows about the rendering of the grid, so
