@@ -1,4 +1,4 @@
-package mainpackage;
+package cells;
 
 import java.util.List;
 

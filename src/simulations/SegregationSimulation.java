@@ -1,4 +1,8 @@
-package mainpackage;
+package simulations;
+
+import cells.AgentCell;
+import cells.Cell;
+import cells.EmptyCell;
 
 import java.util.ArrayList;
 import java.util.Collections;

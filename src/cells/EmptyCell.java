@@ -1,4 +1,6 @@
-package mainpackage;
+package cells;
+
+import cells.Cell;
 
 public class EmptyCell extends Cell {
 

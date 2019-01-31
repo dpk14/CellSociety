@@ -1,12 +1,17 @@
-package mainpackage;
+package simulations;
+
+import cells.Cell;
+import cells.EmptyCell;
+import cells.FishCell;
+import cells.SharkCell;
 
 import java.util.*;
 
-public class WatorWorldSimulation extends Simulation{
-    int myStartEnergy;
-    int myEnergyGain;
-    int mySharkReprodMax;
-    int myFishReprodMax;
+public class WatorWorldSimulation extends Simulation {
+    private int myStartEnergy;
+    private int myEnergyGain;
+    private int mySharkReprodMax;
+    private int myFishReprodMax;
 
     public static final String DATA_TYPE = "WatorWorldSimulation";
     public static final List<String> DATA_FIELDS = List.of(
@@ -50,7 +55,7 @@ public class WatorWorldSimulation extends Simulation{
                     cell.swapPosition(otherCell);
                     myCellList.add(cell);
                     if (((FishCell) cell).canReproduce() && cell!=otherCell) {
-                        ((FishCell) cell).myTracker=0;
+                        ((FishCell) cell).setMyTracker(0);
                         myCellList.add(new FishCell(i, j, myFishReprodMax));
                     }
                     else myCellList.add(otherCell);
@@ -66,7 +71,7 @@ public class WatorWorldSimulation extends Simulation{
                     else otherCell=move(emptyNeighbors, cell);
                     cell.swapPosition(otherCell);
                     if (((SharkCell) cell).canReproduce() && cell!=otherCell) {
-                        ((SharkCell) cell).myTracker=0;
+                        ((SharkCell) cell).setMyTracker(0);
                         if (otherCell instanceof FishCell) ((SharkCell) cell).updateEnergy();
                         myCellList.add(new SharkCell(i, j, mySharkReprodMax, myStartEnergy, myEnergyGain));
                     }
@@ -77,7 +82,7 @@ public class WatorWorldSimulation extends Simulation{
                     else myCellList.add(otherCell);
 
                     ((SharkCell) cell).decrementEnergy();
-                    if(((SharkCell) cell).myEnergy==0) myCellList.add(new EmptyCell(cell.getRow(), cell.getColumn()));
+                    if(((SharkCell) cell).getMyEnergy()==0) myCellList.add(new EmptyCell(cell.getRow(), cell.getColumn()));
                     else myCellList.add(cell);
                     emptyNeighbors.clear();
                     fishNeighbors.clear();

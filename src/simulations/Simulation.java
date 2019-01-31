@@ -1,4 +1,6 @@
-package mainpackage;
+package simulations;
+
+import cells.Cell;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,9 +1,13 @@
 package mainpackage;
 
+import cells.AgentCell;
+import cells.Cell;
+import cells.EmptyCell;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import simulations.SegregationSimulation;
+import simulations.Simulation;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
