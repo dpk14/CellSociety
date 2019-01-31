@@ -3,14 +3,17 @@ package mainpackage;
 import java.util.*;
 
 public class WatorWorldSimulation extends Simulation{
-    int myEnergyMax;
+    int myStartEnergy;
     int mySharkReprodMax;
     int myFishReprodMax;
+    int myEnergyGain;
 
-    public WatorWorldSimulation(int numRows, int numCols, int energyMax, int sharkReproductionMax, int fishReproductionMax){
+    public WatorWorldSimulation(int numRows, int numCols, int startEnergy, int energyGain, int sharkReproductionMax, int fishReproductionMax){
         super(numRows,numCols);
         mySharkReprodMax=sharkReproductionMax;
         myFishReprodMax=fishReproductionMax;
+        myStartEnergy=startEnergy;
+        myEnergyGain=energyGain;
         setupSimulation();
     }
 
@@ -47,12 +50,18 @@ public class WatorWorldSimulation extends Simulation{
                     if(fishNeighbors.size()>0) newlocation=move(fishNeighbors, cell);
                     else newlocation=move(emptyNeighbors, cell);
                     cell.swapPosition(newlocation);
-                    if (((SharkCell) cell).reproduce()) myCellList.add(new SharkCell(i, j, mySharkReprodMax, myEnergyMax));
+                    if (((SharkCell) cell).reproduce()) {
+                        myCellList.add(new SharkCell(i, j, mySharkReprodMax, myStartEnergy, myEnergyGain));
+                        ((SharkCell) cell).updateEnergy();
+                    }
                     else if (newlocation instanceof FishCell) {
                         myCellList.add(new EmptyCell(i, j));
                         ((SharkCell) cell).updateEnergy();
                     }
-                    else myCellList.add(newlocation);
+                    else {
+                        ((SharkCell) cell).decrementEnergy();
+                        myCellList.add(newlocation);
+                    }
 
                     if(((SharkCell) cell).myEnergy==0) myCellList.add(new EmptyCell(cell.getRow(), cell.getColumn()));
                     else myCellList.add(cell);
@@ -63,13 +72,19 @@ public class WatorWorldSimulation extends Simulation{
             }
             System.out.println();
         }
-        makeNewGrid();
         myGrid = getNewGrid(this.myCellList);
         return myGrid;
     }
 
-    private void makeNewGrid(){
-        
+    @Override
+    protected Cell[][] getNewGrid(List<Cell> list){
+        Cell[][] newGrid = super.getNewGrid(list);
+        for(int i = 0; i < myGrid.length; i++) { // i = row number
+            for (int j = 0; j < myGrid[0].length; j++) { // j = column number
+            if (myGrid[i][j]==null) myGrid[i][j]=new EmptyCell(i, j);
+            }
+        }
+        return newGrid;
     }
 
     private Cell move(ArrayList<Cell> movable_spots, Cell current){
@@ -83,10 +98,19 @@ public class WatorWorldSimulation extends Simulation{
     }
 
     @Override
-    public void setupSimulation() {
-
+    public void setupSimulation(){
+        for (int i = 0; i < myGrid.length; i++) {
+            for (int j = 0; j < myGrid[i].length; j++) {
+                if (i == 3) {
+                    myGrid[i][j] = new EmptyCell(i,j);
+                } else if (i % 2 == 0) {
+                    myGrid[i][j] = new SharkCell(i, j, 7, 9, 2);
+                } else {
+                    myGrid[i][j] = new FishCell(i, j, 7);
+                }
+            }
+        }
     }
-
     @Override
     protected List<Cell> getNeighbors(Cell cell) {
         List<Cell> neighbors = super.getNeighbors(cell);
