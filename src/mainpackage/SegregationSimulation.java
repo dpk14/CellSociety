@@ -56,7 +56,7 @@ public class SegregationSimulation extends Simulation {
             if (myEmptyCells.size() == 0) {
                 break;
             }
-//daniel here
+
             Cell empty = myEmptyCells.get(0);
             myEmptyCells.remove(0);
 
