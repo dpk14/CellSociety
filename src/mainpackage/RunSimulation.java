@@ -26,6 +26,8 @@ public class RunSimulation extends Application {
 
     private Scene myScene;
     private Group root;
+    private Group root_grid = new Group();
+    private Group root_other = new Group();
 
     private Visualization newVisual;
 
@@ -55,7 +57,8 @@ public class RunSimulation extends Application {
         Cell[][] initialGrid = newVisual.getInitialGrid("SEGREGATION");
         Node currentIterationView = newVisual.getRootNode(initialGrid);
 
-        root.getChildren().add(currentIterationView);
+        root_grid.getChildren().add(currentIterationView);
+        root.getChildren().add(root_grid);
 
         scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         return scene;
@@ -69,9 +72,9 @@ public class RunSimulation extends Application {
 
     private void handleKeyInput (KeyCode code) {
         if (code == KeyCode.RIGHT) {
-            root.getChildren().clear();
+            root_grid.getChildren().clear();
             Node n = newVisual.getRootNode(newVisual.getCurrentSimType().updateGrid());
-            root.getChildren().add(n);
+            root_grid.getChildren().add(n);
         }
     }
 
