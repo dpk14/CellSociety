@@ -51,10 +51,9 @@ public class RunSimulation extends Application {
         root = new Group();
         Scene scene = new Scene(root, width, height, background);
 
-        newVisual = new Visualization(10,10,30,30,1);
+        newVisual = new Visualization(10,10,1);
         Cell[][] initialGrid = newVisual.getInitialGrid("SEGREGATION");
         Node currentIterationView = newVisual.getRootNode(initialGrid);
-
 
         root.getChildren().add(currentIterationView);
 

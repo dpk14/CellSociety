@@ -8,25 +8,27 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 
 public class Visualization {
-    private int numRows = 10;
-    private int numCols = 10;
-    private double cellWidth = 15.0;
-    private double cellHeight = 15.0;
+    public final double VISUALIZATION_HEIGHT = 500;
+    public final double VISUALIZATION_WIDTH = 500;
+
+    private int numRows;
+    private int numCols;
+    private double cellWidth;
+    private double cellHeight;
     private double simSpeed = 1.0;
     private Simulation currentSimType;
-
 
     public static final Paint COLOR_AGENT_RED = Color.RED;
     public static final Paint COLOR_AGENT_BLUE = Color.BLUE;
     public static final Paint COLOR_EMPTY = Color.WHITESMOKE;
     public static final Paint COLOR_BLACK = Color.BLACK;
 
-    public Visualization(int numRows, int numCols, double cellWidth, double cellHeight, double simSpeed) {
+    public Visualization(int numRows, int numCols, double simSpeed) {
         this.numRows = numRows;
         this.numCols = numCols;
-        this.cellWidth = cellWidth;
-        this.cellHeight = cellHeight;
         this.simSpeed = simSpeed;
+        this.cellHeight = VISUALIZATION_HEIGHT / numRows;
+        this.cellWidth = VISUALIZATION_WIDTH / numCols;
     }
 
     public Simulation getCurrentSimType() {
@@ -43,25 +45,25 @@ public class Visualization {
                 if (c instanceof AgentCell && ((AgentCell) c).getType().equals("BLUE")) {
                     addRectangleToRoot(root, currentX, currentY, COLOR_AGENT_BLUE);
 
-                    System.out.print("1 ");
+                    //System.out.print("1 ");
                 } else if (c instanceof AgentCell && ((AgentCell) c).getType().equals("RED")) {
                     addRectangleToRoot(root, currentX, currentY, COLOR_AGENT_RED);
 
-                    System.out.print("2 ");
+                    //System.out.print("2 ");
                 } else if (c instanceof EmptyCell) {
                     addRectangleToRoot(root, currentX, currentY, COLOR_EMPTY);
 
-                    System.out.print("0 ");
+                    //System.out.print("0 ");
                 } else if (c == null) {
-                    System.out.print("6 ");
+                    //System.out.print("6 ");
                 }
                 else {
-                    System.out.print("9 ");
+                    //System.out.print("9 ");
                 }
             }
-            System.out.println();
+            //System.out.println();
         }
-        System.out.println("=-=-=-=-=-=-=-=-=-=-=-=-=");
+        //System.out.println("=-=-=-=-=-=-=-=-=-=-=-=-=");
         return root;
     }
 
@@ -78,9 +80,11 @@ public class Visualization {
     }
 
     public Cell[][] getInitialGrid(String simulationType) {
+
+        // check for simulation type then create simulation accordingly
         if (simulationType.equals("SEGREGATION")) { }
 
-        currentSimType = new SegregationSimulation(10,10,0.5,0.5,0.1);
+        currentSimType = new SegregationSimulation(numRows,numCols,0.5,0.5,0.1);
         currentSimType.setupSimulation();
         return  currentSimType.getMyGrid();
     }
