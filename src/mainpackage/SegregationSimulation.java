@@ -3,7 +3,7 @@ package mainpackage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-// EDITED BY JORGE
+
 public class SegregationSimulation extends Simulation {
     public static final String DATA_TYPE = "SegregationSimulation";
     public static final List<String> DATA_FIELDS = List.of(
@@ -12,7 +12,7 @@ public class SegregationSimulation extends Simulation {
     public double mySatisfactionThreshold; // between 0 & 1
     private double myRacePercentage; // between 0 & 1, percentage made up by first Agent
     private double myEmptyPercentage; // between 0 & 1
-// comment by jorge
+
     private List<Cell> myEmptyCells = new ArrayList<Cell>();
     private List<Cell> cellsToMove = new ArrayList<Cell>();;
 
@@ -35,9 +35,10 @@ public class SegregationSimulation extends Simulation {
     /**
      * Constructor needed to initialize from XML
      */
-    public SegregationSimulation(List<String> dataValues, List<String> cells){ // pass in list of strings representing rows, columns, sat threshold
+    public SegregationSimulation(List<String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
         super(Integer.parseInt(dataValues.get(2)), Integer.parseInt(dataValues.get(3)));
         this.mySatisfactionThreshold = Double.parseDouble(dataValues.get(5));
+        myGrid = getNewGrid(cells);
     }
 
     @Override

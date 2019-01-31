@@ -29,13 +29,31 @@ public class XMLParser {
         if (! isValidFile(root, SegregationSimulation.DATA_TYPE)) {
             throw new XMLException(ERROR_MESSAGE, SegregationSimulation.DATA_TYPE);
         }
-        List<String> dataValues = new ArrayList<>();
         Element settings = (Element) root.getElementsByTagName("settings").item(0);
-        for(String field : SegregationSimulation.DATA_FIELDS){
+        ArrayList <String> dataValues = getDataValues(settings, SegregationSimulation.DATA_FIELDS);
+        Element grid = (Element) root.getElementsByTagName("grid").item(0);
+        List<Cell> cells = getCells(grid, Integer.parseInt(dataValues.get(2)), Integer.parseInt(dataValues.get(3))); //
+        return new SegregationSimulation(dataValues, cells);
+    }
+
+    private ArrayList<Cell> getCells(Element grid, int rows, int columns){
+        ArrayList<Cell> cells = new ArrayList<>();
+        for(int i = 0; i < rows; i++){
+            Element row = (Element) grid.getElementsByTagName("row").item(i);
+            for(int j = 0; j < columns; j++){
+                String cellType = grid.getElementsByTagName("column").item(j).getTextContent();
+                cells.add(new AgentCell(i, j, cellType));
+            }
+        }
+        return cells;
+    }
+
+    private ArrayList<String> getDataValues(Element settings, List<String> dataFields){
+        ArrayList<String> dataValues = new ArrayList<>();
+        for(String field : dataFields){
             dataValues.add(getTextValue(settings, field));
         }
-        List<String> cells = new ArrayList<>();
-        return new SegregationSimulation(dataValues, cells);
+        return dataValues;
     }
 
     // Get root element of an XML file
