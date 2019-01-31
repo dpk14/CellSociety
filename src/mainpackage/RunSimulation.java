@@ -4,6 +4,8 @@ import cells.Cell;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -15,7 +17,9 @@ import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import simulations.SegregationSimulation;
 import simulations.Simulation;
+import simulations.WatorWorldSimulation;
 
 import java.io.File;
 
@@ -81,22 +85,15 @@ public class RunSimulation extends Application {
         createUIComponents();
 
 
-        /** This code below words for segregation.
-         * Commented out to test Wator
+        /**
+         * Segregation testing
          * **/
-        currentSimulation = new XMLParser("simType").getSimulation(new File(DATA_FILE));
+        setupSegregationSimulation();
 
-        //currentSimulation.setupSimulation();
-        Cell[][] initialGrid = currentSimulation.getMyGrid();
-
-        newVisual = new Visualization(initialGrid.length,initialGrid[0].length,1.0);
-        root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
-
-
-//        currentSimulation = new WatorWorldSimulation(10,10,7,2,5,5);
-//        Cell[][] initialGrid = currentSimulation.getMyGrid();
-//        newVisual = new Visualization(initialGrid.length, initialGrid[0].length, 1.0);
-//        root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
+        /**
+         * Wator world testing
+         */
+        //setupWatorWorldSimulation();
 
         root.getChildren().add(root_other);
         root.getChildren().add(root_grid);
@@ -104,6 +101,21 @@ public class RunSimulation extends Application {
 
         scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         return scene;
+    }
+
+    private void setupWatorWorldSimulation() {
+        currentSimulation = new WatorWorldSimulation(10,10,7,2,5,5);
+        Cell[][] initialGrid = currentSimulation.getMyGrid();
+        newVisual = new Visualization(initialGrid.length, initialGrid[0].length, 1.0);
+        root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
+    }
+
+    private void setupSegregationSimulation() {
+        //currentSimulation = new XMLParser("simType").getSimulation(new File(DATA_FILE));
+        currentSimulation = new SegregationSimulation(10, 10, 0.5, 0.5, 0.5);
+        Cell[][] initialGrid = currentSimulation.getMyGrid();
+        newVisual = new Visualization(initialGrid.length, initialGrid[0].length, 1.0);
+        root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
     }
 
     private void createUIComponents() {
@@ -134,15 +146,32 @@ public class RunSimulation extends Application {
         root_other.getChildren().add(myLoadFileButton);
 
         myNextIterationButton = new Button(">");
+        myNextIterationButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                root_grid.getChildren().clear();
+                Node n = newVisual.getRootNode(currentSimulation.updateGrid());
+                root_grid.getChildren().add(n);
+                System.out.println("next");
+            }
+        });
         myNextIterationButton.setLayoutX(400);
         myNextIterationButton.setLayoutY(510);
-        myNextIterationButton.setDisable(true);
+        myNextIterationButton.setDisable(false);
         root_other.getChildren().add(myNextIterationButton);
 
+
+
         myResetButton = new Button("Reset");
+        myResetButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                setupSegregationSimulation();
+            }
+        });
         myResetButton.setLayoutX(450);
         myResetButton.setLayoutY(580);
-        myResetButton.setDisable(true);
+        myResetButton.setDisable(false);
         root_other.getChildren().add(myResetButton);
 
         myStartButton = new Button("Start");
@@ -175,16 +204,6 @@ public class RunSimulation extends Application {
 
     public static void main(String[] args){
         launch(args);
-
-
-        // For debugging purposes, just use a for loop for now
-
-
-
-
-        //
-
-
     }
 
     //create an interface of key and mouse inputs, which toggles a call to mainpackage.Simulation.initializeGrid
