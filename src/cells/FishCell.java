@@ -1,8 +1,10 @@
 package cells;
 
-import cells.Cell;
+import java.util.List;
 
 public class FishCell extends Cell {
+    public static final String DATA_TYPE = "FishCell";
+    public static final List<String> DATA_FIELDS = List.of("row", "column", "max track");
     private int myTracker;
     private int myMaxTrack;
 

@@ -55,17 +55,21 @@ public class XMLParser {
             public Cell create(List<String> parameters){
                 return new EmptyCell(Integer.parseInt(parameters.get(0)), Integer.parseInt(parameters.get(1)));
             }
-        }/*,
+        },
         FISH{
             public Cell create(List<String> parameters){
-                return new FishCell(Integer.parseInt(parameters.get(0)), Integer.parseInt(parameters.get(1)));
+                return new FishCell(Integer.parseInt(parameters.get(0)), Integer.parseInt(parameters.get(1)),
+                        Integer.parseInt(parameters.get(2)));
+
             }
         },
         SHARK{
             public Cell create(List<String> parameters){
-                return new FishCell(Integer.parseInt(parameters.get(0)), Integer.parseInt(parameters.get(1)));
+                return new SharkCell(Integer.parseInt(parameters.get(0)), Integer.parseInt(parameters.get(1)),
+                        Integer.parseInt(parameters.get(2)), Integer.parseInt(parameters.get(3)),
+                        Integer.parseInt(parameters.get(4)));
             }
-        }*/;
+        };
         abstract Cell create(List<String> parameters);
     }
     /**
@@ -170,10 +174,16 @@ public class XMLParser {
         throw new XMLException(ERROR_MESSAGE, "any kind of Simulation");
     }
 
-    private Cell selectCellType(String cell, List<String> parameters){
-        switch (simType) {
+    private Cell selectCellType(String cellType, List<String> parameters){
+        switch (cellType) {
             case AgentCell.DATA_TYPE :
                 return CellType.AGENT.create(parameters);
+            case EmptyCell.DATA_TYPE :
+                return CellType.EMPTY.create(parameters);
+            case FishCell.DATA_TYPE :
+                return CellType.FISH.create(parameters);
+            case SharkCell.DATA_TYPE :
+                return CellType.SHARK.create(parameters);
         }
         throw new XMLException(ERROR_MESSAGE, "any kind of Simulation");
     }
