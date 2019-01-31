@@ -98,7 +98,7 @@ public class WatorWorldSimulation extends Simulation {
     @Override
     protected Cell[][] getNewGrid(List<Cell> list){
         Cell[][] newGrid = super.getNewGrid(list);
-        for(int i = 0; i < myGrid.length; i++) { // i = row number
+        for(int i = 0; i < newGrid.length; i++) { // i = row number
             for (int j = 0; j < myGrid[0].length; j++) { // j = column number
             if (myGrid[i][j]==null) myGrid[i][j]=new EmptyCell(i, j);
             }
