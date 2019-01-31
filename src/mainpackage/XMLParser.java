@@ -1,18 +1,9 @@
 package mainpackage;
 
-import cells.AgentCell;
-import cells.Cell;
-import cells.EmptyCell;
+import cells.*;
+import simulations.*;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
-import simulations.SegregationSimulation;
-import simulations.Simulation;
-import simulations.WatorWorldSimulation;
-import simulations.SpreadingFireSimulation;
-import simulations.GameOfLifeSimulation;
-import simulations.PercolationSimulation
-
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
