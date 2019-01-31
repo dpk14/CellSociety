@@ -1,13 +1,12 @@
-<title>Initial segregation setup</title>
-
 <simType>SEGREGATION</simType>
+<title>Initial segregation setup</title>
 <author>group14</author>
 
 <settings>
-  <speed></speed>
-  <satisfaction></satisfaction>
   <rows>12</rows>
   <columns>12</columns>
+  <speed>1.0</speed>
+  <satisfaction>0.5</satisfaction>
 </settings>
 
 <grid>
