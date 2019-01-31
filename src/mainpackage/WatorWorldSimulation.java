@@ -9,7 +9,7 @@ public class WatorWorldSimulation extends Simulation{
     int myEnergyGain;
 
     public WatorWorldSimulation(int numRows, int numCols, int startEnergy, int energyGain, int sharkReproductionMax, int fishReproductionMax){
-        super(numRows,numCols);
+        super(numRows,numCols);b
         mySharkReprodMax=sharkReproductionMax;
         myFishReprodMax=fishReproductionMax;
         myStartEnergy=startEnergy;
