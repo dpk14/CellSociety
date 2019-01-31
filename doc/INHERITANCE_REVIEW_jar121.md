@@ -1,5 +1,5 @@
 # Configuration Review
-### jar121 & ih52
+### Worked on by: jar121 & ih52
 ## Part 1
 ### What is an implementation decision that your design is encapsulating (i.e., hiding) for other areas of the program?
 * Ian: My program is creating a SimulationInfo class that contains all of the XML parsed data, and makes it available to the classes that need the data to initialize the starting configuration. All of the XML info is read in and passed to a new SimulationInfo object.
