@@ -68,9 +68,10 @@ public class SegregationSimulation extends Simulation {
             }
             Cell empty = myEmptyCells.get(0);
             myEmptyCells.remove(0);
-            Cell[] tmp = swapTwoCells(c, empty);
-            myCellList.add(tmp[0]);
-            myCellList.add(tmp[1]);
+
+            c.swapPosition(empty);
+            myCellList.add(c);
+            myCellList.add(empty);
         }
         myCellList.addAll(myEmptyCells);
         myCellList.addAll(cellsToMove);
