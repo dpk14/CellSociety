@@ -10,6 +10,11 @@ public class AgentCell extends Cell {
         this.myType = myType;
     }
 
+//    public AgentCell(List<String> dataValues){
+//        super(Integer.parseInt(dataValues.get(0)), Integer.parseInt(dataValues.get(1)));
+//        this.myType = dataValues.get(3);
+//    }
+
     public String getType(){
         return myType;
     }
