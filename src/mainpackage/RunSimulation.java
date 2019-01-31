@@ -6,7 +6,12 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -22,8 +27,6 @@ public class RunSimulation extends Application {
     public static final Paint BACKGROUND = Color.AZURE;
 
 
-
-
     private Scene myScene;
     private Group root;
     private Group root_grid = new Group();
@@ -32,10 +35,16 @@ public class RunSimulation extends Application {
     private Visualization newVisual;
 
 
+    private Button myResetButton;
+    private Button myStartButton;
+    private Button myStopButton;
+
+
+
     @Override
     public void start(Stage stage){
         // attach scene to the stage and display it
-        myScene = setupGame(SIZE, (int) (SIZE * 1.1), BACKGROUND);
+        myScene = setupGame(SIZE, (int) (SIZE * 1.2), BACKGROUND);
 
         stage.setScene(myScene);
         stage.setTitle(TITLE);
@@ -53,12 +62,37 @@ public class RunSimulation extends Application {
         root = new Group();
         Scene scene = new Scene(root, width, height, background);
 
+        // add other components (i.e. not grid)
+        myResetButton = new Button("Reset");
+        myResetButton.setLayoutX(450);
+        myResetButton.setLayoutY(580);
+        myResetButton.setDisable(true);
+        root_other.getChildren().add(myResetButton);
+
+        myStartButton = new Button("Start");
+        myStartButton.setLayoutX(450);
+        myStartButton.setLayoutY(610);
+        myStartButton.setDisable(true);
+        root_other.getChildren().add(myStartButton);
+
+        myStopButton = new Button("Stop");
+        myStopButton.setLayoutX(450);
+        myStopButton.setLayoutY(640);
+        myStopButton.setDisable(true);
+        root_other.getChildren().add(myStopButton);
+
+
+
+
         newVisual = new Visualization(10,10,1);
         Cell[][] initialGrid = newVisual.getInitialGrid("SEGREGATION");
         Node currentIterationView = newVisual.getRootNode(initialGrid);
 
         root_grid.getChildren().add(currentIterationView);
+
+        root.getChildren().add(root_other);
         root.getChildren().add(root_grid);
+
 
         scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         return scene;
