@@ -24,6 +24,8 @@ import simulations.Simulation;
 import simulations.WatorWorldSimulation;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.Logger;
 
 public class RunSimulation extends Application {
     public static final String DATA_FILE = "data/initial_segregation2.xml";
@@ -59,6 +61,7 @@ public class RunSimulation extends Application {
     private Label label2;
     private Label label3;
 
+    private Stage s;
 
     private FileChooser fileChooser;
 
@@ -76,7 +79,7 @@ public class RunSimulation extends Application {
     public void start(Stage stage){
         // attach scene to the stage and display it
         myScene = setupGame(SIZE, (int) (SIZE * 1.2), BACKGROUND);
-
+        s = stage;
         stage.setScene(myScene);
         stage.setTitle(TITLE);
         stage.show();
@@ -86,6 +89,21 @@ public class RunSimulation extends Application {
 //        fileChooser.showOpenDialog(stage);
 
         // attach "game loop" to timeline to play it
+        FileChooser fileChooser = new FileChooser();
+        myLoadFileButton = new Button("Load simulation (.xml)");
+        myLoadFileButton.setLayoutX(50);
+        myLoadFileButton.setLayoutY(510);
+        myLoadFileButton.setDisable(false);
+        //myLoadFileButton = new Button("Load simulation (.xml)");
+        myLoadFileButton.setOnAction(e -> {
+            File selectedFile = fileChooser.showOpenDialog(s);
+            System.out.println(selectedFile.toString());
+        });
+        root_other.getChildren().add(myLoadFileButton);
+
+
+
+
         attachGameLoop();
     }
 
@@ -172,11 +190,11 @@ public class RunSimulation extends Application {
         slider3.setDisable(true);
         root_other.getChildren().add(slider3);
 
-        myLoadFileButton = new Button("Load simulation (.xml)");
-        myLoadFileButton.setLayoutX(50);
-        myLoadFileButton.setLayoutY(510);
-        myLoadFileButton.setDisable(true);
-        root_other.getChildren().add(myLoadFileButton);
+
+
+
+
+
 
         myNextIterationButton = new Button(">");
 
@@ -246,7 +264,11 @@ public class RunSimulation extends Application {
                 animation.setRate(animation.getCycleDuration().toSeconds() * slider1.getValue());
             }
         });
+
+
     }
+
+
 
     private void renderNextIteration() {
         // render next iteration
