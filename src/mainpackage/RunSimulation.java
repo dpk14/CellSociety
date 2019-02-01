@@ -106,16 +106,15 @@ public class RunSimulation extends Application {
         /**
          * Segregation testing
          * **/
-        //setupSegregationSimulation();
+        setupSegregationSimulation();
 
         /**
          * Wator world testing
          */
-        setupWatorWorldSimulation();
+        //setupWatorWorldSimulation();
 
         root.getChildren().add(root_other);
         root.getChildren().add(root_grid);
-
 
         scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         return scene;
