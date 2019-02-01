@@ -92,15 +92,15 @@ public class XMLParser {
 
     private ArrayList<Cell> getCells(Element grid, int rows, int columns){
         ArrayList<Cell> cells = new ArrayList<>();
-        for(int i = 0; i < rows; i++){
-            Element row = (Element) grid.getElementsByTagName("row").item(i);
-            for(int j = 0; j < columns; j++){
-                Element currentCell = (Element)row.getElementsByTagName("Cell").item(j);
-                String cellType = currentCell.getAttribute();
-                ArrayList<String> cellParameters = new ArrayList<>();
-                cells.add(selectCellType(cellType, cellParameters));
-            }
-        }
+//        for(int i = 0; i < rows; i++){
+//            Element row = (Element) grid.getElementsByTagName("row").item(i);
+//            for(int j = 0; j < columns; j++){
+//                Element currentCell = (Element)row.getElementsByTagName("Cell").item(j);
+//                String cellType = currentCell.getAttribute();
+//                ArrayList<String> cellParameters = new ArrayList<>();
+//                cells.add(selectCellType(cellType, cellParameters));
+//            }
+//        }
         return cells;
     }
 
