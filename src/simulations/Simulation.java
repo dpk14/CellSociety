@@ -32,7 +32,7 @@ public abstract class Simulation {
     public abstract void setupSimulation();
 
     protected Cell[][] getNewGrid(List<Cell> list){
-        Cell[][] newGrid = new Cell[myGrid.length][myGrid[0].length];
+        Cell[][] newGrid = myGrid;
         for(Cell cell : list){
             newGrid[cell.getRow()][cell.getColumn()] = cell;
         }

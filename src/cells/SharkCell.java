@@ -21,22 +21,23 @@ public class SharkCell extends Cell {
     }
 
     public boolean canReproduce(){
-        this.myTracker++;
-        if (myTracker==myMaxTrack) return true;
+        if (this.myTracker==this.myMaxTrack) return true;
         return false;
     }
 
     public void updateEnergy(){
-        this.myEnergy+=myEnergyGain;
+        this.myEnergy+=this.myEnergyGain;
     }
 
     public void decrementEnergy(){
         this.myEnergy--;
     }
 
-    public void setMyTracker(int tracker){ myTracker = tracker; }
+    public void setMyTracker(int tracker){ this.myTracker = tracker; }
 
-    public int getMyTracker(){ return myTracker; }
+    public void updateTracker(){ this.myTracker++; }
 
-    public int getMyEnergy(){return myEnergy;}
+    public int getMyTracker(){ return this.myTracker; }
+
+    public int getMyEnergy(){return this.myEnergy;}
 }

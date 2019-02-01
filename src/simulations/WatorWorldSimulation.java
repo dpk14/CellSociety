@@ -12,7 +12,7 @@ public class WatorWorldSimulation extends Simulation {
     private int myEnergyGain;
     private int mySharkReprodMax;
     private int myFishReprodMax;
-    private ArrayList<Cell> myTakenSpots;
+    private ArrayList<Cell> myTakenSpots=new ArrayList<>();
 
     public static final String DATA_TYPE = "WatorWorldSimulation";
     public static final List<String> DATA_FIELDS = List.of(
@@ -65,8 +65,12 @@ public class WatorWorldSimulation extends Simulation {
         myTakenSpots.clear();
         ArrayList<Cell> randomizedList=randomizeCellVisitation();
         for(Cell cell: randomizedList){
-            if(cell instanceof FishCell) fishMover(cell, new Cell(cell.getRow(), cell.getColumn()), cell.getRow(), cell.getColumn());
+            if(cell instanceof FishCell) {
+                ((FishCell) cell).updateTracker();
+                fishMover(cell, new Cell(cell.getRow(), cell.getColumn()), cell.getRow(), cell.getColumn());
+            }
             else if(cell instanceof SharkCell) {
+                ((SharkCell) cell).updateTracker();
                 ((SharkCell) cell).decrementEnergy();
                 sharkMover(cell, new Cell(cell.getRow(), cell.getColumn()), cell.getRow(), cell.getColumn());
             }
@@ -79,6 +83,7 @@ public class WatorWorldSimulation extends Simulation {
     public void fishMover(Cell fish, Cell currentLocation, int currentRow, int currentCol) {
             ArrayList<Cell> emptyNeighbors=new ArrayList<Cell>();
             List<Cell> neighbors = getNeighbors(fish);
+
             for (Cell neighbor : neighbors) {
                 if (neighbor instanceof EmptyCell) emptyNeighbors.add(neighbor);
             }
@@ -88,7 +93,7 @@ public class WatorWorldSimulation extends Simulation {
             myTakenSpots.add(newLocation);
             fish.swapPosition(otherCell);
             myCellList.add(fish);
-            if (((FishCell) fish).canReproduce() && newLocation.getRow()!=currentRow && newLocation.getColumn()!=currentCol) {
+            if (((FishCell) fish).canReproduce() && (newLocation.getRow()!=currentRow || newLocation.getColumn()!=currentCol)) {
                 ((FishCell) fish).setMyTracker(0);
                 myCellList.add(new FishCell(currentRow, currentCol, myFishReprodMax));
                 myTakenSpots.add(currentLocation);
@@ -111,7 +116,7 @@ public class WatorWorldSimulation extends Simulation {
         Cell otherCell=move(availableNeighbors, shark);
         Cell newLocation=new Cell(otherCell.getRow(), otherCell.getColumn());
         shark.swapPosition(otherCell);
-        if (((SharkCell) shark).canReproduce() && newLocation.getRow()!=currentRow && newLocation.getColumn()!=currentCol) {
+        if (((SharkCell) shark).canReproduce() && (newLocation.getRow()!=currentRow || newLocation.getColumn()!=currentCol)) {
             ((SharkCell) shark).setMyTracker(0);
             if (otherCell instanceof FishCell) ((SharkCell) shark).updateEnergy();
             myCellList.add(new SharkCell(currentRow, currentCol, mySharkReprodMax, myStartEnergy, myEnergyGain));
@@ -146,25 +151,37 @@ public class WatorWorldSimulation extends Simulation {
         int row = cell.getRow();
         int column = cell.getColumn();
         if(row==0 || row==myGrid.length-1){
-            neighbors.add(myGrid[Math.abs(row-myGrid.length-1)][column]); //at grid edges, neighbors are also on opposite edge of grid
+            neighbors.add(myGrid[Math.abs(row-(myGrid.length-1))][column]); //at grid edges, neighbors are also on opposite edge of grid
         }
         if(column==0 || column==myGrid[0].length-1){
-            neighbors.add(myGrid[row][Math.abs(column-myGrid.length-1)]);; //at grid edges, neighbors are also on opposite edge of grid
+            neighbors.add(myGrid[row][Math.abs(column-(myGrid.length-1))]);; //at grid edges, neighbors are also on opposite edge of grid
         }
         return neighbors;
     }
 
     @Override
     public void setupSimulation(){
-        for (int i = 0; i < myGrid.length; i++) {
+        int sharknum=3;
+        int fishnum=4;
+        int emptynum=25;
+        ArrayList<String> freqlist=new ArrayList<String>();
+        Random rand=new Random();
+        Cell cell;
+        String cellname;
+
+        for(int k=0; k<sharknum; k++) freqlist.add("SHARK");
+        for(int k=0; k<fishnum; k++) freqlist.add("FISH");
+        for(int k=0; k<emptynum; k++) freqlist.add("EMPTY");
+    for (int i = 0; i < myGrid.length; i++) {
             for (int j = 0; j < myGrid[i].length; j++) {
-                if (i == 3) {
-                    myGrid[i][j] = new EmptyCell(i,j);
-                } else if (i % 2 == 0) {
-                    myGrid[i][j] = new SharkCell(i, j, 7, 9, 2);
-                } else {
-                    myGrid[i][j] = new FishCell(i, j, 7);
+                cellname=freqlist.get(rand.nextInt(freqlist.size()-1));
+                if (cellname.equals("SHARK")){
+                    myGrid[i][j] = new SharkCell(i, j, 9, 3, 2);
                 }
+                else if (cellname.equals("FISH")){
+                    myGrid[i][j] = new FishCell(i, j, 9);
+                }
+                else myGrid[i][j] = new EmptyCell(i, j);
             }
         }
     }
