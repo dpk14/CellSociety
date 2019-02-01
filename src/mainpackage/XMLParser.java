@@ -141,6 +141,9 @@ public class XMLParser {
             case SharkCell.DATA_TYPE :
                 dataValues.addAll(getCellValues(root, SharkCell.DATA_FIELDS));
                 return new SharkCell(dataValues);
+            case StateChangeCell.DATA_TYPE :
+                dataValues.addAll(getCellValues(root, StateChangeCell.DATA_FIELDS));
+                return new StateChangeCell(dataValues);
         }
         throw new XMLException(CELL_ERROR_MESSAGE, cellType);
     }

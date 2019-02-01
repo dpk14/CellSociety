@@ -1,8 +1,6 @@
 package simulations;
 
-import cells.AgentCell;
 import cells.Cell;
-import cells.EmptyCell;
 import cells.StateChangeCell;
 
 import java.util.HashMap;

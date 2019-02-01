@@ -12,7 +12,7 @@ import java.util.Map;
 public class SpreadingFireSimulation extends Simulation{
     public static final String DATA_TYPE = "SpreadingFireSimulation";
     public static final List<String> DATA_FIELDS = List.of(
-            "title", "author", "rows", "columns", "speed", "spread rate", "growth rate", "lightning rate");
+            "title", "author", "rows", "columns", "speed", "spreadRate", "growthRate", "lightningRate");
     private Map<String, String> myDataValues;
 
     private double myProbCatch;
