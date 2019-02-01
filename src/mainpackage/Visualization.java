@@ -89,23 +89,4 @@ public class Visualization {
         rec.setStrokeType(StrokeType.INSIDE);
         root.getChildren().add(rec);
     }
-
-    public Cell[][] getInitialGrid(String simulationType) {
-
-        // check for simulation type then create simulation accordingly
-        if (simulationType.equals("SEGREGATION")) { }
-
-        currentSimType = new SegregationSimulation(numRows,numCols,0.5,0.5,0.1);
-        currentSimType.setupSimulation();
-        return  currentSimType.getMyGrid();
-    }
-
-
-
-
-
-
-
-
-
 }
