@@ -67,7 +67,7 @@ public class RunSimulation extends Application {
     private boolean startedSliding = false;
     private boolean startedAnimation = false;
 
-    private int FRAMES_PER_SECOND = 50;
+    private int FRAMES_PER_SECOND = 15;
     private int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
 
@@ -106,16 +106,15 @@ public class RunSimulation extends Application {
         /**
          * Segregation testing
          * **/
-        //setupSegregationSimulation();
+        setupSegregationSimulation();
 
         /**
          * Wator world testing
          */
-        setupWatorWorldSimulation();
+        //setupWatorWorldSimulation();
 
         root.getChildren().add(root_other);
         root.getChildren().add(root_grid);
-
 
         scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         return scene;
@@ -150,7 +149,7 @@ public class RunSimulation extends Application {
         slider1.setLayoutY(550);
         slider1.setMin(1);
         slider1.setMax(100);
-        slider1.setValue(50);
+        slider1.setValue(15);
         slider1.setShowTickLabels(true);
         slider1.setMajorTickUnit(50);
         slider1.setDisable(false);
@@ -164,7 +163,7 @@ public class RunSimulation extends Application {
         slider2.setValue(50);
         slider2.setShowTickLabels(true);
         slider2.setMajorTickUnit(50);
-        slider2.setDisable(false);
+        slider2.setDisable(true);
         root_other.getChildren().add(slider2);
 
         slider3 = new Slider(0,1,1);
@@ -204,10 +203,10 @@ public class RunSimulation extends Application {
         myStopButton.setDisable(true);
         root_other.getChildren().add(myStopButton);
 
-        myApplyButton = new Button("Stop");
-        myApplyButton.setLayoutX(450);
+        myApplyButton = new Button("Apply");
+        myApplyButton.setLayoutX(30);
         myApplyButton.setLayoutY(640);
-        myApplyButton.setDisable(true);
+        myApplyButton.setDisable(false);
         root_other.getChildren().add(myApplyButton);
 
 
@@ -239,16 +238,12 @@ public class RunSimulation extends Application {
                 onInitialGrid = false;
             }
         });
+
         myApplyButton.setOnAction(new EventHandler<ActionEvent>() {
-
-            //private double duration = timeline.getCycleDuration().toSeconds();
-
             @Override
             public void handle(ActionEvent event) {
-//                if (duration > 1) {
-//                    duration--;
-//                    timeline.setRate(timeline.getCycleDuration().toSeconds() / duration);
-//                }
+                //System.out.println(animation.getCycleDuration().toSeconds());
+                animation.setRate(animation.getCycleDuration().toSeconds() * slider1.getValue());
             }
         });
     }
@@ -269,16 +264,10 @@ public class RunSimulation extends Application {
         myStartButton.setDisable(startedAnimation);
         myStopButton.setDisable(!startedAnimation);
         slider1.setDisable(startedAnimation);
+        myApplyButton.setDisable(startedAnimation);
 
         if (startedAnimation) renderNextIteration();
-        if(slider1.isValueChanging()) {
-            //FRAMES_PER_SECOND = (int) Math.round(slider1.getValue());
-            FRAMES_PER_SECOND = 1;
 
-//            animation.getKeyFrames().clear();
-//            animation.stop();
-//            attachGameLoop();
-        }
 
         //Node n = newVisual.getRootNode()
     }
