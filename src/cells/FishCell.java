@@ -14,6 +14,12 @@ public class FishCell extends Cell {
         this.myMaxTrack=maxtrack;
     }
 
+    public FishCell(List<String> dataValues) {
+        super(Integer.parseInt(dataValues.get(0)), Integer.parseInt(dataValues.get(1)));
+        this.myTracker=0;
+        this.myMaxTrack=Integer.parseInt(dataValues.get(2));
+    }
+
     public boolean canReproduce(){
         this.myTracker++;
         if (myTracker==myMaxTrack) return true;

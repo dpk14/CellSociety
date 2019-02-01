@@ -17,62 +17,8 @@ public class XMLParser {
     public static final String CELL_ERROR_MESSAGE = "There is no such thing as a '%s/' cell type";
     private final String TYPE_ATTRIBUTE;
     private final DocumentBuilder DOCUMENT_BUILDER;
-    public enum SimulationType{
-        GAMEOFLIFE{
-            public Simulation create(List<String> dataValues, List<Cell> cells){
-                return new GameOfLifeSimulation(dataValues, cells);
-            }
-        },
-        SPREADINGFIRE{
-            public Simulation create(List<String> dataValues, List<Cell> cells){
-                return new SpreadingFireSimulation(dataValues, cells);
-            }
-        },
-        PERCOLATION{
-            public Simulation create(List<String> dataValues, List<Cell> cells){
-                return new PercolationSimulation(dataValues, cells);
-            }
-        },
-        WATORWORLD{
-            public Simulation create(List<String> dataValues, List<Cell> cells){
-                return new WatorWorldSimulation(dataValues, cells);
-            }
-        },
-        SEGREGATION{
-            public Simulation create(List<String> dataValues, List<Cell> cells){
-                return new SegregationSimulation(dataValues, cells);
-            }
-        };
-        abstract Simulation create(List<String> dataValues, List<Cell> cells);
-    }
 
-    public enum CellType{
-        AGENT{
-            public Cell create(List<String> parameters){
-                return new AgentCell(Integer.parseInt(parameters.get(0)), Integer.parseInt(parameters.get(1)), parameters.get(2));
-            }
-        },
-        EMPTY{
-            public Cell create(List<String> parameters){
-                return new EmptyCell(Integer.parseInt(parameters.get(0)), Integer.parseInt(parameters.get(1)));
-            }
-        },
-        FISH{
-            public Cell create(List<String> parameters){
-                return new FishCell(Integer.parseInt(parameters.get(0)), Integer.parseInt(parameters.get(1)),
-                        Integer.parseInt(parameters.get(2)));
 
-            }
-        },
-        SHARK{
-            public Cell create(List<String> parameters){
-                return new SharkCell(Integer.parseInt(parameters.get(0)), Integer.parseInt(parameters.get(1)),
-                        Integer.parseInt(parameters.get(2)), Integer.parseInt(parameters.get(3)),
-                        Integer.parseInt(parameters.get(4)));
-            }
-        };
-        abstract Cell create(List<String> parameters);
-    }
     /**
      * Create a parser for XML files of given type.
      */
@@ -87,7 +33,7 @@ public class XMLParser {
         ArrayList <String> dataValues = getDataValues(settings, SegregationSimulation.DATA_FIELDS);
         Element grid = (Element) root.getElementsByTagName("grid").item(0);
         List<Cell> cells = getCells(grid, Integer.parseInt(dataValues.get(2)), Integer.parseInt(dataValues.get(3))); //
-        return selectSimType(root.getAttribute(TYPE_ATTRIBUTE), dataValues, cells);
+        return createSimulation(root.getAttribute(TYPE_ATTRIBUTE), dataValues, cells);
     }
 
     private ArrayList<Cell> getCells(Element grid, int rows, int columns){
@@ -96,9 +42,10 @@ public class XMLParser {
             Element row = (Element) grid.getElementsByTagName("row").item(i);
             for(int j = 0; j < columns; j++){
                 Element currentCell = (Element)row.getElementsByTagName("Cell").item(j);
-                String cellType = currentCell.getAttribute();
+                System.out.println(row.getElementsByTagName("Cell").item(j).getNodeName());
+                String cellType = currentCell.getAttribute("id");
                 ArrayList<String> cellParameters = new ArrayList<>();
-                cells.add(selectCellType(cellType, cellParameters));
+                cells.add(createCell(cellType, cellParameters));
             }
         }
         return cells;
@@ -156,32 +103,32 @@ public class XMLParser {
         }
     }
 
-    private Simulation selectSimType(String simType, List<String> dataValues, List<Cell> cells){
+    private Simulation createSimulation(String simType, List<String> dataValues, List<Cell> cells) {
         switch (simType) {
-            case SegregationSimulation.DATA_TYPE :
-                return SimulationType.SEGREGATION.create(dataValues, cells);
-            case WatorWorldSimulation.DATA_TYPE :
-                return SimulationType.WATORWORLD.create(dataValues, cells);
-            case PercolationSimulation.DATA_TYPE :
-                return SimulationType.PERCOLATION.create(dataValues, cells);
-            case SpreadingFireSimulation.DATA_TYPE :
-                return SimulationType.SPREADINGFIRE.create(dataValues, cells);
-            case GameOfLifeSimulation.DATA_TYPE :
-                return SimulationType.GAMEOFLIFE.create(dataValues, cells);
+            case SegregationSimulation.DATA_TYPE:
+                return new SegregationSimulation(dataValues, cells);
+            case WatorWorldSimulation.DATA_TYPE:
+                return new WatorWorldSimulation(dataValues, cells);
+            case PercolationSimulation.DATA_TYPE:
+                return new PercolationSimulation(dataValues, cells);
+            case SpreadingFireSimulation.DATA_TYPE:
+                return new SpreadingFireSimulation(dataValues, cells);
+            case GameOfLifeSimulation.DATA_TYPE:
+                return new GameOfLifeSimulation(dataValues, cells);
         }
         throw new XMLException(ERROR_MESSAGE, "any kind of Simulation");
     }
 
-    private Cell selectCellType(String cellType, List<String> parameters){
+    private Cell createCell(String cellType,  List<String> parameters){
         switch (cellType) {
             case AgentCell.DATA_TYPE :
-                return CellType.AGENT.create(parameters);
+                return new AgentCell(parameters);
             case EmptyCell.DATA_TYPE :
-                return CellType.EMPTY.create(parameters);
+                return new EmptyCell(parameters);
             case FishCell.DATA_TYPE :
-                return CellType.FISH.create(parameters);
+                return new FishCell(parameters);
             case SharkCell.DATA_TYPE :
-                return CellType.SHARK.create(parameters);
+                return new SharkCell(parameters);
         }
         throw new XMLException(CELL_ERROR_MESSAGE, cellType);
     }

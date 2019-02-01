@@ -1,3 +1,4 @@
+<?xml version = "1.0"?>
 <data simType = "SegregationSimulation">
     <settings>
         <title>initial segregation 1</title>
@@ -10,387 +11,386 @@
 
     <grid>
         <row>
-            <Cell cell = "AgentCell">
-                <cellType>RED</cellType>
+            <Cell cellType="AgentCell">
+                <race>RED</race>
             </Cell>
-            <Cell cell = "AgentCell">
-                <cellType>RED</cellType>
+            <Cell cellType="AgentCell">
+                <race>RED</race>
             </Cell>
-            <Cell cell = "AgentCell">
-                <cellType>EMPTY</cellType>
+            <Cell cellType="AgentCell">
+                <race>BLUE</race>
             </Cell>
-            <Cell cell = "EmptyCell">
+            <Cell cellType="EmptyCell"></Cell>
+            <Cell cellType="EmptyCell"></Cell>
+            <Cell cellType="AgentCell">
+                <race>RED</race>
             </Cell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <celltype>BLUE</celltype>
-            </AgentCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <EmptyCell>EMPTY</EmptyCell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
         </row>
         <row>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-             </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
         </row>
         <row>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell race = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
         </row>
         <row>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
         </row>
         <row>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
         </row>
         <row>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
         </row>
         <row>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
         </row>
         <row>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
         </row>
         <row>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
         </row>
         <row>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <EmptyCell>EMPTY</EmptyCell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
         </row>
         <row>
-            <EmptyCell>EMPTY</EmptyCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
         </row>
         <row>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <AgentCell>
-                <cellType>RED</cellType>
-            </AgentCell>
-            <AgentCell>
-                <cellType>BLUE</cellType>
-            </AgentCell>
-            <EmptyCell>EMPTY</EmptyCell>
-            <EmptyCell>EMPTY</EmptyCell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "AgentCell">
+                <race>RED</race>
+            </Cell>
+            <Cell cellType = "AgentCell">
+                <race>BLUE</race>
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
         </row>
     </grid>
 </data>

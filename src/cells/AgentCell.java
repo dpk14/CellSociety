@@ -6,7 +6,7 @@ public class AgentCell extends Cell {
     private String myType;
     public static final String DATA_TYPE = "AgentCell";
     public static final List<String> DATA_FIELDS = List.of(
-            "row", "column", "cellType");
+            "row", "column", "race");
 
     public AgentCell(int row, int column, String myType){
         super(row, column);
