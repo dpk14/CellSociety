@@ -16,8 +16,8 @@ public class WatorWorldSimulation extends Simulation {
 
     public static final String DATA_TYPE = "WatorWorldSimulation";
     public static final List<String> DATA_FIELDS = List.of(
-            "title", "author", "rows", "columns", "speed", "satisfaction", "start energy",
-            "shark reproduction max", "fish reproduction max", "energy gain");
+            "title", "author", "rows", "columns", "speed", "startEnergy",
+            "sharkReproductionMax", "fishReproductionMax", "energyGain");
 
     public WatorWorldSimulation(int numRows, int numCols, int startEnergy, int energyGain, int sharkReproductionMax, int fishReproductionMax){
         super(numRows,numCols);
