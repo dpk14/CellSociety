@@ -2,19 +2,24 @@ package simulations;
 
 import cells.Cell;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GameOfLifeSimulation extends Simulation{
     public static final String DATA_TYPE = "GameOfLifeSimulation";
     public static final List<String> DATA_FIELDS = List.of(
             "title", "author", "rows", "columns", "speed");
+    private Map<String, String> myDataValues;
     public GameOfLifeSimulation(int numRows, int numCols){
         super(numRows, numCols);
+        myDataValues = new HashMap<>();
     }
 
-    public GameOfLifeSimulation(List<String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
-        super(Integer.parseInt(dataValues.get(2)), Integer.parseInt(dataValues.get(3)));
+    public GameOfLifeSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
+        super(Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
         myGrid = getNewGrid(cells);
+        myDataValues = dataValues;
     }
 
     @Override
@@ -34,7 +39,10 @@ public class GameOfLifeSimulation extends Simulation{
 
     @Override
     public void setupSimulation() {
-
     }
 
+    @Override
+    public Map<String, String> getMyDataValues(){
+        return myDataValues;
+    }
 }

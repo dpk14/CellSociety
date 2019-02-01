@@ -11,14 +11,16 @@ public class PercolationSimulation extends Simulation{
     public static final String DATA_TYPE = "PercolationSimulation";
     public static final List<String> DATA_FIELDS = List.of(
             "title", "author", "rows", "columns", "speed");
-
+    private Map<String, String> myDataValues;
     public PercolationSimulation(int numRows, int numCols){
         super(numRows, numCols);
+        myDataValues = new HashMap<>();
     }
 
-    public PercolationSimulation(List<String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
-        super(Integer.parseInt(dataValues.get(2)), Integer.parseInt(dataValues.get(3)));
+    public PercolationSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
+        super(Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
         myGrid = getNewGrid(cells);
+        myDataValues = dataValues;
     }
 /*
     @Override
@@ -76,17 +78,22 @@ public class PercolationSimulation extends Simulation{
         return new Cell[0][];
     }
 
-@Override
-public void setupSimulation() {
+    @Override
+    public void setupSimulation() {
 
-}
+    }
     @Override
     public String getDataType(){
         return DATA_TYPE;
     }
 
-@Override
-public List<String> getDataFields(){
-    return DATA_FIELDS;
-}
+    @Override
+    public List<String> getDataFields(){
+        return DATA_FIELDS;
+    }
+
+    @Override
+    public Map<String, String> getMyDataValues(){
+        return myDataValues;
+    }
 }

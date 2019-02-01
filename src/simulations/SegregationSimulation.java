@@ -4,9 +4,7 @@ import cells.AgentCell;
 import cells.Cell;
 import cells.EmptyCell;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class SegregationSimulation extends Simulation {
     public static final String DATA_TYPE = "SegregationSimulation";
@@ -17,6 +15,7 @@ public class SegregationSimulation extends Simulation {
     private double myRacePercentage; // between 0 & 1, percentage made up by first Agent
     private double myEmptyPercentage; // between 0 & 1
 
+    private Map<String, String> myDataValues;
     private List<Cell> myEmptyCells = new ArrayList<Cell>();
     private List<Cell> myCellsToMove = new ArrayList<Cell>();;
 
@@ -34,15 +33,17 @@ public class SegregationSimulation extends Simulation {
         this.myRacePercentage = myRacePercentage;
         this.myEmptyPercentage = myEmptyPercentage;
         setupSimulation();
+        myDataValues = new HashMap<>();
     }
 
     /**
      * Constructor needed to initialize from XML
      */
-    public SegregationSimulation(List<String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
-        super(Integer.parseInt(dataValues.get(2)), Integer.parseInt(dataValues.get(3)));
-        this.mySatisfactionThreshold = Double.parseDouble(dataValues.get(5));
+    public SegregationSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
+        super(Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
+        this.mySatisfactionThreshold = Double.parseDouble(dataValues.get("satisfaction"));
         myGrid = getNewGrid(cells);
+        myDataValues = dataValues;
     }
 
     @Override
@@ -131,5 +132,10 @@ public class SegregationSimulation extends Simulation {
     @Override
     public String getDataType(){
         return DATA_TYPE;
+    }
+
+    @Override
+    public Map<String, String> getMyDataValues(){
+        return myDataValues;
     }
 }

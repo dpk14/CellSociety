@@ -1,7 +1,7 @@
 <?xml version = "1.0"?>
 <data simType = "WatorWorldSimulation">
     <settings>
-        <title>watorworld segregation 1</title>
+        <title>watorworld 1</title>
         <author>group14</author>
         <rows>12</rows>
         <columns>12</columns>
