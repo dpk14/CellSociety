@@ -16,25 +16,26 @@ public class WatorWorldSimulation extends Simulation {
 
     public static final String DATA_TYPE = "WatorWorldSimulation";
     public static final List<String> DATA_FIELDS = List.of(
-            "title", "author", "rows", "columns", "speed", "satisfaction", "start energy",
-            "shark reproduction max", "fish reproduction max", "energy gain");
-
+            "title", "author", "rows", "columns", "speed", "startEnergy",
+            "sharkReproductionMax", "fishReproductionMax", "energyGain");
+    private Map<String, String> myDataValues;
     public WatorWorldSimulation(int numRows, int numCols, int startEnergy, int energyGain, int sharkReproductionMax, int fishReproductionMax){
         super(numRows,numCols);
         myStartEnergy=startEnergy;
         myEnergyGain=energyGain;
         mySharkReprodMax=sharkReproductionMax;
         myFishReprodMax=fishReproductionMax;
-        setupSimulation();
+        myDataValues = new HashMap<>();
     }
 
-    public WatorWorldSimulation(List<String> dataValues, List<Cell> cells){
-        super(Integer.parseInt(dataValues.get(2)), Integer.parseInt(dataValues.get(3)));
-        myStartEnergy=Integer.parseInt(dataValues.get(4));
-        myEnergyGain=Integer.parseInt(dataValues.get(5));
-        mySharkReprodMax=Integer.parseInt(dataValues.get(6));
-        myFishReprodMax=Integer.parseInt(dataValues.get(7));
+    public WatorWorldSimulation(Map<String, String> dataValues, List<Cell> cells){
+        super(Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
+        myStartEnergy=Integer.parseInt(dataValues.get("startEnergy"));
+        myEnergyGain=Integer.parseInt(dataValues.get("energyGain"));
+        mySharkReprodMax=Integer.parseInt(dataValues.get("sharkReproductionMax"));
+        myFishReprodMax=Integer.parseInt(dataValues.get("fishReproductionMax"));
         myGrid = getNewGrid(cells);
+        myDataValues = dataValues;
     }
 
     private ArrayList<Cell> randomizeCellVisitation(){
@@ -160,33 +161,6 @@ public class WatorWorldSimulation extends Simulation {
     }
 
     @Override
-    public void setupSimulation(){
-        int sharknum=3;
-        int fishnum=4;
-        int emptynum=25;
-        ArrayList<String> freqlist=new ArrayList<String>();
-        Random rand=new Random();
-        Cell cell;
-        String cellname;
-
-        for(int k=0; k<sharknum; k++) freqlist.add("SHARK");
-        for(int k=0; k<fishnum; k++) freqlist.add("FISH");
-        for(int k=0; k<emptynum; k++) freqlist.add("EMPTY");
-    for (int i = 0; i < myGrid.length; i++) {
-            for (int j = 0; j < myGrid[i].length; j++) {
-                cellname=freqlist.get(rand.nextInt(freqlist.size()-1));
-                if (cellname.equals("SHARK")){
-                    myGrid[i][j] = new SharkCell(i, j, 9, 3, 2);
-                }
-                else if (cellname.equals("FISH")){
-                    myGrid[i][j] = new FishCell(i, j, 9);
-                }
-                else myGrid[i][j] = new EmptyCell(i, j);
-            }
-        }
-    }
-
-    @Override
     public List<String> getDataFields(){
         return DATA_FIELDS;
     }
@@ -194,5 +168,10 @@ public class WatorWorldSimulation extends Simulation {
     @Override
     public String getDataType(){
         return DATA_TYPE;
+    }
+
+    @Override
+    public Map<String, String> getMyDataValues(){
+        return myDataValues;
     }
 }

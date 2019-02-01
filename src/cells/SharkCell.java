@@ -6,7 +6,7 @@ import java.util.List;
 
 public class SharkCell extends Cell {
     public static final String DATA_TYPE = "SharkCell";
-    public static final List<String> DATA_FIELDS = List.of("row", "column", "max track", "energy", "energy gain");
+    public static final List<String> DATA_FIELDS = List.of("maxTrack", "energy", "energyGain");
     private int myTracker;
     private int myMaxTrack;
     private int myEnergy;
