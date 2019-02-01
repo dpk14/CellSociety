@@ -146,10 +146,10 @@ public class WatorWorldSimulation extends Simulation {
         int row = cell.getRow();
         int column = cell.getColumn();
         if(row==0 || row==myGrid.length-1){
-            neighbors.add(myGrid[Math.abs(row-myGrid.length-1)][column]);
+            neighbors.add(myGrid[Math.abs(row-myGrid.length-1)][column]); //at grid edges, neighbors are also on opposite edge of grid
         }
         if(column==0 || column==myGrid[0].length-1){
-            neighbors.add(myGrid[row][Math.abs(column-myGrid.length-1)]);;
+            neighbors.add(myGrid[row][Math.abs(column-myGrid.length-1)]);; //at grid edges, neighbors are also on opposite edge of grid
         }
         return neighbors;
     }
