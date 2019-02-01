@@ -25,7 +25,6 @@ public class WatorWorldSimulation extends Simulation {
         myEnergyGain=energyGain;
         mySharkReprodMax=sharkReproductionMax;
         myFishReprodMax=fishReproductionMax;
-        setupSimulation();
         myDataValues = new HashMap<>();
     }
 
@@ -159,33 +158,6 @@ public class WatorWorldSimulation extends Simulation {
             neighbors.add(myGrid[row][Math.abs(column-(myGrid.length-1))]);; //at grid edges, neighbors are also on opposite edge of grid
         }
         return neighbors;
-    }
-
-    @Override
-    public void setupSimulation(){
-        int sharknum=3;
-        int fishnum=4;
-        int emptynum=25;
-        ArrayList<String> freqlist=new ArrayList<String>();
-        Random rand=new Random();
-        Cell cell;
-        String cellname;
-
-        for(int k=0; k<sharknum; k++) freqlist.add("SHARK");
-        for(int k=0; k<fishnum; k++) freqlist.add("FISH");
-        for(int k=0; k<emptynum; k++) freqlist.add("EMPTY");
-    for (int i = 0; i < myGrid.length; i++) {
-            for (int j = 0; j < myGrid[i].length; j++) {
-                cellname=freqlist.get(rand.nextInt(freqlist.size()-1));
-                if (cellname.equals("SHARK")){
-                    myGrid[i][j] = new SharkCell(i, j, 9, 3, 2);
-                }
-                else if (cellname.equals("FISH")){
-                    myGrid[i][j] = new FishCell(i, j, 9);
-                }
-                else myGrid[i][j] = new EmptyCell(i, j);
-            }
-        }
     }
 
     @Override

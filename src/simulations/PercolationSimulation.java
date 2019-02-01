@@ -79,10 +79,6 @@ public class PercolationSimulation extends Simulation{
     }
 
     @Override
-    public void setupSimulation() {
-
-    }
-    @Override
     public String getDataType(){
         return DATA_TYPE;
     }

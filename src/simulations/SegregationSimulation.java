@@ -32,7 +32,6 @@ public class SegregationSimulation extends Simulation {
         this.mySatisfactionThreshold = mySatisfactionThreshold;
         this.myRacePercentage = myRacePercentage;
         this.myEmptyPercentage = myEmptyPercentage;
-        setupSimulation();
         myDataValues = new HashMap<>();
     }
 
@@ -107,21 +106,6 @@ public class SegregationSimulation extends Simulation {
             neighbors.add(myGrid[row+1][column+1]);
         }
         return neighbors;
-    }
-
-    @Override
-    public void setupSimulation(){
-        for (int i = 0; i < myGrid.length; i++) {
-            for (int j = 0; j < myGrid[i].length; j++) {
-                if (i == 3) {
-                    myGrid[i][j] = new EmptyCell(i,j);
-                } else if (i % 2 == 0) {
-                    myGrid[i][j] = new AgentCell(i,j,"BLUE");
-                } else {
-                    myGrid[i][j] = new AgentCell(i,j,"RED");
-                }
-            }
-        }
     }
 
     @Override

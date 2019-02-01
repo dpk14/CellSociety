@@ -30,11 +30,6 @@ public abstract class Simulation {
      */
     public abstract Cell[][] updateGrid();
 
-    /**
-     * Populates myGrid according to XML file. (Possibly?)
-     */
-    public abstract void setupSimulation();
-
     protected Cell[][] getNewGrid(List<Cell> list){
         Cell[][] newGrid = myGrid;
         for(Cell cell : list){
