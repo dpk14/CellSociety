@@ -137,9 +137,7 @@ public class XMLParser {
         switch (cellType) {
             case AgentCell.DATA_TYPE :
                 dataValues.addAll(getDataValues(root, AgentCell.DATA_FIELDS));
-                AgentCell a = new AgentCell(dataValues);
-                System.out.println(a.getType());
-                return a;
+                return new AgentCell(dataValues);
             case EmptyCell.DATA_TYPE :
                 dataValues.addAll(getDataValues(root, EmptyCell.DATA_FIELDS));
                 return new EmptyCell(dataValues);

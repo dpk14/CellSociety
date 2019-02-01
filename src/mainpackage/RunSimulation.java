@@ -129,8 +129,8 @@ public class RunSimulation extends Application {
 
     private void setupSegregationSimulation() {
         onInitialGrid = true;
-        //currentSimulation = new XMLParser("simType").getSimulation(new File(DATA_FILE));
-        currentSimulation = new SegregationSimulation(10, 10, 0.5, 0.5, 0.5);
+        currentSimulation = new XMLParser("simType").getSimulation(new File(DATA_FILE));
+        //currentSimulation = new SegregationSimulation(10, 10, 0.5, 0.5, 0.5);
         Cell[][] initialGrid = currentSimulation.getMyGrid();
         newVisual = new Visualization(initialGrid.length, initialGrid[0].length, 1.0);
         root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
