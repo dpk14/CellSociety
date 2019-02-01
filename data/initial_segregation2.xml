@@ -95,7 +95,7 @@
             <Cell cellType = "AgentCell">
                 <race>BLUE</race>
             </Cell>
-            <Cell race = "AgentCell">
+            <Cell cellType = "AgentCell">
                 <race>RED</race>
             </Cell>
             <Cell cellType = "AgentCell">
