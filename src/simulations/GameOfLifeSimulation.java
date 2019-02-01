@@ -16,12 +16,11 @@ public class GameOfLifeSimulation extends Simulation{
         super(numRows,numCols);
         setupSimulation();
     }
-    /*
+
     public GameOfLifeSimulation(List<String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
         super(Integer.parseInt(dataValues.get(2)), Integer.parseInt(dataValues.get(3)));
         myGrid = getNewGrid(cells);
     }
-    */
 
     @Override
     public Cell[][] updateGrid(){
