@@ -11,8 +11,6 @@ public class Cell {
         myColumn = column;
     }
 
-
-    // Michael: I think we should delete this; i moved it to the simulation class
     public void swapPosition(Cell cell){
         int tempRow = cell.myRow;
         int tempCol = cell.myColumn;

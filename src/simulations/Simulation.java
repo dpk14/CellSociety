@@ -1,6 +1,7 @@
 package simulations;
 
 import cells.Cell;
+import cells.StateChangeCell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +64,15 @@ public abstract class Simulation {
             neighbors.add(myGrid[row][column+1]);
         }
         return neighbors;
+    }
+
+    protected List<Cell> getTypedNeighbors(Cell cell, String type) {
+        List<Cell> neighbors = getNeighbors(cell);
+        List<Cell> specificNeighbors=new ArrayList<Cell>();
+        for(Cell neighbor: neighbors){
+            if (((StateChangeCell) cell).getState().equals(type)) specificNeighbors.add(neighbor);
+        }
+        return specificNeighbors;
     }
 
     /**

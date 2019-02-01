@@ -12,6 +12,7 @@ public class WatorWorldSimulation extends Simulation {
     private int myEnergyGain;
     private int mySharkReprodMax;
     private int myFishReprodMax;
+    private ArrayList<Cell> myTakenSpots;
 
     public static final String DATA_TYPE = "WatorWorldSimulation";
     public static final List<String> DATA_FIELDS = List.of(
@@ -36,58 +37,38 @@ public class WatorWorldSimulation extends Simulation {
         myGrid = getNewGrid(cells);
     }
 
+    private ArrayList<Cell> randomizeCellVisitation(){
+        ArrayList<Cell> randomizedList=new ArrayList<Cell>();
+        for(int i = 0; i < myGrid.length; i++) { // i = row number
+            for (int j = 0; j < myGrid[0].length; j++) { // j = column number
+                randomizedList.add(myGrid[i][j]);
+            }
+        }
+        Collections.shuffle(randomizedList);
+        return randomizedList;
+    }
+
+    @Override
+    protected Cell[][] getNewGrid(List<Cell> list){
+        Cell[][] newGrid = super.getNewGrid(list);
+        for(int i = 0; i < newGrid.length; i++) { // i = row number
+            for (int j = 0; j < newGrid[0].length; j++) { // j = column number
+                if (newGrid[i][j]==null) newGrid[i][j]=new EmptyCell(i, j);
+            }
+        }
+        return newGrid;
+    }
+
     @Override
     public Cell[][] updateGrid() {
         myCellList.clear();
-        for(int i = 0; i < myGrid.length; i++){ // i = row number
-            for(int j = 0; j < myGrid[0].length; j++){ // j = column number
-                Cell cell = myGrid[i][j];
-                List<Cell> neighbors=new ArrayList<Cell>();
-                ArrayList<Cell> fishNeighbors=new ArrayList<Cell>();
-                ArrayList<Cell> emptyNeighbors=new ArrayList<Cell>();
-                Cell otherCell;
-                if(cell instanceof FishCell) {
-                    neighbors = getNeighbors(cell);
-                    for (Cell neighbor : neighbors) {
-                        if (neighbor instanceof EmptyCell) emptyNeighbors.add(neighbor);
-                    }
-                    otherCell = move(emptyNeighbors, cell);
-                    cell.swapPosition(otherCell);
-                    myCellList.add(cell);
-                    if (((FishCell) cell).canReproduce() && cell!=otherCell) {
-                        ((FishCell) cell).setMyTracker(0);
-                        myCellList.add(new FishCell(i, j, myFishReprodMax));
-                    }
-                    else myCellList.add(otherCell);
-                    emptyNeighbors.clear();
-                }
-                else if(cell instanceof SharkCell) {
-                    neighbors = getNeighbors(cell);
-                    for (Cell neighbor : neighbors) {
-                        if (neighbor instanceof EmptyCell) emptyNeighbors.add(neighbor);
-                        else if (neighbor instanceof FishCell) fishNeighbors.add(neighbor);
-                    }
-                    if(fishNeighbors.size()>0) otherCell=move(fishNeighbors, cell);
-                    else otherCell=move(emptyNeighbors, cell);
-                    cell.swapPosition(otherCell);
-                    if (((SharkCell) cell).canReproduce() && cell!=otherCell) {
-                        ((SharkCell) cell).setMyTracker(0);
-                        if (otherCell instanceof FishCell) ((SharkCell) cell).updateEnergy();
-                        myCellList.add(new SharkCell(i, j, mySharkReprodMax, myStartEnergy, myEnergyGain));
-                    }
-                    else if (otherCell instanceof FishCell) {
-                        myCellList.add(new EmptyCell(i, j));
-                        ((SharkCell) cell).updateEnergy();
-                    }
-                    else myCellList.add(otherCell);
-
-                    ((SharkCell) cell).decrementEnergy();
-                    if(((SharkCell) cell).getMyEnergy()==0) myCellList.add(new EmptyCell(cell.getRow(), cell.getColumn()));
-                    else myCellList.add(cell);
-                    emptyNeighbors.clear();
-                    fishNeighbors.clear();
-                }
-
+        myTakenSpots.clear();
+        ArrayList<Cell> randomizedList=randomizeCellVisitation();
+        for(Cell cell: randomizedList){
+            if(cell instanceof FishCell) fishMover(cell, new Cell(cell.getRow(), cell.getColumn()), cell.getRow(), cell.getColumn());
+            else if(cell instanceof SharkCell) {
+                ((SharkCell) cell).decrementEnergy();
+                sharkMover(cell, new Cell(cell.getRow(), cell.getColumn()), cell.getRow(), cell.getColumn());
             }
             System.out.println();
         }
@@ -95,15 +76,58 @@ public class WatorWorldSimulation extends Simulation {
         return myGrid;
     }
 
-    @Override
-    protected Cell[][] getNewGrid(List<Cell> list){
-        Cell[][] newGrid = super.getNewGrid(list);
-        for(int i = 0; i < newGrid.length; i++) { // i = row number
-            for (int j = 0; j < myGrid[0].length; j++) { // j = column number
-            if (myGrid[i][j]==null) myGrid[i][j]=new EmptyCell(i, j);
+    public void fishMover(Cell fish, Cell currentLocation, int currentRow, int currentCol) {
+            ArrayList<Cell> emptyNeighbors=new ArrayList<Cell>();
+            List<Cell> neighbors = getNeighbors(fish);
+            for (Cell neighbor : neighbors) {
+                if (neighbor instanceof EmptyCell) emptyNeighbors.add(neighbor);
             }
+            emptyNeighbors.removeAll(myTakenSpots);
+            Cell otherCell = move(emptyNeighbors, fish);
+            Cell newLocation=new Cell(otherCell.getRow(), otherCell.getColumn());
+            myTakenSpots.add(newLocation);
+            fish.swapPosition(otherCell);
+            myCellList.add(fish);
+            if (((FishCell) fish).canReproduce() && newLocation.getRow()!=currentRow && newLocation.getColumn()!=currentCol) {
+                ((FishCell) fish).setMyTracker(0);
+                myCellList.add(new FishCell(currentRow, currentCol, myFishReprodMax));
+                myTakenSpots.add(currentLocation);
+            }
+            else myCellList.add(otherCell);
+    }
+
+    public void sharkMover(Cell shark, Cell currentLocation, int currentRow, int currentCol) {
+        ArrayList<Cell> emptyNeighbors=new ArrayList<Cell>();
+        ArrayList<Cell> fishNeighbors=new ArrayList<Cell>();
+        ArrayList<Cell> availableNeighbors;
+
+        List<Cell> neighbors = getNeighbors(shark);
+        for (Cell neighbor : neighbors) {
+            if (neighbor instanceof EmptyCell) emptyNeighbors.add(neighbor);
+            else if (neighbor instanceof FishCell) fishNeighbors.add(neighbor);
         }
-        return newGrid;
+        if(fishNeighbors.size()>0) availableNeighbors=new ArrayList<Cell>(fishNeighbors);
+        else availableNeighbors=new ArrayList<Cell>(emptyNeighbors);
+        Cell otherCell=move(availableNeighbors, shark);
+        Cell newLocation=new Cell(otherCell.getRow(), otherCell.getColumn());
+        shark.swapPosition(otherCell);
+        if (((SharkCell) shark).canReproduce() && newLocation.getRow()!=currentRow && newLocation.getColumn()!=currentCol) {
+            ((SharkCell) shark).setMyTracker(0);
+            if (otherCell instanceof FishCell) ((SharkCell) shark).updateEnergy();
+            myCellList.add(new SharkCell(currentRow, currentCol, mySharkReprodMax, myStartEnergy, myEnergyGain));
+            myTakenSpots.add(currentLocation);
+        }
+        else if (otherCell instanceof FishCell) {
+            myCellList.add(new EmptyCell(currentRow, currentCol));
+            ((SharkCell) shark).updateEnergy();
+        }
+        else myCellList.add(otherCell);
+
+        if(((SharkCell) shark).getMyEnergy()==0) myCellList.add(new EmptyCell(newLocation.getRow(), newLocation.getColumn()));
+        else {
+            myTakenSpots.add(newLocation);
+            myCellList.add(shark);
+        }
     }
 
     private Cell move(ArrayList<Cell> movable_spots, Cell current){
@@ -114,6 +138,20 @@ public class WatorWorldSimulation extends Simulation {
             newLocation = movable_spots.get(rand.nextInt(movable_spots.size()));
         }
         return newLocation;
+    }
+
+    @Override
+    protected List<Cell> getNeighbors(Cell cell) {
+        List<Cell> neighbors = super.getNeighbors(cell);
+        int row = cell.getRow();
+        int column = cell.getColumn();
+        if(row==0 || row==myGrid.length-1){
+            neighbors.add(myGrid[Math.abs(row-myGrid.length-1)][column]); //at grid edges, neighbors are also on opposite edge of grid
+        }
+        if(column==0 || column==myGrid[0].length-1){
+            neighbors.add(myGrid[row][Math.abs(column-myGrid.length-1)]);; //at grid edges, neighbors are also on opposite edge of grid
+        }
+        return neighbors;
     }
 
     @Override
@@ -129,19 +167,6 @@ public class WatorWorldSimulation extends Simulation {
                 }
             }
         }
-    }
-    @Override
-    protected List<Cell> getNeighbors(Cell cell) {
-        List<Cell> neighbors = super.getNeighbors(cell);
-        int row = cell.getRow();
-        int column = cell.getColumn();
-        if(row==0 || row==myGrid.length-1){
-            neighbors.add(myGrid[Math.abs(row-myGrid.length-1)][column]);
-        }
-        if(column==0 || column==myGrid[0].length-1){
-            neighbors.add(myGrid[row][Math.abs(column-myGrid.length-1)]);;
-        }
-        return neighbors;
     }
 
     @Override
