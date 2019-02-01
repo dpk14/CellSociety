@@ -21,13 +21,14 @@ public class FishCell extends Cell {
     }
 
     public boolean canReproduce(){
-        this.myTracker++;
-        if (myTracker==myMaxTrack) return true;
+        if (this.myTracker==this.myMaxTrack) return true;
         return false;
     }
 
-    public void setMyTracker(int tracker){ myTracker = tracker; }
+    public void setMyTracker(int tracker){ this.myTracker = tracker; }
 
-    public int getMyTracker(){ return myTracker; }
+    public void updateTracker(){ this.myTracker++; }
+
+    public int getMyTracker(){ return this.myTracker; }
 
 }

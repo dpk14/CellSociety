@@ -11,6 +11,7 @@ public class PercolationSimulation extends Simulation{
     public static final String DATA_TYPE = "PercolationSimulation";
     public static final List<String> DATA_FIELDS = List.of(
             "title", "author", "rows", "columns", "speed");
+
     public PercolationSimulation(int numRows, int numCols){
         super(numRows, numCols);
     }
@@ -19,45 +20,39 @@ public class PercolationSimulation extends Simulation{
         super(Integer.parseInt(dataValues.get(2)), Integer.parseInt(dataValues.get(3)));
         myGrid = getNewGrid(cells);
     }
-
+/*
     @Override
     public Cell[][] updateGrid(){
         String state;
+        Cell cell=new Cell(0, 0);
+        List<Cell> openNeighbors;
         myCellList.clear();
         Queue<Cell> qu=openOne();
-        while(qu.size()!=0)
-            if(((StateChangeCell) cell).getState().equals("OPEN")) ((StateChangeCell) cell).setState(fill(cell, state));
-            myCellList.add(cell);
+        while(qu.size()>0){
+            cell=qu.remove();
+            if(getTypedNeighbors(cell, "FULL").size()>0){
+                ((StateChangeCell) cell).setState("FULL");
+                myCellList.add(cell);
+                openNeighbors=getTypedNeighbors(cell, "OPEN");
+                for(Cell open: openNeighbors) qu.add(open);
+            }
         }
         myGrid = getNewGrid(this.myCellList);
         return myGrid;
     }
 
     private Queue<Cell> openOne(){
-        List<Cell> revisedList=new ArrayList<>();
         Queue<Cell> qu=new LinkedList<Cell>();
+        Cell cell=new StateChangeCell(0, 0, "OPEN");
+        Random rand=new Random();
 
-        for(int i = 0; i < myGrid.length; i++) { // i = row number
-            for (int j = 0; j < myGrid[0].length; j++) { // j = column number
-                revisedList.add(myGrid[i][j]);
-            }
+        while(!((StateChangeCell) cell).getState().equals("CLOSED")) {
+            cell=myGrid[rand.nextInt(myGrid.length)][rand.nextInt(myGrid[0].length)];
         }
-        Collections.shuffle(revisedList);
-        for(Cell cell:revisedList){
-            if (((StateChangeCell) cell).getState().equals("CLOSED")) {
-                ((StateChangeCell) cell).setState("OPEN");
-                if (cell.getRow()==0 || getTypedNeighbors(cell, "FULL").size()!=0) {
-                    ((StateChangeCell) cell).setState("FULL");
-                    qu.add(cell);
-                }
-                break;
-            }
-        }
+
+        ((StateChangeCell) cell).setState("OPEN");
+        qu.add(cell);
         return qu;
-    }
-
-    private String fill(Cell cell, String state){
-        List<Cell> neighbors=getNeighbors(cell);
     }
 
     @Override
@@ -74,34 +69,24 @@ public class PercolationSimulation extends Simulation{
             }
         }
     }
-
-    protected List<Cell> getNeighbors(Cell cell) {
-        List<Cell> neighbors = super.getNeighbors(cell);
-        List<Cell> fullNeighbors=new ArrayList<Cell>();
-        for(Cell neighbor: fullNeighbors){
-            if (((StateChangeCell) cell).getState().equals("FULL")) burnNeighbors.add(neighbor);
-        }
-        return burnNeighbors;
-    }
-
-    @Override
-    public List<String> getDataFields(){
-        return DATA_FIELDS;
-    }
-
-    @Override
-    public String getDataType(){
-        return DATA_TYPE;
-    }
+*/
 
     @Override
     public Cell[][] updateGrid() {
         return new Cell[0][];
     }
 
-    @Override
-    public void setupSimulation() {
+@Override
+public void setupSimulation() {
 
+}
+    @Override
+    public String getDataType(){
+        return DATA_TYPE;
     }
 
+@Override
+public List<String> getDataFields(){
+    return DATA_FIELDS;
+}
 }
