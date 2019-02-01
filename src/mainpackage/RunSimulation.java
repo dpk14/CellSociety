@@ -240,19 +240,10 @@ public class RunSimulation extends Application {
         });
 
         myApplyButton.setOnAction(new EventHandler<ActionEvent>() {
-
-            //private double duration = animation.getCycleDuration().toSeconds();
-
-
             @Override
             public void handle(ActionEvent event) {
-                System.out.println(animation.getCycleDuration().toSeconds());
-
+                //System.out.println(animation.getCycleDuration().toSeconds());
                 animation.setRate(animation.getCycleDuration().toSeconds() * slider1.getValue());
-//                if (duration > 1) {
-//                    duration--;
-//
-//                }
             }
         });
     }
