@@ -106,12 +106,9 @@ public class RunSimulation extends Application {
         /**
          * Segregation testing
          * **/
-        //setupSegregationSimulation();
+        setupSimulation();
 
-        /**
-         * Wator world testing
-         */
-        setupWatorWorldSimulation();
+
 
         root.getChildren().add(root_other);
         root.getChildren().add(root_grid);
@@ -120,17 +117,11 @@ public class RunSimulation extends Application {
         return scene;
     }
 
-    private void setupWatorWorldSimulation() {
-        currentSimulation = new WatorWorldSimulation(10,10,7,2,5,5);
-        Cell[][] initialGrid = currentSimulation.getMyGrid();
-        newVisual = new Visualization(initialGrid.length, initialGrid[0].length, 1.0);
-        root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
-    }
 
-    private void setupSegregationSimulation() {
+
+    private void setupSimulation() {
         onInitialGrid = true;
         currentSimulation = new XMLParser("simType").getSimulation(new File(DATA_FILE));
-        //currentSimulation = new SegregationSimulation(10, 10, 0.5, 0.5, 0.5);
         Cell[][] initialGrid = currentSimulation.getMyGrid();
         newVisual = new Visualization(initialGrid.length, initialGrid[0].length, 1.0);
         root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
@@ -221,7 +212,7 @@ public class RunSimulation extends Application {
         myResetButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                setupSegregationSimulation();
+                setupSimulation();
             }
         });
         myStartButton.setOnAction(new EventHandler<ActionEvent>() {
