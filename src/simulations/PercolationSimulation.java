@@ -26,7 +26,6 @@ public class PercolationSimulation extends Simulation{
         myCellList.clear();
         Queue<Cell> qu=openOne();
         while(qu.size()!=0)
-
             if(((StateChangeCell) cell).getState().equals("OPEN")) ((StateChangeCell) cell).setState(fill(cell, state));
             myCellList.add(cell);
         }
@@ -37,7 +36,6 @@ public class PercolationSimulation extends Simulation{
     private Queue<Cell> openOne(){
         List<Cell> revisedList=new ArrayList<>();
         Queue<Cell> qu=new LinkedList<Cell>();
-        Cell changedCell;
 
         for(int i = 0; i < myGrid.length; i++) { // i = row number
             for (int j = 0; j < myGrid[0].length; j++) { // j = column number
@@ -48,11 +46,13 @@ public class PercolationSimulation extends Simulation{
         for(Cell cell:revisedList){
             if (((StateChangeCell) cell).getState().equals("CLOSED")) {
                 ((StateChangeCell) cell).setState("OPEN");
-                changedCell=cell;
+                if (cell.getRow()==0 || getTypedNeighbors(cell, "FULL").size()!=0) {
+                    ((StateChangeCell) cell).setState("FULL");
+                    qu.add(cell);
+                }
                 break;
             }
         }
-        if (changedCell.getRow()==0 || 
         return qu;
     }
 

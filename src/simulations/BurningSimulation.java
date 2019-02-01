@@ -49,7 +49,7 @@ public class BurningSimulation extends Simulation {
         double rand=Math.random();
 
         if(state.equals("TREE")){
-            int firecount=getNeighbors(cell).size();
+            int firecount=getTypedNeighbors(cell, "BURNING").size();
             if((firecount!=0 && rand/firecount<myProbCatch) || rand<myProbCatch*myProbLightning) return "BURNING";
         }
         else if (rand<myProbGrow) return "TREE";
@@ -70,15 +70,6 @@ public class BurningSimulation extends Simulation {
                 }
             }
         }
-    }
-
-    protected List<Cell> getNeighbors(Cell cell) {
-        List<Cell> neighbors = super.getNeighbors(cell);
-        List<Cell> burnNeighbors=new ArrayList<Cell>();
-        for(Cell neighbor: neighbors){
-            if (((StateChangeCell) cell).getState().equals("BURNING")) burnNeighbors.add(neighbor);
-        }
-        return burnNeighbors;
     }
 
     @Override
