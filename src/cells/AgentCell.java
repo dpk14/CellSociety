@@ -6,7 +6,7 @@ public class AgentCell extends Cell {
     private String myType;
     public static final String DATA_TYPE = "AgentCell";
     public static final List<String> DATA_FIELDS = List.of(
-            "row", "column", "cellType");
+            "race");
 
     public AgentCell(int row, int column, String myType){
         super(row, column);
@@ -15,7 +15,7 @@ public class AgentCell extends Cell {
 
     public AgentCell(List<String> dataValues){
         super(Integer.parseInt(dataValues.get(0)), Integer.parseInt(dataValues.get(1)));
-        this.myType = dataValues.get(3);
+        this.myType = dataValues.get(2);
     }
 
     public String getType(){

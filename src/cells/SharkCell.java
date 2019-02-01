@@ -20,6 +20,14 @@ public class SharkCell extends Cell {
         this.myEnergyGain=energyGain;
     }
 
+    public SharkCell(List<String> dataValues){
+        super(Integer.parseInt(dataValues.get(0)), Integer.parseInt(dataValues.get(1)));
+        this.myTracker= 0;
+        this.myMaxTrack= Integer.parseInt(dataValues.get(2));
+        this.myEnergy=Integer.parseInt(dataValues.get(3));
+        this.myEnergyGain=Integer.parseInt(dataValues.get(4));
+    }
+
     public boolean canReproduce(){
         this.myTracker++;
         if (myTracker==myMaxTrack) return true;

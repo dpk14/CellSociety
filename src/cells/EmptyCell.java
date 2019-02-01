@@ -11,4 +11,8 @@ public class EmptyCell extends Cell {
     public EmptyCell(int row, int column){
         super(row, column);
     }
+
+    public EmptyCell(List<String> dataValues){
+        super(Integer.parseInt(dataValues.get(0)), Integer.parseInt(dataValues.get(1)));
+    }
 }

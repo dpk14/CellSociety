@@ -26,7 +26,7 @@ import simulations.WatorWorldSimulation;
 import java.io.File;
 
 public class RunSimulation extends Application {
-    public static final String DATA_FILE = "data/initial_segregation1.xml";
+    public static final String DATA_FILE = "data/initial_segregation2.xml";
 
 
     public static final String TITLE = "";
