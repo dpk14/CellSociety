@@ -106,12 +106,12 @@ public class RunSimulation extends Application {
         /**
          * Segregation testing
          * **/
-        setupSegregationSimulation();
+        //setupSegregationSimulation();
 
         /**
          * Wator world testing
          */
-        //setupWatorWorldSimulation();
+        setupWatorWorldSimulation();
 
         root.getChildren().add(root_other);
         root.getChildren().add(root_grid);
@@ -271,9 +271,6 @@ public class RunSimulation extends Application {
 
         //Node n = newVisual.getRootNode()
     }
-
-
-
 
     private void handleKeyInput (KeyCode code) {
         if (code == KeyCode.RIGHT) {
