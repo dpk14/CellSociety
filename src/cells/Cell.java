@@ -1,14 +1,21 @@
 package cells;
 
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Paint;
+
+
+
 public class Cell {
     private int myRow;
     private int myColumn;
-    // ImageView?
+    protected ImageView myImage;
 
-    public Cell(int row, int column){
+    public Cell(int row, int column, ImageView m){
         myRow = row;
         myColumn = column;
+        myImage = m;
     }
 
     public void swapPosition(Cell cell){
@@ -37,5 +44,8 @@ public class Cell {
         myColumn = c;
     }
 
+    public ImageView getMyImage() {
+        return myImage;
+    }
 
 }

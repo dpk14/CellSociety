@@ -1,10 +1,15 @@
 package cells;
 
 import cells.Cell;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 import java.util.List;
 
 public class SharkCell extends Cell {
+    public static final String SHARK_IMAGE = "WatorWorldImages/shark.gif";
     public static final String DATA_TYPE = "SharkCell";
     public static final List<String> DATA_FIELDS = List.of("row", "column", "max track", "energy", "energy gain");
     private int myTurnsSurvived;

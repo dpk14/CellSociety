@@ -5,15 +5,28 @@ import cells.Cell;
 import cells.EmptyCell;
 import cells.StateChangeCell;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SpreadingFireSimulation extends Simulation{
     public static final String DATA_TYPE = "SpreadingFireSimulation";
     public static final List<String> DATA_FIELDS = List.of(
             "title", "author", "rows", "columns", "speed", "spread rate", "growth rate", "lightning rate");
+    private Map<String, String> myDataValues;
+
     private double myProbCatch;
     private double myProbLightning;
     private double myProbGrow;
+
+    public SpreadingFireSimulation(int numRows, int numCols){
+        super(numRows, numCols);
+        myDataValues = new HashMap<>();
+    }
+
+    public SpreadingFireSimulation(Map<String, String> dataValues, List<Cell> cells) { // pass in list of strings representing rows, columns, sat threshold
+        super(Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
+    }
 
     public SpreadingFireSimulation(int numRows, int numCols, double probCatch, double probLightning, double probGrow){
         super(numRows,numCols);
@@ -46,6 +59,11 @@ public class SpreadingFireSimulation extends Simulation{
         return myGrid;
     }
 
+    @Override
+    public Map<String, String> getMyDataValues(){
+        return myDataValues;
+    }
+
     private String randomizeState(Cell cell, String state){
         double rand=Math.random();
 
@@ -54,23 +72,7 @@ public class SpreadingFireSimulation extends Simulation{
             if((firecount!=0 && rand/firecount<myProbCatch) || rand<myProbCatch*myProbLightning) return "BURNING";
         }
         else if (rand<myProbGrow) return "TREE";
-
         return state;
-    }
-
-    @Override
-    public void setupSimulation(){
-        for (int i = 0; i < myGrid.length; i++) {
-            for (int j = 0; j < myGrid[i].length; j++) {
-                if (i == 3) {
-                    myGrid[i][j] = new EmptyCell(i,j);
-                } else if (i % 2 == 0) {
-                    myGrid[i][j] = new AgentCell(i,j,"BLUE");
-                } else {
-                    myGrid[i][j] = new AgentCell(i,j,"RED");
-                }
-            }
-        }
     }
 
     @Override

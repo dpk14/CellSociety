@@ -5,21 +5,25 @@ import cells.Cell;
 import cells.EmptyCell;
 import cells.StateChangeCell;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GameOfLifeSimulation extends Simulation{
     public static final String DATA_TYPE = "GameOfLifeSimulation";
     public static final List<String> DATA_FIELDS = List.of(
             "title", "author", "rows", "columns", "speed");
+    private Map<String, String> myDataValues;
 
     public GameOfLifeSimulation(int numRows, int numCols){
-        super(numRows,numCols);
-        setupSimulation();
+        super(numRows, numCols);
+        myDataValues = new HashMap<>();
     }
 
-    public GameOfLifeSimulation(List<String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
-        super(Integer.parseInt(dataValues.get(2)), Integer.parseInt(dataValues.get(3)));
+    public GameOfLifeSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
+        super(Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
         myGrid = getNewGrid(cells);
+        myDataValues = dataValues;
     }
 
     @Override
@@ -46,21 +50,6 @@ public class GameOfLifeSimulation extends Simulation{
     }
 
     @Override
-    public void setupSimulation(){
-        for (int i = 0; i < myGrid.length; i++) {
-            for (int j = 0; j < myGrid[i].length; j++) {
-                if (i == 3) {
-                    myGrid[i][j] = new EmptyCell(i,j);
-                } else if (i % 2 == 0) {
-                    myGrid[i][j] = new AgentCell(i,j,"BLUE");
-                } else {
-                    myGrid[i][j] = new AgentCell(i,j,"RED");
-                }
-            }
-        }
-    }
-
-    @Override
     public List<String> getDataFields(){
         return DATA_FIELDS;
     }
@@ -70,4 +59,8 @@ public class GameOfLifeSimulation extends Simulation{
         return DATA_TYPE;
     }
 
+    @Override
+    public Map<String, String> getMyDataValues(){
+        return myDataValues;
+    }
 }
