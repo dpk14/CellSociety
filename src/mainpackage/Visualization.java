@@ -53,7 +53,6 @@ public class Visualization {
                 double currentX = j * cellWidth;
                 double currentY = i * cellHeight;
                 //
-                System.out.println(c.getColumn());
                 addImageToRoot(root, currentX, currentY, c.getMyColor());
             }
             //System.out.println();

@@ -26,6 +26,11 @@ public class SpreadingFireSimulation extends Simulation{
 
     public SpreadingFireSimulation(Map<String, String> dataValues, List<Cell> cells) { // pass in list of strings representing rows, columns, sat threshold
         super(Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
+        myProbCatch = Double.parseDouble(dataValues.get("spreadRate"));
+        myProbGrow=Double.parseDouble(dataValues.get("growthRate"));
+        myProbLightning=Double.parseDouble(dataValues.get("lightningRate"));
+        myGrid = getNewGrid(cells);
+        myDataValues = dataValues;
     }
 
     public SpreadingFireSimulation(int numRows, int numCols, double probCatch, double probLightning, double probGrow){
@@ -33,6 +38,7 @@ public class SpreadingFireSimulation extends Simulation{
         myProbCatch=probCatch;
         myProbLightning=probLightning;
         myProbGrow=probGrow;
+        myDataValues = new HashMap<>();
     }
 
     @Override
@@ -41,6 +47,7 @@ public class SpreadingFireSimulation extends Simulation{
         myCellList.clear();
         for(int i = 0; i < myGrid.length; i++){ // i = row number
             for(int j = 0; j < myGrid[0].length; j++){ // j = column number
+
                 Cell cell = myGrid[i][j];
                 state=((StateChangeCell) cell).getState();
                 if(((StateChangeCell) cell).getState().equals("BURNING")) ((StateChangeCell) cell).setState("EMPTY");
