@@ -113,6 +113,7 @@ public class RunSimulation extends Application {
          */
         setupWatorWorldSimulation();
 
+
         root.getChildren().add(root_other);
         root.getChildren().add(root_grid);
 
