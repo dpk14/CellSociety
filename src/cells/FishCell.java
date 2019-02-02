@@ -1,21 +1,31 @@
 package cells;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+
 import java.util.List;
 
 public class FishCell extends Cell {
+
+    public static final String FISH_IMAGE = "WatorWorldImages/fish.gif";
+
     public static final String DATA_TYPE = "FishCell";
     public static final List<String> DATA_FIELDS = List.of("maxTrack");
+
     private int myTracker;
     private int myMaxTrack;
 
+
     public FishCell(int row, int column, int maxtrack) {
-        super(row, column);
+        super(row, column, new ImageView(new Image(FISH_IMAGE)));
         this.myTracker=0;
         this.myMaxTrack=maxtrack;
     }
 
     public FishCell(List<String> dataValues) {
-        super(Integer.parseInt(dataValues.get(0)), Integer.parseInt(dataValues.get(1)));
+        super(Integer.parseInt(dataValues.get(0)), Integer.parseInt(dataValues.get(1)), new ImageView(new Image(FISH_IMAGE)));
         this.myTracker=0;
         this.myMaxTrack=Integer.parseInt(dataValues.get(2));
     }
