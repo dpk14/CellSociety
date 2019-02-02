@@ -21,7 +21,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import simulations.SegregationSimulation;
 import simulations.Simulation;
-import simulations.WatorWorldSimulation;
+//import simulations.WatorWorldSimulation;
 
 import java.io.File;
 import java.io.IOException;
