@@ -12,7 +12,7 @@ import java.util.Map;
 public class SpreadingFireSimulation extends Simulation{
     public static final String DATA_TYPE = "SpreadingFireSimulation";
     public static final List<String> DATA_FIELDS = List.of(
-            "title", "author", "rows", "columns", "speed", "spread rate", "growth rate", "lightning rate");
+            "title", "author", "rows", "columns", "speed", "spreadRate", "growthRate", "lightningRate");
     private Map<String, String> myDataValues;
 
     private double myProbCatch;
@@ -43,7 +43,7 @@ public class SpreadingFireSimulation extends Simulation{
             for(int j = 0; j < myGrid[0].length; j++){ // j = column number
                 Cell cell = myGrid[i][j];
                 state=((StateChangeCell) cell).getState();
-                if(((StateChangeCell) cell).getState().equals("BURN")) ((StateChangeCell) cell).setState("EMPTY");
+                if(((StateChangeCell) cell).getState().equals("BURNING")) ((StateChangeCell) cell).setState("EMPTY");
                 else ((StateChangeCell) cell).setState(randomizeState(cell, state));
                 myCellList.add(cell);
             }

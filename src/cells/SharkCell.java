@@ -19,7 +19,7 @@ public class SharkCell extends Cell {
     private int myEnergyGain;
 
     public SharkCell(int row, int column, int maxtrack, int energy, int energyGain) {
-        super(row, column, new ImageView(new Image(SHARK_IMAGE)));
+        super(row, column, COLOR_SHARK);
         this.myTracker=0;
         this.myMaxTrack=maxtrack;
         this.myEnergy=energy;
@@ -27,7 +27,7 @@ public class SharkCell extends Cell {
     }
 
     public SharkCell(List<String> dataValues){
-        super(Integer.parseInt(dataValues.get(0)), Integer.parseInt(dataValues.get(1)), new ImageView(new Image(SHARK_IMAGE)));
+        super(Integer.parseInt(dataValues.get(0)), Integer.parseInt(dataValues.get(1)), COLOR_SHARK);
         this.myTracker= 0;
         this.myMaxTrack= Integer.parseInt(dataValues.get(2));
         this.myEnergy=Integer.parseInt(dataValues.get(3));
