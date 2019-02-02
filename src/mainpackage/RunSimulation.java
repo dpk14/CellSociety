@@ -1,6 +1,7 @@
 package mainpackage;
 
 import cells.Cell;
+import cells.StateChangeCell;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
@@ -27,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RunSimulation extends Application {
-    public static final String DATA_FILE = "data/initial_spreadingfire1.xml";
+    public static final String DATA_FILE = "data/initial_gameoflife1.xml";
 
 
     public static final String TITLE = "";
@@ -142,6 +143,8 @@ public class RunSimulation extends Application {
         onInitialGrid = true;
         currentSimulation = new XMLParser("simType").getSimulation(new File(DATA_FILE));
         Cell[][] initialGrid = currentSimulation.getMyGrid();
+
+        System.out.println(initialGrid[0][0] instanceof Cell);
         newVisual = new Visualization(initialGrid.length, initialGrid[0].length, 1.0);
         root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
     }
