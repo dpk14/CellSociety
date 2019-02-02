@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RunSimulation extends Application {
-    public static final String DATA_FILE = "data/initial_gameoflife1.xml";
+    public static final String DATA_FILE = "data/initial_watorworld1.xml";
 
 
     public static final String TITLE = "";
