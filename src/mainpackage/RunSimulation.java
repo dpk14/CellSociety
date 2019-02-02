@@ -122,7 +122,7 @@ public class RunSimulation extends Application {
     }
 
     private void setupWatorWorldSimulation() {
-        currentSimulation = new WatorWorldSimulation(10,10,7,2,5,5);
+        currentSimulation = new WatorWorldSimulation(200,200,7,2,5,5);
         Cell[][] initialGrid = currentSimulation.getMyGrid();
         newVisual = new Visualization(initialGrid.length, initialGrid[0].length, 1.0);
         root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
