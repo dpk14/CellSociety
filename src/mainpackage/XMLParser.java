@@ -43,9 +43,9 @@ public class XMLParser {
             Element row = (Element) grid.getElementsByTagName("row").item(i);
             for(int j = 0; j < columns; j++){
                 Element currentCell = (Element)row.getElementsByTagName("Cell").item(j);
-                System.out.println(row.getElementsByTagName("Cell").item(j).getNodeName());
+                //System.out.println(row.getElementsByTagName("Cell").item(j).getNodeName());
                 String cellType = currentCell.getAttribute("cellType");
-                System.out.println(cellType);
+                //System.out.println(cellType);
                 cells.add(createCell(i, j, cellType, currentCell));
             }
         }

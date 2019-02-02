@@ -43,7 +43,7 @@ public class SpreadingFireSimulation extends Simulation{
             for(int j = 0; j < myGrid[0].length; j++){ // j = column number
                 Cell cell = myGrid[i][j];
                 state=((StateChangeCell) cell).getState();
-                if(((StateChangeCell) cell).getState().equals("BURN")) ((StateChangeCell) cell).setState("EMPTY");
+                if(((StateChangeCell) cell).getState().equals("BURNING")) ((StateChangeCell) cell).setState("EMPTY");
                 else ((StateChangeCell) cell).setState(randomizeState(cell, state));
                 myCellList.add(cell);
             }

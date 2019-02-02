@@ -1,14 +1,21 @@
 package cells;
 
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Paint;
+
+
+
 public class Cell {
     private int myRow;
     private int myColumn;
-    // ImageView?
+    protected Paint myColor;
 
-    public Cell(int row, int column){
+    public Cell(int row, int column, Paint c){
         myRow = row;
         myColumn = column;
+        myColor = c;
     }
 
     public void swapPosition(Cell cell){
@@ -37,5 +44,8 @@ public class Cell {
         myColumn = c;
     }
 
+    public Paint getMyColor() {
+        return myColor;
+    }
 
 }

@@ -4,15 +4,22 @@ import cells.Cell;
 import cells.EmptyCell;
 import cells.FishCell;
 import cells.SharkCell;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 import java.util.*;
 
 public class WatorWorldSimulation extends Simulation {
+    public static final String EMPTY_IMAGE = "SegregationImages/emptySG.gif";
     private int myStartEnergy;
     private int myEnergyGain;
     private int mySharkReprodMax;
     private int myFishReprodMax;
     private ArrayList<Cell> myTakenSpots=new ArrayList<>();
+    public static final Paint COLOR_AGENT_RED = Color.RED;
+
 
     public static final String DATA_TYPE = "WatorWorldSimulation";
     public static final List<String> DATA_FIELDS = List.of(
@@ -68,14 +75,13 @@ public class WatorWorldSimulation extends Simulation {
         for(Cell cell: randomizedList){
             if(cell instanceof FishCell) {
                 ((FishCell) cell).updateTracker();
-                fishMover(cell, new Cell(cell.getRow(), cell.getColumn()), cell.getRow(), cell.getColumn());
+                fishMover(cell, new Cell(cell.getRow(), cell.getColumn(), COLOR_AGENT_RED), cell.getRow(), cell.getColumn());
             }
             else if(cell instanceof SharkCell) {
                 ((SharkCell) cell).updateTracker();
                 ((SharkCell) cell).decrementEnergy();
-                sharkMover(cell, new Cell(cell.getRow(), cell.getColumn()), cell.getRow(), cell.getColumn());
+                sharkMover(cell, new Cell(cell.getRow(), cell.getColumn(), COLOR_AGENT_RED), cell.getRow(), cell.getColumn());
             }
-            System.out.println();
         }
         myGrid = getNewGrid(this.myCellList);
         return myGrid;
@@ -90,7 +96,7 @@ public class WatorWorldSimulation extends Simulation {
             }
             emptyNeighbors.removeAll(myTakenSpots);
             Cell otherCell = move(emptyNeighbors, fish);
-            Cell newLocation=new Cell(otherCell.getRow(), otherCell.getColumn());
+            Cell newLocation=new Cell(otherCell.getRow(), otherCell.getColumn(), COLOR_AGENT_RED);
             myTakenSpots.add(newLocation);
             fish.swapPosition(otherCell);
             myCellList.add(fish);
@@ -115,7 +121,7 @@ public class WatorWorldSimulation extends Simulation {
         if(fishNeighbors.size()>0) availableNeighbors=new ArrayList<Cell>(fishNeighbors);
         else availableNeighbors=new ArrayList<Cell>(emptyNeighbors);
         Cell otherCell=move(availableNeighbors, shark);
-        Cell newLocation=new Cell(otherCell.getRow(), otherCell.getColumn());
+        Cell newLocation=new Cell(otherCell.getRow(), otherCell.getColumn(),COLOR_AGENT_RED);
         shark.swapPosition(otherCell);
         if (((SharkCell) shark).canReproduce() && (newLocation.getRow()!=currentRow || newLocation.getColumn()!=currentCol)) {
             ((SharkCell) shark).setMyTracker(0);

@@ -19,16 +19,15 @@ import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import simulations.SegregationSimulation;
+import simulations.*;
 import simulations.Simulation;
-import simulations.WatorWorldSimulation;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 public class RunSimulation extends Application {
-    public static final String DATA_FILE = "data/initial_watorworld1.xml";
+    public static final String DATA_FILE = "data/initial_spreadingfire1.xml";
 
 
     public static final String TITLE = "";
@@ -62,6 +61,7 @@ public class RunSimulation extends Application {
     private Label label2;
     private Label label3;
 
+    private Stage s;
 
     private FileChooser fileChooser;
 
@@ -79,7 +79,7 @@ public class RunSimulation extends Application {
     public void start(Stage stage){
         // attach scene to the stage and display it
         myScene = setupGame(SIZE, (int) (SIZE * 1.2), BACKGROUND);
-
+        s = stage;
         stage.setScene(myScene);
         stage.setTitle(TITLE);
         stage.show();
@@ -89,6 +89,21 @@ public class RunSimulation extends Application {
 //        fileChooser.showOpenDialog(stage);
 
         // attach "game loop" to timeline to play it
+        FileChooser fileChooser = new FileChooser();
+        myLoadFileButton = new Button("Load simulation (.xml)");
+        myLoadFileButton.setLayoutX(50);
+        myLoadFileButton.setLayoutY(510);
+        myLoadFileButton.setDisable(false);
+        //myLoadFileButton = new Button("Load simulation (.xml)");
+        myLoadFileButton.setOnAction(e -> {
+            File selectedFile = fileChooser.showOpenDialog(s);
+            System.out.println(selectedFile.toString());
+        });
+        root_other.getChildren().add(myLoadFileButton);
+
+
+
+
         attachGameLoop();
     }
 
@@ -145,7 +160,7 @@ public class RunSimulation extends Application {
             String currentField = currentSimulation.getDataFields().get(sliderCounter);
             double value = Double.parseDouble(currentSimulation.getMyDataValues().get(currentField));
             System.out.println(value);
-            Slider slider = createSlider(30, 550, 0, 100, value);
+            Slider slider = createSlider(30, 550 + k*20, 0, 100, value);
             mySliders.put(currentField, slider);
             root_other.getChildren().add(slider);
             sliderCounter++;
@@ -163,11 +178,6 @@ public class RunSimulation extends Application {
 //        slider3.setDisable(true);
 //        root_other.getChildren().add(slider3);
 
-        myLoadFileButton = new Button("Load simulation (.xml)");
-        myLoadFileButton.setLayoutX(50);
-        myLoadFileButton.setLayoutY(510);
-        myLoadFileButton.setDisable(true);
-        root_other.getChildren().add(myLoadFileButton);
 
         myNextIterationButton = new Button(">");
 
@@ -234,9 +244,11 @@ public class RunSimulation extends Application {
             @Override
             public void handle(ActionEvent event) {
                 //System.out.println(animation.getCycleDuration().toSeconds());
-                animation.setRate(animation.getCycleDuration().toSeconds() * slider1.getValue());
+                animation.setRate(animation.getCycleDuration().toSeconds() * mySliders.get("speed").getValue());
             }
         });
+
+
     }
 
     private Button createButton(String text, int x, int y, boolean setDisable){
