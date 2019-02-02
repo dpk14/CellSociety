@@ -280,7 +280,7 @@
                 <state>CLOSED</state>
             </Cell>
             <Cell cellType = "StateChangeCell">
-                <state>FIRE</state>
+                <state>CLOSED</state>
             </Cell>
             <Cell cellType = "StateChangeCell">
                 <state>CLOSED</state>
