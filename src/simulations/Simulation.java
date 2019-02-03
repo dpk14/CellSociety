@@ -12,6 +12,31 @@ public abstract class Simulation {
     protected Cell[][] myGrid;
     protected List<Cell> myCellList = new ArrayList<Cell>();
 
+    public static enum Bounds{
+        rows(1, 100),
+        columns(1,100),
+        speed (1, 100),
+        satisfaction (0, 1),
+        spreadRate(0,1),
+        growthRate(0,1),
+        lightningRate(0,1),
+        startEnergy(1,100),
+        sharkReproductionMax(1,100),
+        fishReproductionMax(1,100),
+        energyGain(1,10);
+
+        private double min;
+        private double max;
+
+        private Bounds(double min, double max){
+            this.min = min;
+            this.max = max;
+        }
+
+        public double getMin(){ return min; }
+        public double getMax(){ return max; }
+    }
+
     public abstract Map<String, String> getMyDataValues();
 
     public abstract List<String> getDataFields();
