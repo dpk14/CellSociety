@@ -94,7 +94,7 @@ public abstract class Simulation {
         List<Cell> neighbors = getNeighbors(cell);
         List<Cell> specificNeighbors=new ArrayList<Cell>();
         for(Cell neighbor: neighbors){
-            if (((StateChangeCell) cell).getState().equals(type)) specificNeighbors.add(neighbor);
+            if (((StateChangeCell) neighbor).getState().equals(type)) specificNeighbors.add(neighbor);
         }
         return specificNeighbors;
     }

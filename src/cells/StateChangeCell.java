@@ -11,9 +11,9 @@ public class StateChangeCell extends Cell{
     public static final List<String> DATA_FIELDS = List.of("state");
 
     public static final Paint COLOR_EMPTY = Color.WHITESMOKE;
-    public static final Paint COLOR_POPULATED = Color.PURPLE;
+    public static final Paint COLOR_POPULATED = Color.BLACK;
 
-    public static final Paint COLOR_FULL = Color.BLUEVIOLET;
+    public static final Paint COLOR_FULL = Color.BLUE;
     public static final Paint COLOR_CLOSED = Color.BLACK;
     public static final Paint COLOR_OPEN = Color.ANTIQUEWHITE;
 

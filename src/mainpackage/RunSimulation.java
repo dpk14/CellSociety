@@ -1,13 +1,9 @@
 package mainpackage;
 
 import cells.Cell;
-import cells.StateChangeCell;
 import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -20,7 +16,6 @@ import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import simulations.*;
 import simulations.Simulation;
 
 import java.io.File;
@@ -28,10 +23,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RunSimulation extends Application {
-    public static final String DATA_FILE = "data/initial_watorworld1.xml";
+//    public static final String DATA_FILE = "data/initial_gameoflife1.xml";
+//    public static final String DATA_FILE = "data/initial_gameoflife2.xml";
+//    public static final String DATA_FILE = "data/initial_spreadingfire1.xml";
+    public static final String DATA_FILE = "data/initial_spreadingfire2.xml";
+//    public static final String DATA_FILE = "data/initial_percolation1.xml";
+//    public static final String DATA_FILE = "data/initial_percolation2.xml";
+//    public static final String DATA_FILE = "data/initial_segregation1.xml";
+//    public static final String DATA_FILE = "data/initial_segregation2.xml";
+//    public static final String DATA_FILE = "data/initial_watorworld1.xml";
 
-
-    public static final String TITLE = "";
+    public static final String TITLE = "Cellular Automaton Simulation";
     public static final int SIZE = 600;
 
 
@@ -115,8 +117,6 @@ public class RunSimulation extends Application {
         scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         return scene;
     }
-
-
 
     private void setupSimulation() {
         onInitialGrid = true;
