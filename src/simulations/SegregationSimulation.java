@@ -125,6 +125,7 @@ public class SegregationSimulation extends Simulation {
 
     @Override
     public void updateParameters(Map<String, String> map){
+        mySatisfactionThreshold = Double.parseDouble(map.get("satisfaction"));
         myDataValues = map;
     }
 }

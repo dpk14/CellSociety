@@ -22,22 +22,9 @@ import java.io.File;
 import java.util.*;
 
 public class RunSimulation extends Application {
-
-//    public static final String DATA_FILE = "data/initial_gameoflife1.xml";
-//    public static final String DATA_FILE = "data/initial_gameoflife2.xml";
-//    public static final String DATA_FILE = "data/initial_spreadingfire1.xml";
     private String DATA_FILE = "data/initial_spreadingfire2.xml";
-//    public static final String DATA_FILE = "data/initial_percolation1.xml";
-//    public static final String DATA_FILE = "data/initial_percolation2.xml";
-//    public static final String DATA_FILE = "data/initial_segregation1.xml";
-//    public static final String DATA_FILE = "data/initial_segregation2.xml";
-//    public static final String DATA_FILE = "data/initial_watorworld1.xml";
-
     public static final String TITLE = "Cellular Automaton Simulation";
-
     public static final int SIZE = 600;
-
-
     public static final Paint BACKGROUND = Color.AZURE;
 
     private Timeline animation;
@@ -80,7 +67,6 @@ public class RunSimulation extends Application {
         stage.setScene(myScene);
         stage.setTitle(TITLE);
         stage.show();
-
         attachGameLoop();
     }
 
@@ -100,6 +86,7 @@ public class RunSimulation extends Application {
         animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
+        animation.setRate(animation.getCycleDuration().toSeconds() * mySliders.get("speed").getValue());
         animation.play();
     }
 

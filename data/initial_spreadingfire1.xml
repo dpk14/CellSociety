@@ -5,7 +5,7 @@
         <author>group14</author>
         <rows>12</rows>
         <columns>12</columns>
-        <speed>100</speed>
+        <speed>50</speed>
         <spreadRate>0.90</spreadRate>
         <growthRate>0.10</growthRate>
         <lightningRate>0.05</lightningRate>
