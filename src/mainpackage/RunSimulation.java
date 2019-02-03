@@ -29,9 +29,9 @@ import java.util.Map;
 
 public class RunSimulation extends Application {
 
-    public static final String DATA_FILE = "data/initial_watorworld1.xml";
+    //public static final String DATA_FILE = "data/initial_watorworld1.xml";
 
-
+    private String DATA_FILE = "data/initial_watorworld1.xml";
 
     public static final String TITLE = "";
     public static final int SIZE = 600;
@@ -87,27 +87,22 @@ public class RunSimulation extends Application {
         stage.setTitle(TITLE);
         stage.show();
 
-//        fileChooser = new FileChooser();
-//        fileChooser.setTitle("Open Resource File");
-//        fileChooser.showOpenDialog(stage);
 
-        // attach "game loop" to timeline to play it
-        FileChooser fileChooser = new FileChooser();
-        myLoadFileButton = new Button("Load simulation (.xml)");
-        myLoadFileButton.setLayoutX(50);
-        myLoadFileButton.setLayoutY(510);
-        myLoadFileButton.setDisable(false);
-        //myLoadFileButton = new Button("Load simulation (.xml)");
-        myLoadFileButton.setOnAction(e -> {
-            File selectedFile = fileChooser.showOpenDialog(s);
-            System.out.println(selectedFile.toString());
-        });
-        root_other.getChildren().add(myLoadFileButton);
 
 
 
 
         attachGameLoop();
+    }
+
+    private void openFile(File f) {
+        DATA_FILE = f.getAbsolutePath();
+        root.getChildren().clear();
+        setupSimulation();
+        createUIComponents();
+        root.getChildren().add(root_other);
+        root.getChildren().add(root_grid);
+
     }
 
     private void attachGameLoop() {
@@ -121,8 +116,6 @@ public class RunSimulation extends Application {
     private Scene setupGame(int width, int height, Paint background){
         root = new Group();
         Scene scene = new Scene(root, width, height, background);
-
-
 
         /**
          * Segregation testing
@@ -152,6 +145,24 @@ public class RunSimulation extends Application {
     }
 
     private void createUIComponents() {
+
+        // deals with uploading XML
+        FileChooser fileChooser = new FileChooser();
+        myLoadFileButton = new Button("Load simulation (.xml)");
+        myLoadFileButton.setLayoutX(50);
+        myLoadFileButton.setLayoutY(510);
+        myLoadFileButton.setDisable(false);
+        myLoadFileButton.setOnAction(e -> {
+            File selectedFile = fileChooser.showOpenDialog(s);
+            String fileName = selectedFile.getName();
+            if (selectedFile != null && fileName.substring(fileName.lastIndexOf(".") + 1, selectedFile.getName().length()).equals("xml")) {
+                openFile(selectedFile);
+            }
+            //System.out.println(selectedFile.toString());
+        });
+        root_other.getChildren().add(myLoadFileButton);
+
+
         // add other components (i.e. not grid) MICHAEL: I WILL MOVE THIS TO VISUALIZATION I THINK
         mySliders = new HashMap<>();
         label1 = new Label("Speed");
