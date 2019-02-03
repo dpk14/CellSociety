@@ -1,25 +1,28 @@
 package simulations;
 
-import cells.AgentCell;
 import cells.Cell;
-import cells.EmptyCell;
 import cells.StateChangeCell;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GameOfLifeSimulation extends Simulation{
     public static final String DATA_TYPE = "GameOfLifeSimulation";
     public static final List<String> DATA_FIELDS = List.of(
             "title", "author", "rows", "columns", "speed");
+    private Map<String, String> myDataValues;
 
     public GameOfLifeSimulation(int numRows, int numCols){
-        super(numRows,numCols);
-        setupSimulation();
+        super(numRows, numCols);
+        myDataValues = new HashMap<>();
     }
 
-    public GameOfLifeSimulation(List<String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
-        super(Integer.parseInt(dataValues.get(2)), Integer.parseInt(dataValues.get(3)));
+
+    public GameOfLifeSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
+        super(Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
         myGrid = getNewGrid(cells);
+        myDataValues = dataValues;
     }
 
     @Override
@@ -30,34 +33,44 @@ public class GameOfLifeSimulation extends Simulation{
             for(int j = 0; j < myGrid[0].length; j++){ // j = column number
                 Cell cell = myGrid[i][j];
                 state=((StateChangeCell) cell).getState();
-                ((StateChangeCell) cell).setState(editState(cell, state));
+                cell=new StateChangeCell(i, j, editState(cell, state));
                 myCellList.add(cell);
             }
         }
-        myGrid = getNewGrid(this.myCellList);
+        myGrid = getNewGrid(myCellList);
         return myGrid;
     }
 
     private String editState(Cell cell, String state){
-        List<Cell> neighbors=getNeighbors(cell);
+        List<Cell> neighbors=getTypedNeighbors(cell, "POPULATED");
         if (state.equals("POPULATED") && (neighbors.size()<=1 || neighbors.size()>=4)) return "EMPTY";
         else if (state.equals("EMPTY") && neighbors.size()==3) return "POPULATED";
         return state;
     }
 
     @Override
-    public void setupSimulation(){
-        for (int i = 0; i < myGrid.length; i++) {
-            for (int j = 0; j < myGrid[i].length; j++) {
-                if (i == 3) {
-                    myGrid[i][j] = new EmptyCell(i,j);
-                } else if (i % 2 == 0) {
-                    myGrid[i][j] = new AgentCell(i,j,"BLUE");
-                } else {
-                    myGrid[i][j] = new AgentCell(i,j,"RED");
-                }
-            }
+    /**
+     * Overrides the superclass's method. It takes the result of the superclass's method while adding the corner
+     * neighbors. A key assumption is that each row in the grid has the same number of entries.
+     * @return ArrayList<Cell> neighbors
+     */
+    protected List<Cell> getNeighbors(Cell cell) {
+        List<Cell> neighbors = super.getNeighbors(cell);
+        int row = cell.getRow();
+        int column = cell.getColumn();
+        if(row != 0 && column != 0){ //check top-left neighbor
+            neighbors.add(myGrid[row-1][column-1]);
         }
+        if(row != 0 && column != myGrid[0].length-1){ //check top-right neighbor
+            neighbors.add(myGrid[row-1][column+1]);
+        }
+        if(row != myGrid.length-1 && column != 0){ //check bottom-left neighbor
+            neighbors.add(myGrid[row+1][column-1]);
+        }
+        if(row != myGrid.length-1 && column != myGrid[0].length-1){ //check bottom-right neighbor
+            neighbors.add(myGrid[row+1][column+1]);
+        }
+        return neighbors;
     }
 
     @Override
@@ -70,4 +83,8 @@ public class GameOfLifeSimulation extends Simulation{
         return DATA_TYPE;
     }
 
+    @Override
+    public Map<String, String> getMyDataValues(){
+        return myDataValues;
+    }
 }

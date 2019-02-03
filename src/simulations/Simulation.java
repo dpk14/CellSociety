@@ -5,13 +5,17 @@ import cells.StateChangeCell;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public abstract class Simulation {
     //https://stackoverflow.com/questions/46820750/java-how-to-choose-what-subclass-to-construct
     protected Cell[][] myGrid;
     protected List<Cell> myCellList = new ArrayList<Cell>();
 
+    public abstract Map<String, String> getMyDataValues();
+
     public abstract List<String> getDataFields();
+
     public abstract String getDataType();
 
     public Simulation(int numRows, int numCols){
@@ -25,11 +29,6 @@ public abstract class Simulation {
      * @return updated myGrid
      */
     public abstract Cell[][] updateGrid();
-
-    /**
-     * Populates myGrid according to XML file. (Possibly?)
-     */
-    public abstract void setupSimulation();
 
     protected Cell[][] getNewGrid(List<Cell> list){
         Cell[][] newGrid = myGrid;
@@ -70,7 +69,7 @@ public abstract class Simulation {
         List<Cell> neighbors = getNeighbors(cell);
         List<Cell> specificNeighbors=new ArrayList<Cell>();
         for(Cell neighbor: neighbors){
-            if (((StateChangeCell) cell).getState().equals(type)) specificNeighbors.add(neighbor);
+            if (((StateChangeCell) neighbor).getState().equals(type)) specificNeighbors.add(neighbor);
         }
         return specificNeighbors;
     }
