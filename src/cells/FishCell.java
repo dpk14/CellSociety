@@ -10,7 +10,7 @@ import java.util.List;
 public class FishCell extends Cell {
 
     public static final String FISH_IMAGE = "WatorWorldImages/fish.gif";
-
+    public static final Paint COLOR_FISH = Color.ORANGE;
     public static final String DATA_TYPE = "FishCell";
     public static final List<String> DATA_FIELDS = List.of("row", "column", "max track");
     private int myTurnsSurvived;

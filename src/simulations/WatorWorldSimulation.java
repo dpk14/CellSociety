@@ -18,6 +18,7 @@ public class WatorWorldSimulation extends Simulation {
     private int mySharkReprodMax;
     private int myFishReprodMax;
     private ArrayList<Cell> myTakenSpots=new ArrayList<>();
+    public static final Paint COLOR_AGENT_RED = Color.RED;
 
 
     public static final String DATA_TYPE = "WatorWorldSimulation";

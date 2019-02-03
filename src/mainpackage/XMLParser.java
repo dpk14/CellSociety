@@ -33,8 +33,8 @@ public class XMLParser {
         Element root = getRootElement(dataFile);
         Element settings = (Element) root.getElementsByTagName("settings").item(0);
         Element grid = (Element) root.getElementsByTagName("grid").item(0);
-
-        return createSimulation(root.getAttribute(TYPE_ATTRIBUTE), settings, grid);
+        Simulation sim = createSimulation(root.getAttribute(TYPE_ATTRIBUTE), settings, grid);
+        return sim;
     }
 
     private ArrayList<Cell> getCells(Element grid, int rows, int columns){
@@ -115,6 +115,10 @@ public class XMLParser {
             case SpreadingFireSimulation.DATA_TYPE:
                 dataValues = getDataValues(settings, SpreadingFireSimulation.DATA_FIELDS);
                 cells = getCells(grid, Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
+                for(String s : dataValues.values()){
+                    System.out.println(s);
+                }
+                System.out.println(cells.get(0).getRow());
                 return new SpreadingFireSimulation(dataValues, cells);
             case GameOfLifeSimulation.DATA_TYPE:
                 dataValues = getDataValues(settings, GameOfLifeSimulation.DATA_FIELDS);
@@ -141,6 +145,11 @@ public class XMLParser {
             case SharkCell.DATA_TYPE :
                 dataValues.addAll(getCellValues(root, SharkCell.DATA_FIELDS));
                 return new SharkCell(dataValues);
+            case StateChangeCell.DATA_TYPE :
+                dataValues.addAll(getCellValues(root, StateChangeCell.DATA_FIELDS));
+                Cell cell = new StateChangeCell(dataValues);
+                //System.out.println(((StateChangeCell) cell).getState());
+                return cell;
         }
         throw new XMLException(CELL_ERROR_MESSAGE, cellType);
     }

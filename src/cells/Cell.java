@@ -10,12 +10,12 @@ import javafx.scene.paint.Paint;
 public class Cell {
     private int myRow;
     private int myColumn;
-    protected ImageView myImage;
+    protected Paint myColor;
 
-    public Cell(int row, int column, ImageView m){
+    public Cell(int row, int column, Paint c){
         myRow = row;
         myColumn = column;
-        myImage = m;
+        myColor = c;
     }
 
     public void swapPosition(Cell cell){
@@ -44,8 +44,8 @@ public class Cell {
         myColumn = c;
     }
 
-    public ImageView getMyImage() {
-        return myImage;
+    public Paint getMyColor() {
+        return myColor;
     }
 
 }

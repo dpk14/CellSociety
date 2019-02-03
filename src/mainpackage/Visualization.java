@@ -3,6 +3,7 @@ package mainpackage;
 import cells.*;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -10,6 +11,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import simulations.SegregationSimulation;
 import simulations.Simulation;
+
+import java.awt.desktop.SystemSleepEvent;
 
 public class Visualization {
     public final double VISUALIZATION_HEIGHT = 500;
@@ -49,7 +52,8 @@ public class Visualization {
                 Cell c = currentGrid[i][j];
                 double currentX = j * cellWidth;
                 double currentY = i * cellHeight;
-                addImageToRoot(root, currentX, currentY, c.getMyImage());
+                //
+                addImageToRoot(root, currentX, currentY, c.getMyColor());
             }
             //System.out.println();
         }
@@ -57,21 +61,15 @@ public class Visualization {
         return root;
     }
 
-    private void addImageToRoot(Group root, double currentX, double currentY, ImageView im) {
-//        Rectangle rec = new Rectangle();
-//        rec.setX(currentX);
-//        rec.setY(currentY);
-//        rec.setWidth(cellWidth);
-//        rec.setHeight(cellHeight);
-//        rec.setFill(colorAgentBlue);
-//        rec.setStroke(COLOR_BLACK);
-//        rec.setStrokeType(StrokeType.INSIDE);
-
-        ImageView image = im;
-        image.setX(currentX);
-        image.setY(currentY);
-        image.setFitWidth(cellWidth);
-        image.setFitHeight(cellHeight);
-        root.getChildren().add(image);
+    private void addImageToRoot(Group root, double currentX, double currentY, Paint p) {
+        Rectangle rec = new Rectangle();
+        rec.setX(currentX);
+        rec.setY(currentY);
+        rec.setWidth(cellWidth);
+        rec.setHeight(cellHeight);
+        rec.setFill(p);
+        rec.setStroke(COLOR_BLACK);
+        rec.setStrokeType(StrokeType.INSIDE);
+        root.getChildren().add(rec);
     }
 }
