@@ -188,4 +188,12 @@ public class WatorWorldSimulation extends Simulation {
     public Map<String, String> getMyDataValues(){
         return myDataValues;
     }
+
+    //@Override
+    public void updateSimulationParameters (int startEnergy, int energyGain, int sharkMax, int fishMax) {
+        myStartEnergy = startEnergy;
+        myEnergyGain = energyGain;
+        mySharkReprodMax = sharkMax;
+        myFishReprodMax = fishMax;
+    }
 }

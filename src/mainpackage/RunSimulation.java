@@ -23,10 +23,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RunSimulation extends Application {
+
 //    public static final String DATA_FILE = "data/initial_gameoflife1.xml";
 //    public static final String DATA_FILE = "data/initial_gameoflife2.xml";
 //    public static final String DATA_FILE = "data/initial_spreadingfire1.xml";
-    public static final String DATA_FILE = "data/initial_spreadingfire2.xml";
+    private String DATA_FILE = "data/initial_spreadingfire2.xml";
 //    public static final String DATA_FILE = "data/initial_percolation1.xml";
 //    public static final String DATA_FILE = "data/initial_percolation2.xml";
 //    public static final String DATA_FILE = "data/initial_segregation1.xml";
@@ -34,6 +35,7 @@ public class RunSimulation extends Application {
 //    public static final String DATA_FILE = "data/initial_watorworld1.xml";
 
     public static final String TITLE = "Cellular Automaton Simulation";
+
     public static final int SIZE = 600;
 
 
@@ -80,23 +82,18 @@ public class RunSimulation extends Application {
         stage.setTitle(TITLE);
         stage.show();
 
-//        fileChooser = new FileChooser();
-//        fileChooser.setTitle("Open Resource File");
-//        fileChooser.showOpenDialog(stage);
-
-        // attach "game loop" to timeline to play it
-        FileChooser fileChooser = new FileChooser();
-        myLoadFileButton = new Button("Load simulation (.xml)");
-        myLoadFileButton.setLayoutX(30);
-        myLoadFileButton.setLayoutY(510);
-        myLoadFileButton.setDisable(false);
-        //myLoadFileButton = new Button("Load simulation (.xml)");
-        myLoadFileButton.setOnAction(e -> {
-            File selectedFile = fileChooser.showOpenDialog(s);
-            System.out.println(selectedFile.toString());
-        });
-        root_other.getChildren().add(myLoadFileButton);
         attachGameLoop();
+    }
+
+    private void openFile(File f) {
+        DATA_FILE = f.getAbsolutePath();
+        root_other.getChildren().clear();
+        root.getChildren().clear();
+        setupSimulation();
+        createUIComponents();
+        root.getChildren().add(root_other);
+        root.getChildren().add(root_grid);
+
     }
 
     private void attachGameLoop() {
@@ -110,6 +107,7 @@ public class RunSimulation extends Application {
     private Scene setupGame(int width, int height, Paint background){
         root = new Group();
         Scene scene = new Scene(root, width, height, background);
+
         setupSimulation();
         createUIComponents();
         root.getChildren().add(root_other);
@@ -129,13 +127,14 @@ public class RunSimulation extends Application {
     }
 
     private void createUIComponents() {
-        // add other components (i.e. not grid) MICHAEL: I WILL MOVE THIS TO VISUALIZATION I THINK
+        // add other components (i.e. not grid)
         mySliders = createMySliders(currentSimulation, root_other);
+        myLoadFileButton = createButton("Load simulation (.xml)", 50,510,false);
         myNextIterationButton = createButton(">", 450, 550, false);
         myResetButton = createButton("Reset", 450, 580, false);
         myStartButton = createButton("Start", 450, 610, true);
         myStopButton = createButton("Stop", 450, 640, true);;
-        root_other.getChildren().addAll(myNextIterationButton, myResetButton, myApplyButton, myStartButton, myStopButton);
+        root_other.getChildren().addAll(myLoadFileButton, myNextIterationButton, myResetButton, myApplyButton, myStartButton, myStopButton);
         setButtonHandlers();
     }
 
@@ -156,6 +155,16 @@ public class RunSimulation extends Application {
         myApplyButton.setOnAction(event -> {
             //System.out.println(animation.getCycleDuration().toSeconds());
             animation.setRate(animation.getCycleDuration().toSeconds() * mySliders.get("speed").getValue());
+            //must update parameters
+        });
+        myLoadFileButton.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            File selectedFile = fileChooser.showOpenDialog(s);
+            if (selectedFile != null
+                    && selectedFile.getName().substring(selectedFile.getName().lastIndexOf(".") + 1).equals("xml")) {
+                openFile(selectedFile);
+            }
+            //System.out.println(selectedFile.toString());
         });
     }
 
@@ -222,10 +231,13 @@ public class RunSimulation extends Application {
         myResetButton.setDisable(onInitialGrid);
         myStartButton.setDisable(startedAnimation);
         myStopButton.setDisable(!startedAnimation);
-        mySliders.get("speed").setDisable(startedAnimation);
+
+        for (String s : mySliders.keySet()) {
+            mySliders.get(s).setDisable(startedAnimation);
+        }
+
         myApplyButton.setDisable(startedAnimation);
         if (startedAnimation) renderNextIteration();
-        //Node n = newVisual.getRootNode()
     }
 
     private void handleKeyInput (KeyCode code) {

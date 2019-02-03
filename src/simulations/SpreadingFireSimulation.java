@@ -90,4 +90,11 @@ public class SpreadingFireSimulation extends Simulation{
         return DATA_TYPE;
     }
 
+    //@Override
+    public void updateSimulationParameters(double pCatch, double pLightning, double pGrow) {
+        myProbCatch = pCatch;
+        myProbLightning = pLightning;
+        myProbGrow = pGrow;
+    }
+
 }
