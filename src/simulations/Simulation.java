@@ -123,11 +123,12 @@ public abstract class Simulation {
     }
 
     /**
-     * Michael made this for debugging purposes.
      * Returns grid at start of initialization just so I can check we have the right grid to begin with
      * @return
      */
     public Cell[][] getMyGrid() {
         return myGrid;
     }
+
+
 }

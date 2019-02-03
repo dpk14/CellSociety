@@ -52,12 +52,9 @@ public class Visualization {
                 Cell c = currentGrid[i][j];
                 double currentX = j * cellWidth;
                 double currentY = i * cellHeight;
-                //
                 addImageToRoot(root, currentX, currentY, c.getMyColor());
             }
-            //System.out.println();
         }
-        //System.out.println("=-=-=-=-=-=-=-=-=-=-=-=-=");
         return root;
     }
 
