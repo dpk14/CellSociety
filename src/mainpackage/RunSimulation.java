@@ -1,13 +1,9 @@
 package mainpackage;
 
 import cells.Cell;
-import cells.StateChangeCell;
 import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -20,7 +16,6 @@ import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import simulations.*;
 import simulations.Simulation;
 
 import java.io.File;
@@ -28,10 +23,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RunSimulation extends Application {
-    public static final String DATA_FILE = "data/initial_spreadingfire1.xml";
+//    public static final String DATA_FILE = "data/initial_gameoflife1.xml";
+//    public static final String DATA_FILE = "data/initial_gameoflife2.xml";
+//    public static final String DATA_FILE = "data/initial_spreadingfire1.xml";
+    public static final String DATA_FILE = "data/initial_spreadingfire2.xml";
+//    public static final String DATA_FILE = "data/initial_percolation1.xml";
+//    public static final String DATA_FILE = "data/initial_percolation2.xml";
+//    public static final String DATA_FILE = "data/initial_segregation1.xml";
+//    public static final String DATA_FILE = "data/initial_segregation2.xml";
+//    public static final String DATA_FILE = "data/initial_watorworld1.xml";
 
-
-    public static final String TITLE = "SegregationSimulation";
+    public static final String TITLE = "Cellular Automaton Simulation";
     public static final int SIZE = 600;
 
 
@@ -46,7 +48,6 @@ public class RunSimulation extends Application {
     private Visualization newVisual;
     private Simulation currentSimulation;
 
-
     // UI components
     private Button myResetButton;
     private Button myStartButton;
@@ -55,12 +56,6 @@ public class RunSimulation extends Application {
     private Button myNextIterationButton;
     private Button myLoadFileButton;
     private Map<String, Slider> mySliders;
-    private Slider slider1;
-    private Slider slider2;
-    private Slider slider3;
-    private Label label1;
-    private Label label2;
-    private Label label3;
 
     private Stage s;
 
@@ -79,7 +74,7 @@ public class RunSimulation extends Application {
     @Override
     public void start(Stage stage){
         // attach scene to the stage and display it
-        myScene = setupGame(SIZE, (int) (SIZE * 1.2), BACKGROUND);
+        myScene = setupGame(SIZE, (int) (SIZE * 1.35), BACKGROUND);
         s = stage;
         stage.setScene(myScene);
         stage.setTitle(TITLE);
@@ -92,7 +87,7 @@ public class RunSimulation extends Application {
         // attach "game loop" to timeline to play it
         FileChooser fileChooser = new FileChooser();
         myLoadFileButton = new Button("Load simulation (.xml)");
-        myLoadFileButton.setLayoutX(50);
+        myLoadFileButton.setLayoutX(30);
         myLoadFileButton.setLayoutY(510);
         myLoadFileButton.setDisable(false);
         //myLoadFileButton = new Button("Load simulation (.xml)");
@@ -101,10 +96,6 @@ public class RunSimulation extends Application {
             System.out.println(selectedFile.toString());
         });
         root_other.getChildren().add(myLoadFileButton);
-
-
-
-
         attachGameLoop();
     }
 
@@ -119,34 +110,13 @@ public class RunSimulation extends Application {
     private Scene setupGame(int width, int height, Paint background){
         root = new Group();
         Scene scene = new Scene(root, width, height, background);
-
-
-
-        /**
-         * Segregation testing
-         * **/
         setupSimulation();
         createUIComponents();
-
-
-
-
         root.getChildren().add(root_other);
         root.getChildren().add(root_grid);
-
         scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         return scene;
     }
-
-/*
-    private void setupWatorWorldSimulation() {
-        currentSimulation = new WatorWorldSimulation(200,200,7,2,5,5);
-        Cell[][] initialGrid = currentSimulation.getMyGrid();
-        newVisual = new Visualization(initialGrid.length, initialGrid[0].length, 1.0);
-        root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
-    }
-*/
-
 
     private void setupSimulation() {
         onInitialGrid = true;
@@ -160,119 +130,44 @@ public class RunSimulation extends Application {
 
     private void createUIComponents() {
         // add other components (i.e. not grid) MICHAEL: I WILL MOVE THIS TO VISUALIZATION I THINK
-        mySliders = new HashMap<>();
-        label1 = new Label("Speed");
-        label1.setLayoutX(200);
-        label1.setLayoutY(550);
-        root_other.getChildren().add(label1);
-        int sliderCounter = 4;
-
-        System.out.println(currentSimulation.getMyDataValues().size());
-        for(int k = 0; k < currentSimulation.getMyDataValues().size() - 4; k++){
-            String currentField = currentSimulation.getDataFields().get(sliderCounter);
-            double value = Double.parseDouble(currentSimulation.getMyDataValues().get(currentField));
-            System.out.println(value);
-            Slider slider = createSlider(30, 550 + k*20, 0, 100, value);
-            mySliders.put(currentField, slider);
-            root_other.getChildren().add(slider);
-            sliderCounter++;
-        }
-
-//        slider1 = createSlider(30, 550, 1, 100, 15);
-//        slider1.setDisable(false);
-//        root_other.getChildren().add(slider1);
-//
-//        slider2 = createSlider(30, 580, 0, 100, 50);
-//        slider2.setDisable(true);
-//        root_other.getChildren().add(slider2);
-//
-//        slider3 = createSlider(30, 610, 0, 1, 0);
-//        slider3.setDisable(true);
-//        root_other.getChildren().add(slider3);
-
-
-        myNextIterationButton = new Button(">");
-
-        myNextIterationButton.setLayoutX(400);
-        myNextIterationButton.setLayoutY(510);
-        myNextIterationButton.setDisable(false);
-        root_other.getChildren().add(myNextIterationButton);
-
-        myResetButton = new Button("Reset");
-        myResetButton.setLayoutX(450);
-        myResetButton.setLayoutY(580);
-        myResetButton.setDisable(false);
-        root_other.getChildren().add(myResetButton);
-
-        myStartButton = new Button("Start");
-        myStartButton.setLayoutX(450);
-        myStartButton.setLayoutY(610);
-        myStartButton.setDisable(true);
-        root_other.getChildren().add(myStartButton);
-
-        myStopButton = new Button("Stop");
-        myStopButton.setLayoutX(450);
-        myStopButton.setLayoutY(640);
-        myStopButton.setDisable(true);
-        root_other.getChildren().add(myStopButton);
-
-        myApplyButton = new Button("Apply");
-        myApplyButton.setLayoutX(30);
-        myApplyButton.setLayoutY(640);
-        myApplyButton.setDisable(false);
-        root_other.getChildren().add(myApplyButton);
-
-
-
-        myNextIterationButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                onInitialGrid = false;
-                renderNextIteration();
-            }
-        });
-        myResetButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                setupSimulation();
-            }
-        });
-        myStartButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                startedAnimation = true;
-                onInitialGrid = false;
-            }
-        });
-        myStopButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                startedAnimation = false;
-                onInitialGrid = false;
-            }
-        });
-
-        myApplyButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                //System.out.println(animation.getCycleDuration().toSeconds());
-                animation.setRate(animation.getCycleDuration().toSeconds() * mySliders.get("speed").getValue());
-            }
-        });
-
-
+        mySliders = createMySliders(currentSimulation, root_other);
+        myNextIterationButton = createButton(">", 450, 550, false);
+        myResetButton = createButton("Reset", 450, 580, false);
+        myStartButton = createButton("Start", 450, 610, true);
+        myStopButton = createButton("Stop", 450, 640, true);;
+        root_other.getChildren().addAll(myNextIterationButton, myResetButton, myApplyButton, myStartButton, myStopButton);
+        setButtonHandlers();
     }
 
-    private Button createButton(String text, int x, int y, boolean setDisable){
-        Button button = new Button();
-        button = new Button(text);
+    private void setButtonHandlers(){
+        myNextIterationButton.setOnAction(event -> {
+            onInitialGrid = false;
+            renderNextIteration();
+        });
+        myResetButton.setOnAction(event -> setupSimulation());
+        myStartButton.setOnAction(event -> {
+            startedAnimation = true;
+            onInitialGrid = false;
+        });
+        myStopButton.setOnAction(event -> {
+            startedAnimation = false;
+            onInitialGrid = false;
+        });
+        myApplyButton.setOnAction(event -> {
+            //System.out.println(animation.getCycleDuration().toSeconds());
+            animation.setRate(animation.getCycleDuration().toSeconds() * mySliders.get("speed").getValue());
+        });
+    }
+
+    private Button createButton(String text, double x, double y, boolean setDisable){
+        Button button = new Button(text);
         button.setLayoutX(x);
         button.setLayoutY(y);
         button.setDisable(setDisable);
         return button;
     }
 
-    private Slider createSlider(int x, int y, double min, double max, double value){
+    private Slider createSlider(double x, double y, double min, double max, double value){
         Slider slider = new Slider(0,1,1);
         slider.setLayoutX(x);
         slider.setLayoutY(y);
@@ -282,6 +177,34 @@ public class RunSimulation extends Application {
         slider.setValue(value);
         slider.setShowTickLabels(true);
         return slider;
+    }
+
+    /**
+     * Given a simulation, a map of sliders is created matching the simulation's data fields. The apply button is also
+     * initialized and located under the last slider
+     * @param sim - the current simulation
+     * @param root - the root that the sliders will be attached to
+     * @return
+     */
+    private HashMap<String, Slider> createMySliders(Simulation sim, Group root){
+        HashMap<String, Slider> sliderMap = new HashMap<>();
+        double applyButtonY = 0;
+        int sliderCounter = 4; // first important data field (comes after title, author, rows, columns...)
+        for(int k = 0; k < sim.getMyDataValues().size() - 4; k++){
+            String currentField = sim.getDataFields().get(sliderCounter);
+            double value = Double.parseDouble(sim.getMyDataValues().get(currentField));
+            Slider slider = createSlider(30, 550 + k*40, Simulation.Bounds.valueOf(currentField).getMin(),
+                    Simulation.Bounds.valueOf(currentField).getMax(), value);
+            sliderMap.put(currentField, slider);
+            Label label = new Label(currentField);
+            label.setLayoutX(180);
+            label.setLayoutY(550 + k*40);
+            root.getChildren().addAll(label, slider);
+            if(k == sim.getMyDataValues().size() - 5) applyButtonY = 550 + ++k*40;
+            sliderCounter++;
+        }
+        myApplyButton = createButton("Apply", 30, applyButtonY, false);
+        return sliderMap;
     }
 
     private void renderNextIteration() {
@@ -301,10 +224,7 @@ public class RunSimulation extends Application {
         myStopButton.setDisable(!startedAnimation);
         mySliders.get("speed").setDisable(startedAnimation);
         myApplyButton.setDisable(startedAnimation);
-
         if (startedAnimation) renderNextIteration();
-
-
         //Node n = newVisual.getRootNode()
     }
 

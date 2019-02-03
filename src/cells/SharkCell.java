@@ -10,7 +10,7 @@ import java.util.List;
 
 public class SharkCell extends Cell {
     public static final String DATA_TYPE = "SharkCell";
-    public static final List<String> DATA_FIELDS = List.of("row,", "column", "maxTrack", "energy", "energyGain");
+    public static final List<String> DATA_FIELDS = List.of("reproductionTime", "energy", "energyGain");
     public static final Paint COLOR_SHARK = Color.GREY;
         private int myTurnsSurvived;
         private int myReproductionTime;
