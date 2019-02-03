@@ -90,4 +90,12 @@ public class SpreadingFireSimulation extends Simulation{
         return DATA_TYPE;
     }
 
+    @Override
+    public void updateParameters(Map<String, String> map){
+        myProbCatch = Double.parseDouble(map.get("spreadRate"));
+        myProbGrow=Double.parseDouble(map.get("growthRate"));
+        myProbLightning=Double.parseDouble(map.get("lightningRate"));
+        myDataValues = map;
+    }
+
 }

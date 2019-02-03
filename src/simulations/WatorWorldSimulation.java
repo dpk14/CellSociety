@@ -188,4 +188,13 @@ public class WatorWorldSimulation extends Simulation {
     public Map<String, String> getMyDataValues(){
         return myDataValues;
     }
+
+    @Override
+    public void updateParameters(Map<String, String> map){
+        myStartEnergy=Integer.parseInt(map.get("startEnergy"));
+        myEnergyGain=Integer.parseInt(map.get("energyGain"));
+        mySharkReprodMax=Integer.parseInt(map.get("sharkReproductionMax"));
+        myFishReprodMax=Integer.parseInt(map.get("fishReproductionMax"));
+        myDataValues = map;
+    }
 }

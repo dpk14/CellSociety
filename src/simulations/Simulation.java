@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class Simulation {
-    //https://stackoverflow.com/questions/46820750/java-how-to-choose-what-subclass-to-construct
     protected Cell[][] myGrid;
     protected List<Cell> myCellList = new ArrayList<Cell>();
 
@@ -37,11 +36,35 @@ public abstract class Simulation {
         public double getMax(){ return max; }
     }
 
+    /**
+     * Returns myDataValues, which is defined within each subclass. The instance variable myDataValues is a map with
+     * strings representing a simulation's data fields as the keys and the corresponding numbers as the values (as
+     * Strings). This is used to initialize the sliders to be on the values specified within the XML files.
+     * @return Map<String, String> myDataValues
+     */
     public abstract Map<String, String> getMyDataValues();
 
+    /**
+     * Returns myDataFields, which is defined within each subclass. The instance variable myDataFields is a List that
+     * contains a simulation's data fields as strings.
+     * @return List<String> myDataFields
+     */
     public abstract List<String> getDataFields();
 
+    /**
+     * Returns a String representing the Simulation subclass. This is used when creating an instance of a Simulation
+     * subclass within the XMLParser according to the simulation specified within the XML file being read.
+     * @return String data type
+     */
     public abstract String getDataType();
+
+    /**
+     * Updates the instance variable myDataValues defined within each Simulation subclass to match the given map.
+     * It also updates all the parameters within a Simulation to match the values within the given map. This is always
+     * called from within carryOutApply. The map passed is always created using the values from mySliders.
+     * @param map
+     */
+    public abstract void updateParameters(Map<String, String> map);
 
     public Simulation(int numRows, int numCols){
         myGrid = new Cell[numRows][numCols];

@@ -86,4 +86,9 @@ public class GameOfLifeSimulation extends Simulation{
     public Map<String, String> getMyDataValues(){
         return myDataValues;
     }
+
+    @Override
+    public void updateParameters(Map<String, String> map){
+        myDataValues = map;
+    }
 }
