@@ -54,9 +54,7 @@ public class Visualization {
                 double currentY = i * cellHeight;
                 addImageToRoot(root, currentX, currentY, c.getMyColor());
             }
-            //System.out.println();
         }
-        //System.out.println("=-=-=-=-=-=-=-=-=-=-=-=-=");
         return root;
     }
 

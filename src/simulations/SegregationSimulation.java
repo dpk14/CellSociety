@@ -32,7 +32,7 @@ public class SegregationSimulation extends Simulation {
         this.mySatisfactionThreshold = mySatisfactionThreshold;
         this.myRacePercentage = myRacePercentage;
         this.myEmptyPercentage = myEmptyPercentage;
-        myDataValues = new HashMap<>();
+        myDataValues = new LinkedHashMap<>();
     }
 
     /**
@@ -121,5 +121,10 @@ public class SegregationSimulation extends Simulation {
     @Override
     public Map<String, String> getMyDataValues(){
         return myDataValues;
+    }
+
+    @Override
+    public void updateParameters(Map<String, String> map){
+        myDataValues = map;
     }
 }

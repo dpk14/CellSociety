@@ -19,8 +19,7 @@ import javafx.util.Duration;
 import simulations.Simulation;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class RunSimulation extends Application {
 
@@ -120,8 +119,6 @@ public class RunSimulation extends Application {
         onInitialGrid = true;
         currentSimulation = new XMLParser("simType").getSimulation(new File(DATA_FILE));
         Cell[][] initialGrid = currentSimulation.getMyGrid();
-
-        System.out.println(initialGrid[0][0] instanceof Cell);
         newVisual = new Visualization(initialGrid.length, initialGrid[0].length, 1.0);
         root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
     }
@@ -153,8 +150,8 @@ public class RunSimulation extends Application {
             onInitialGrid = false;
         });
         myApplyButton.setOnAction(event -> {
-            //System.out.println(animation.getCycleDuration().toSeconds());
             animation.setRate(animation.getCycleDuration().toSeconds() * mySliders.get("speed").getValue());
+            carryOutApply(currentSimulation);
             //must update parameters
         });
         myLoadFileButton.setOnAction(e -> {
@@ -164,7 +161,6 @@ public class RunSimulation extends Application {
                     && selectedFile.getName().substring(selectedFile.getName().lastIndexOf(".") + 1).equals("xml")) {
                 openFile(selectedFile);
             }
-            //System.out.println(selectedFile.toString());
         });
     }
 
@@ -196,7 +192,7 @@ public class RunSimulation extends Application {
      * @return
      */
     private HashMap<String, Slider> createMySliders(Simulation sim, Group root){
-        HashMap<String, Slider> sliderMap = new HashMap<>();
+        HashMap<String, Slider> sliderMap = new LinkedHashMap<>();
         double applyButtonY = 0;
         int sliderCounter = 4; // first important data field (comes after title, author, rows, columns...)
         for(int k = 0; k < sim.getMyDataValues().size() - 4; k++){
@@ -216,6 +212,14 @@ public class RunSimulation extends Application {
         return sliderMap;
     }
 
+    private void carryOutApply(Simulation sim){
+        Map<String, String> map = sim.getMyDataValues();
+        for(String s : map.keySet()){
+            if(mySliders.containsKey(s)) map.put(s, Double.toString(mySliders.get(s).getValue()));
+        }
+        sim.updateParameters(map);
+    }
+
     private void renderNextIteration() {
         // render next iteration
         root_grid.getChildren().clear();
@@ -226,7 +230,6 @@ public class RunSimulation extends Application {
     private void step(double elapsedTime){
         // update grid
         // receive a Node from visualization class
-        //System.out.println("stepping");
         myNextIterationButton.setDisable(startedAnimation);
         myResetButton.setDisable(onInitialGrid);
         myStartButton.setDisable(startedAnimation);
