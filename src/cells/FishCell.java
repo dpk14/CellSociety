@@ -1,44 +1,35 @@
 package cells;
 
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-
 import java.util.List;
 
 public class FishCell extends Cell {
 
-    public static final String FISH_IMAGE = "WatorWorldImages/fish.gif";
     public static final Paint COLOR_FISH = Color.ORANGE;
     public static final String DATA_TYPE = "FishCell";
-    public static final List<String> DATA_FIELDS = List.of("maxTrack");
+    public static final List<String> DATA_FIELDS = List.of("reproductionTime");
+    private int myTurnsSurvived;
+    private int myReproductionTime;
 
-    private int myTracker;
-    private int myMaxTrack;
-
-
-    public FishCell(int row, int column, int maxtrack) {
+    public FishCell(int row, int column, int reproductionTime) {
         super(row, column, COLOR_FISH);
-        this.myTracker=0;
-        this.myMaxTrack=maxtrack;
+        this.myTurnsSurvived=0;
+        this.myReproductionTime=reproductionTime;
     }
 
     public FishCell(List<String> dataValues) {
         super(Integer.parseInt(dataValues.get(0)), Integer.parseInt(dataValues.get(1)), COLOR_FISH);
-        this.myTracker=0;
-        this.myMaxTrack=Integer.parseInt(dataValues.get(2));
+        this.myTurnsSurvived=0;
+        this.myReproductionTime=Integer.parseInt(dataValues.get(2));
     }
 
     public boolean canReproduce(){
-        if (this.myTracker==this.myMaxTrack) return true;
+        if (this.myTurnsSurvived==this.myReproductionTime) return true;
         return false;
     }
 
-    public void setMyTracker(int tracker){ this.myTracker = tracker; }
+    public void setMyTurnsSurvived(int tracker){ this.myTurnsSurvived = tracker; }
 
-    public void updateTracker(){ this.myTracker++; }
-
-    public int getMyTracker(){ return this.myTracker; }
-
+    public void updateMyTurnsSurvived(){ this.myTurnsSurvived++; }
 }

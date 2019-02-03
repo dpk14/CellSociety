@@ -22,19 +22,26 @@ public class XMLParser {
 
 
     /**
-     * Create a parser for XML files of given type.
+     * Create a parser for XML files of given type. Will be called by RunSimulation in order to read in selected XML
+     * file. The type passed in will be "simType".
+     * @param type - data type of object you want to read in from XML file
      */
     public XMLParser (String type) {
         DOCUMENT_BUILDER = getDocumentBuilder();
         TYPE_ATTRIBUTE = type;
     }
 
+    /**
+     * Given a file, returns a simulation that corresponds to the XML file. This will be called from RunSimulation in
+     * order to begin a simulation
+     * @param dataFile - data file to be read
+     * @return
+     */
     public Simulation getSimulation(File dataFile){
         Element root = getRootElement(dataFile);
         Element settings = (Element) root.getElementsByTagName("settings").item(0);
         Element grid = (Element) root.getElementsByTagName("grid").item(0);
-        Simulation sim = createSimulation(root.getAttribute(TYPE_ATTRIBUTE), settings, grid);
-        return sim;
+        return createSimulation(root.getAttribute(TYPE_ATTRIBUTE), settings, grid);
     }
 
     private ArrayList<Cell> getCells(Element grid, int rows, int columns){
@@ -43,13 +50,79 @@ public class XMLParser {
             Element row = (Element) grid.getElementsByTagName("row").item(i);
             for(int j = 0; j < columns; j++){
                 Element currentCell = (Element)row.getElementsByTagName("Cell").item(j);
-                //System.out.println(row.getElementsByTagName("Cell").item(j).getNodeName());
                 String cellType = currentCell.getAttribute("cellType");
-                //System.out.println(cellType);
                 cells.add(createCell(i, j, cellType, currentCell));
             }
         }
         return cells;
+    }
+
+    private Simulation createSimulation(String simType, Element settings, Element grid) {
+        Map<String, String> dataValues;
+        List<Cell> cells;
+        switch (simType) {
+            case SegregationSimulation.DATA_TYPE:
+                dataValues = getDataValues(settings, SegregationSimulation.DATA_FIELDS);
+                cells = getCells(grid, Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
+                return new SegregationSimulation(dataValues, cells);
+            case WatorWorldSimulation.DATA_TYPE:
+                dataValues = getDataValues(settings, WatorWorldSimulation.DATA_FIELDS);
+                cells = getCells(grid, Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
+                return new WatorWorldSimulation(dataValues, cells);
+            case PercolationSimulation.DATA_TYPE:
+                dataValues = getDataValues(settings, PercolationSimulation.DATA_FIELDS);
+                cells = getCells(grid, Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
+                return new PercolationSimulation(dataValues, cells);
+            case SpreadingFireSimulation.DATA_TYPE:
+                dataValues = getDataValues(settings, SpreadingFireSimulation.DATA_FIELDS);
+                cells = getCells(grid, Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
+                return new SpreadingFireSimulation(dataValues, cells);
+            case GameOfLifeSimulation.DATA_TYPE:
+                dataValues = getDataValues(settings, GameOfLifeSimulation.DATA_FIELDS);
+                cells = getCells(grid, Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
+                return new GameOfLifeSimulation(dataValues, cells);
+        }
+        throw new XMLException(ERROR_MESSAGE, "any kind of Simulation");
+    }
+
+    private Cell createCell(int row, int col, String cellType,  Element root){
+        ArrayList<String> dataValues = new ArrayList<>();
+        dataValues.add(Integer.toString(row));
+        dataValues.add(Integer.toString(col));
+        switch (cellType) {
+            case AgentCell.DATA_TYPE :
+                dataValues.addAll(getCellValues(root, AgentCell.DATA_FIELDS));
+                return new AgentCell(dataValues);
+            case EmptyCell.DATA_TYPE :
+                dataValues.addAll(getCellValues(root, EmptyCell.DATA_FIELDS));
+                return new EmptyCell(dataValues);
+            case FishCell.DATA_TYPE :
+                dataValues.addAll(getCellValues(root, FishCell.DATA_FIELDS));
+                return new FishCell(dataValues);
+            case SharkCell.DATA_TYPE :
+                dataValues.addAll(getCellValues(root, SharkCell.DATA_FIELDS));
+                return new SharkCell(dataValues);
+            case StateChangeCell.DATA_TYPE :
+                dataValues.addAll(getCellValues(root, StateChangeCell.DATA_FIELDS));
+                return new StateChangeCell(dataValues);
+        }
+        throw new XMLException(CELL_ERROR_MESSAGE, cellType);
+    }
+
+    private Map<String, String> getDataValues(Element root, List<String> dataFields){
+        Map<String, String> dataValues = new HashMap<>();
+        for(String field : dataFields){
+            dataValues.put(field, getTextValue(root, field));
+        }
+        return dataValues;
+    }
+
+    private List<String> getCellValues(Element root, List<String> dataFields){
+        List<String> dataValues = new ArrayList<>();
+        for(String field : dataFields){
+            dataValues.add(getTextValue(root, field));
+        }
+        return dataValues;
     }
 
     // Get root element of an XML file
@@ -96,77 +169,4 @@ public class XMLParser {
         }
     }
 
-    private Simulation createSimulation(String simType, Element settings, Element grid) {
-        Map<String, String> dataValues;
-        List<Cell> cells;
-        switch (simType) {
-            case SegregationSimulation.DATA_TYPE:
-                dataValues = getDataValues(settings, SegregationSimulation.DATA_FIELDS);
-                cells = getCells(grid, Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
-                return new SegregationSimulation(dataValues, cells);
-            case WatorWorldSimulation.DATA_TYPE:
-                dataValues = getDataValues(settings, WatorWorldSimulation.DATA_FIELDS);
-                cells = getCells(grid, Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
-                return new WatorWorldSimulation(dataValues, cells);
-            case PercolationSimulation.DATA_TYPE:
-                dataValues = getDataValues(settings, PercolationSimulation.DATA_FIELDS);
-                cells = getCells(grid, Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
-                return new PercolationSimulation(dataValues, cells);
-            case SpreadingFireSimulation.DATA_TYPE:
-                dataValues = getDataValues(settings, SpreadingFireSimulation.DATA_FIELDS);
-                cells = getCells(grid, Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
-                for(String s : dataValues.values()){
-                    System.out.println(s);
-                }
-                System.out.println(cells.get(0).getRow());
-                return new SpreadingFireSimulation(dataValues, cells);
-            case GameOfLifeSimulation.DATA_TYPE:
-                dataValues = getDataValues(settings, GameOfLifeSimulation.DATA_FIELDS);
-                cells = getCells(grid, Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
-                return new GameOfLifeSimulation(dataValues, cells);
-        }
-        throw new XMLException(ERROR_MESSAGE, "any kind of Simulation");
-    }
-
-    private Cell createCell(int row, int col, String cellType,  Element root){
-        ArrayList<String> dataValues = new ArrayList<>();
-        dataValues.add(Integer.toString(row));
-        dataValues.add(Integer.toString(col));
-        switch (cellType) {
-            case AgentCell.DATA_TYPE :
-                dataValues.addAll(getCellValues(root, AgentCell.DATA_FIELDS));
-                return new AgentCell(dataValues);
-            case EmptyCell.DATA_TYPE :
-                dataValues.addAll(getCellValues(root, EmptyCell.DATA_FIELDS));
-                return new EmptyCell(dataValues);
-            case FishCell.DATA_TYPE :
-                dataValues.addAll(getCellValues(root, FishCell.DATA_FIELDS));
-                return new FishCell(dataValues);
-            case SharkCell.DATA_TYPE :
-                dataValues.addAll(getCellValues(root, SharkCell.DATA_FIELDS));
-                return new SharkCell(dataValues);
-            case StateChangeCell.DATA_TYPE :
-                dataValues.addAll(getCellValues(root, StateChangeCell.DATA_FIELDS));
-                Cell cell = new StateChangeCell(dataValues);
-                //System.out.println(((StateChangeCell) cell).getState());
-                return cell;
-        }
-        throw new XMLException(CELL_ERROR_MESSAGE, cellType);
-    }
-
-    private Map<String, String> getDataValues(Element root, List<String> dataFields){
-        Map<String, String> dataValues = new HashMap<>();
-        for(String field : dataFields){
-            dataValues.put(field, getTextValue(root, field));
-        }
-        return dataValues;
-    }
-
-    private List<String> getCellValues(Element root, List<String> dataFields){
-        List<String> dataValues = new ArrayList<>();
-        for(String field : dataFields){
-            dataValues.add(getTextValue(root, field));
-        }
-        return dataValues;
-    }
 }

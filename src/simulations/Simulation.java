@@ -12,7 +12,34 @@ public abstract class Simulation {
     protected Cell[][] myGrid;
     protected List<Cell> myCellList = new ArrayList<Cell>();
 
+    public static enum Bounds{
+        rows(1, 100),
+        columns(1,100),
+        speed (1, 100),
+        satisfaction (0, 1),
+        spreadRate(0,1),
+        growthRate(0,1),
+        lightningRate(0,1),
+        startEnergy(1,100),
+        sharkReproductionMax(1,100),
+        fishReproductionMax(1,100),
+        energyGain(1,10);
+
+        private double min;
+        private double max;
+
+        private Bounds(double min, double max){
+            this.min = min;
+            this.max = max;
+        }
+
+        public double getMin(){ return min; }
+        public double getMax(){ return max; }
+    }
+
     public abstract Map<String, String> getMyDataValues();
+
+    //public abstract void updateSimulationParameters();
 
     public abstract List<String> getDataFields();
 
@@ -69,17 +96,18 @@ public abstract class Simulation {
         List<Cell> neighbors = getNeighbors(cell);
         List<Cell> specificNeighbors=new ArrayList<Cell>();
         for(Cell neighbor: neighbors){
-            if (((StateChangeCell) cell).getState().equals(type)) specificNeighbors.add(neighbor);
+            if (((StateChangeCell) neighbor).getState().equals(type)) specificNeighbors.add(neighbor);
         }
         return specificNeighbors;
     }
 
     /**
-     * Michael made this for debugging purposes.
      * Returns grid at start of initialization just so I can check we have the right grid to begin with
      * @return
      */
     public Cell[][] getMyGrid() {
         return myGrid;
     }
+
+
 }

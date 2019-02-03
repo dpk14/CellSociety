@@ -6,7 +6,7 @@
         <rows>12</rows>
         <columns>12</columns>
         <speed>100</speed>
-        <spreadRate>0.75</spreadRate>
+        <spreadRate>0.90</spreadRate>
         <growthRate>0.10</growthRate>
         <lightningRate>0.05</lightningRate>
     </settings>
@@ -73,7 +73,7 @@
                 <state>TREE</state>
             </Cell>
             <Cell cellType = "StateChangeCell">
-                <state>EMPTY</state>
+                <state>BURNING</state>
             </Cell>
             <Cell cellType = "StateChangeCell">
                 <state>TREE</state>

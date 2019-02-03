@@ -15,7 +15,7 @@
     <grid>
         <row>
             <Cell cellType = "FishCell">
-                <maxTrack>5</maxTrack>`
+                <reproductionTime>5</reproductionTime>`
             </Cell>
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "EmptyCell"></Cell>
@@ -23,25 +23,7 @@
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "FishCell">
-                <maxTrack>5</maxTrack>`
-            </Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-        </row>
-        <row>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "FishCell">
-                <maxTrack>5</maxTrack>`
-            </Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "FishCell">
-                <maxTrack>5</maxTrack>`
+                <reproductionTime>5</reproductionTime>`
             </Cell>
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "EmptyCell"></Cell>
@@ -52,89 +34,15 @@
         <row>
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "FishCell">
-                <maxTrack>5</maxTrack>`
-            </Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "FishCell">
-                <maxTrack>5</maxTrack>`
-            </Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "FishCell">
-                <maxTrack>5</maxTrack>`
-            </Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-        </row>
-        <row>
-            <Cell cellType = "FishCell">
-                <maxTrack>5</maxTrack>`
-            </Cell>
-            <Cell cellType = "FishCell">
-                <maxTrack>5</maxTrack>`
+                <reproductionTime>5</reproductionTime>`
             </Cell>
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "FishCell">
-                <maxTrack>5</maxTrack>`
+                <reproductionTime>5</reproductionTime>`
             </Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "FishCell">
-                <maxTrack>5</maxTrack>`
-            </Cell>
-        </row>
-        <row>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "FishCell">
-                <maxTrack>5</maxTrack>`
-            </Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-        </row>
-        <row>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "FishCell">
-                <maxTrack>5</maxTrack>`
-            </Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-        </row>
-        <row>
-            <Cell cellType = "FishCell">
-                <maxTrack>5</maxTrack>`
-            </Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "EmptyCell"></Cell>
-            <Cell cellType = "FishCell">
-                <maxTrack>5</maxTrack>`
-            </Cell>
-            <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "EmptyCell"></Cell>
@@ -145,14 +53,106 @@
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "FishCell">
+                <reproductionTime>5</reproductionTime>`
+            </Cell>
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "FishCell">
-                <maxTrack>5</maxTrack>`
+                <reproductionTime>5</reproductionTime>`
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "FishCell">
+                <reproductionTime>5</reproductionTime>`
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+        </row>
+        <row>
+            <Cell cellType = "FishCell">
+                <reproductionTime>5</reproductionTime>`
+            </Cell>
+            <Cell cellType = "FishCell">
+                <reproductionTime>5</reproductionTime>`
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "FishCell">
+                <reproductionTime>5</reproductionTime>`
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "FishCell">
+                <reproductionTime>5</reproductionTime>`
+            </Cell>
+        </row>
+        <row>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "FishCell">
+                <reproductionTime>5</reproductionTime>`
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+        </row>
+        <row>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "FishCell">
+                <reproductionTime>5</reproductionTime>`
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+        </row>
+        <row>
+            <Cell cellType = "FishCell">
+                <reproductionTime>5</reproductionTime>`
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "FishCell">
+                <reproductionTime>5</reproductionTime>`
+            </Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+        </row>
+        <row>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "EmptyCell"></Cell>
+            <Cell cellType = "FishCell">
+                <reproductionTime>5</reproductionTime>`
             </Cell>
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "SharkCell">
-                <maxTrack>5</maxTrack>
+                <reproductionTime>5</reproductionTime>
                 <energy>10</energy>
                 <energyGain>10</energyGain>
             </Cell>
@@ -166,7 +166,7 @@
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "FishCell">
-                <maxTrack>5</maxTrack>`
+                <reproductionTime>5</reproductionTime>`
             </Cell>
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "EmptyCell"></Cell>
@@ -200,7 +200,7 @@
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "SharkCell">
-                <maxTrack>5</maxTrack>
+                <reproductionTime>5</reproductionTime>
                 <energy>10</energy>
                 <energyGain>10</energyGain>
             </Cell>
@@ -213,19 +213,19 @@
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "FishCell">
-                <maxTrack>5</maxTrack>`
+                <reproductionTime>5</reproductionTime>`
             </Cell>
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "FishCell">
-                <maxTrack>5</maxTrack>`
+                <reproductionTime>5</reproductionTime>`
             </Cell>
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "EmptyCell"></Cell>
             <Cell cellType = "FishCell">
-                <maxTrack>5</maxTrack>`
+                <reproductionTime>5</reproductionTime>`
             </Cell>
             <Cell cellType = "EmptyCell"></Cell>
         </row>
