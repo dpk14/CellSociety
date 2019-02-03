@@ -8,6 +8,7 @@ import cells.StateChangeCell;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class SpreadingFireSimulation extends Simulation{
     public static final String DATA_TYPE = "SpreadingFireSimulation";
@@ -55,9 +56,8 @@ public class SpreadingFireSimulation extends Simulation{
             for(int j = 0; j < myGrid[0].length; j++){ // j = column number
                 Cell cell = myGrid[i][j];
                 state=((StateChangeCell) cell).getState();
-                if(((StateChangeCell) cell).getState().equals("BURNING")) ((StateChangeCell) cell).setState("EMPTY");
-                else ((StateChangeCell) cell).setState(randomizeState(cell, state));
-                myCellList.add(cell);
+                if(((StateChangeCell) cell).getState().equals("BURNING")) myCellList.add(new StateChangeCell(i, j, "EMPTY"));
+                else myCellList.add(new StateChangeCell(i, j, randomizeState(cell, state)));
             }
         }
         myGrid = getNewGrid(this.myCellList);
@@ -71,10 +71,12 @@ public class SpreadingFireSimulation extends Simulation{
 
     private String randomizeState(Cell cell, String state){
         double rand=Math.random();
-
         if(state.equals("TREE")){
             int firecount=getTypedNeighbors(cell, "BURNING").size();
-            if((firecount!=0 && rand/firecount<myProbCatch) || rand<myProbCatch*myProbLightning) return "BURNING";
+            if(firecount!=0){
+                if (rand/firecount<myProbCatch) return "BURNING";
+                }
+            else if (rand<myProbCatch*myProbLightning) return "BURNING";
         }
         else if (rand<myProbGrow) return "TREE";
         return state;

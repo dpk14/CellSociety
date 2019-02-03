@@ -12,7 +12,6 @@ import javafx.scene.paint.Paint;
 import java.util.*;
 
 public class WatorWorldSimulation extends Simulation {
-    public static final String EMPTY_IMAGE = "SegregationImages/emptySG.gif";
     private int myStartEnergy;
     private int myEnergyGain;
     private int mySharkReprodMax;
@@ -75,7 +74,7 @@ public class WatorWorldSimulation extends Simulation {
         for(Cell cell: randomizedList){
             if(cell instanceof FishCell) {
                 myTakenSpots.add(cell);
-                ((SharkCell) cell).updateMyTurnsSurvived();
+                ((FishCell) cell).updateMyTurnsSurvived();
                 fishMover(cell, cell.getRow(), cell.getColumn());
             }
             else if(cell instanceof SharkCell) {
@@ -191,10 +190,14 @@ public class WatorWorldSimulation extends Simulation {
 
     @Override
     public void updateParameters(Map<String, String> map) {
-        myStartEnergy = Integer.parseInt(map.get("startEnergy"));
-        myEnergyGain = Integer.parseInt(map.get("energyGain"));
-        mySharkReprodMax = Integer.parseInt(map.get("sharkReproductionMax"));
-        myFishReprodMax = Integer.parseInt(map.get("fishReproductionMax"));
+        double start= Double.parseDouble(map.get("startEnergy"));
+        myStartEnergy = (int) Math.floor(start);
+        double gain= Double.parseDouble(map.get("energyGain"));
+        myEnergyGain = (int) Math.floor(gain);
+        double sharkMax=Double.parseDouble(map.get("sharkReproductionMax"));
+        mySharkReprodMax = (int) Math.floor(sharkMax);
+        double fishMax=Double.parseDouble(map.get("fishReproductionMax"));
+        mySharkReprodMax = (int) Math.floor(fishMax);
         myDataValues = map;
     }
 //=======
