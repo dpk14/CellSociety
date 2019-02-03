@@ -38,13 +38,12 @@ public class SpreadingFireSimulation extends Simulation{
         myProbCatch=probCatch;
         myProbLightning=probLightning;
         myProbGrow=probGrow;
-        //setupSimulation();
+        myDataValues = new HashMap<>();
     }
 
     public SpreadingFireSimulation(List<String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
         super(Integer.parseInt(dataValues.get(2)), Integer.parseInt(dataValues.get(3)));
         myGrid = getNewGrid(cells);
-        myDataValues = new HashMap<>();
     }
 
 

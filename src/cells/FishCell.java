@@ -19,7 +19,6 @@ public class FishCell extends Cell {
         super(row, column, COLOR_FISH);
         this.myTurnsSurvived=0;
         this.myReproductionTime=reproductionTime;
-
     }
 
     public FishCell(List<String> dataValues) {
