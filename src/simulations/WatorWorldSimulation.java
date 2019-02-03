@@ -74,46 +74,50 @@ public class WatorWorldSimulation extends Simulation {
         ArrayList<Cell> randomizedList=randomizeCellVisitation();
         for(Cell cell: randomizedList){
             if(cell instanceof FishCell) {
-                ((FishCell) cell).updateTracker();
-                fishMover(cell, new Cell(cell.getRow(), cell.getColumn(), COLOR_AGENT_RED), cell.getRow(), cell.getColumn());
+                myTakenSpots.add(cell);
+                ((SharkCell) cell).updateMyTurnsSurvived();
+                fishMover(cell, cell.getRow(), cell.getColumn());
             }
             else if(cell instanceof SharkCell) {
-                ((SharkCell) cell).updateTracker();
+                myTakenSpots.add(cell);
+                ((SharkCell) cell).updateMyTurnsSurvived();
                 ((SharkCell) cell).decrementEnergy();
-                sharkMover(cell, new Cell(cell.getRow(), cell.getColumn(), COLOR_AGENT_RED), cell.getRow(), cell.getColumn());
+                if(((SharkCell) cell).getMyEnergy()<=0) myCellList.add(new EmptyCell(cell.getRow(), cell.getColumn()));
+                else sharkMover(cell, cell.getRow(), cell.getColumn());
             }
         }
         myGrid = getNewGrid(this.myCellList);
         return myGrid;
     }
 
-    public void fishMover(Cell fish, Cell currentLocation, int currentRow, int currentCol) {
+    public void fishMover(Cell fish, int currentRow, int currentCol) {
             ArrayList<Cell> emptyNeighbors=new ArrayList<Cell>();
             List<Cell> neighbors = getNeighbors(fish);
-
+            neighbors=removeTakenSpots(neighbors);
             for (Cell neighbor : neighbors) {
                 if (neighbor instanceof EmptyCell) emptyNeighbors.add(neighbor);
             }
-            emptyNeighbors.removeAll(myTakenSpots);
             Cell otherCell = move(emptyNeighbors, fish);
             Cell newLocation=new Cell(otherCell.getRow(), otherCell.getColumn(), COLOR_AGENT_RED);
-            myTakenSpots.add(newLocation);
-            fish.swapPosition(otherCell);
-            myCellList.add(fish);
-            if (((FishCell) fish).canReproduce() && (newLocation.getRow()!=currentRow || newLocation.getColumn()!=currentCol)) {
-                ((FishCell) fish).setMyTracker(0);
-                myCellList.add(new FishCell(currentRow, currentCol, myFishReprodMax));
-                myTakenSpots.add(currentLocation);
+            if(!(newLocation.getRow()==currentRow && newLocation.getColumn()==currentCol)){
+                fish.swapPosition(otherCell);
+                myTakenSpots.add(newLocation);
+                myCellList.add(fish);
+                if (((FishCell) fish).canReproduce()) {
+                    ((FishCell) fish).setMyTurnsSurvived(0);
+                    myCellList.add(new FishCell(currentRow, currentCol, myFishReprodMax));
+                }
+                else myCellList.add(new EmptyCell(currentRow, currentCol));
             }
-            else myCellList.add(otherCell);
     }
 
-    public void sharkMover(Cell shark, Cell currentLocation, int currentRow, int currentCol) {
+    public void sharkMover(Cell shark, int currentRow, int currentCol) {
         ArrayList<Cell> emptyNeighbors=new ArrayList<Cell>();
         ArrayList<Cell> fishNeighbors=new ArrayList<Cell>();
         ArrayList<Cell> availableNeighbors;
 
         List<Cell> neighbors = getNeighbors(shark);
+        neighbors=removeTakenSpots(neighbors);
         for (Cell neighbor : neighbors) {
             if (neighbor instanceof EmptyCell) emptyNeighbors.add(neighbor);
             else if (neighbor instanceof FishCell) fishNeighbors.add(neighbor);
@@ -121,24 +125,17 @@ public class WatorWorldSimulation extends Simulation {
         if(fishNeighbors.size()>0) availableNeighbors=new ArrayList<Cell>(fishNeighbors);
         else availableNeighbors=new ArrayList<Cell>(emptyNeighbors);
         Cell otherCell=move(availableNeighbors, shark);
-        Cell newLocation=new Cell(otherCell.getRow(), otherCell.getColumn(),COLOR_AGENT_RED);
-        shark.swapPosition(otherCell);
-        if (((SharkCell) shark).canReproduce() && (newLocation.getRow()!=currentRow || newLocation.getColumn()!=currentCol)) {
-            ((SharkCell) shark).setMyTracker(0);
+        Cell newLocation=new Cell(otherCell.getRow(), otherCell.getColumn(), COLOR_AGENT_RED);
+        if(!(newLocation.getRow()==currentRow && newLocation.getColumn()==currentCol)) {
+            shark.swapPosition(otherCell);
             if (otherCell instanceof FishCell) ((SharkCell) shark).updateEnergy();
-            myCellList.add(new SharkCell(currentRow, currentCol, mySharkReprodMax, myStartEnergy, myEnergyGain));
-            myTakenSpots.add(currentLocation);
-        }
-        else if (otherCell instanceof FishCell) {
-            myCellList.add(new EmptyCell(currentRow, currentCol));
-            ((SharkCell) shark).updateEnergy();
-        }
-        else myCellList.add(otherCell);
-
-        if(((SharkCell) shark).getMyEnergy()==0) myCellList.add(new EmptyCell(newLocation.getRow(), newLocation.getColumn()));
-        else {
             myTakenSpots.add(newLocation);
             myCellList.add(shark);
+            if (((SharkCell) shark).canReproduce()) {
+                ((SharkCell) shark).setMyTurnsSurvived(0);
+                myCellList.add(new SharkCell(currentRow, currentCol, mySharkReprodMax, myStartEnergy, myEnergyGain));
+            }
+            else myCellList.add(new EmptyCell(currentRow, currentCol));
         }
     }
 
@@ -150,6 +147,17 @@ public class WatorWorldSimulation extends Simulation {
             newLocation = movable_spots.get(rand.nextInt(movable_spots.size()));
         }
         return newLocation;
+    }
+
+    private List<Cell> removeTakenSpots(List<Cell> neighbors){
+        List<Cell> reducedNeighbors=new ArrayList<Cell>();
+        for(Cell neighbor: neighbors){
+            for (Cell taken: myTakenSpots)
+                if(!(neighbor.getColumn()==taken.getColumn() && neighbor.getRow()==taken.getRow())){
+                    reducedNeighbors.add(neighbor);
+                }
+        }
+        return reducedNeighbors;
     }
 
     @Override

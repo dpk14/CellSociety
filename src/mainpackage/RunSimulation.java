@@ -28,10 +28,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RunSimulation extends Application {
-    public static final String DATA_FILE = "data/initial_percolation1.xml";
+    public static final String DATA_FILE = "data/initial_spreadingfire1.xml";
 
 
-    public static final String TITLE = "";
+    public static final String TITLE = "SegregationSimulation";
     public static final int SIZE = 600;
 
 
@@ -130,6 +130,7 @@ public class RunSimulation extends Application {
 
 
 
+
         root.getChildren().add(root_other);
         root.getChildren().add(root_grid);
 
@@ -137,6 +138,14 @@ public class RunSimulation extends Application {
         return scene;
     }
 
+/*
+    private void setupWatorWorldSimulation() {
+        currentSimulation = new WatorWorldSimulation(200,200,7,2,5,5);
+        Cell[][] initialGrid = currentSimulation.getMyGrid();
+        newVisual = new Visualization(initialGrid.length, initialGrid[0].length, 1.0);
+        root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
+    }
+*/
 
 
     private void setupSimulation() {

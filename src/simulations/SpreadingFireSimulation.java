@@ -41,13 +41,18 @@ public class SpreadingFireSimulation extends Simulation{
         myDataValues = new HashMap<>();
     }
 
+    public SpreadingFireSimulation(List<String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
+        super(Integer.parseInt(dataValues.get(2)), Integer.parseInt(dataValues.get(3)));
+        myGrid = getNewGrid(cells);
+    }
+
+
     @Override
     public Cell[][] updateGrid(){
         String state;
         myCellList.clear();
         for(int i = 0; i < myGrid.length; i++){ // i = row number
             for(int j = 0; j < myGrid[0].length; j++){ // j = column number
-
                 Cell cell = myGrid[i][j];
                 state=((StateChangeCell) cell).getState();
                 if(((StateChangeCell) cell).getState().equals("BURNING")) ((StateChangeCell) cell).setState("EMPTY");

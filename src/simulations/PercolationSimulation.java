@@ -1,6 +1,7 @@
 package simulations;
 
 import cells.Cell;
+import cells.EmptyCell;
 import cells.StateChangeCell;
 
 import java.util.*;
@@ -20,21 +21,21 @@ public class PercolationSimulation extends Simulation{
         myGrid = getNewGrid(cells);
         myDataValues = dataValues;
     }
-/*
+
     @Override
     public Cell[][] updateGrid(){
-        String state;
-        Cell cell=new Cell(0, 0);
+        if (percolates()) return myGrid;
+        Cell cell = new EmptyCell(0, 0);
         List<Cell> openNeighbors;
         myCellList.clear();
-        Queue<Cell> qu=openOne();
-        while(qu.size()>0){
-            cell=qu.remove();
-            if(getTypedNeighbors(cell, "FULL").size()>0){
+        Queue<Cell> qu = openOne();
+        while (qu.size() > 0) {
+            cell = qu.remove();
+            if (getTypedNeighbors(cell, "FULL").size() > 0 || cell.getRow() == 0) {
                 ((StateChangeCell) cell).setState("FULL");
                 myCellList.add(cell);
-                openNeighbors=getTypedNeighbors(cell, "OPEN");
-                for(Cell open: openNeighbors) qu.add(open);
+                openNeighbors = getTypedNeighbors(cell, "OPEN");
+                for (Cell open : openNeighbors) qu.add(open);
             }
         }
         myGrid = getNewGrid(this.myCellList);
@@ -55,26 +56,13 @@ public class PercolationSimulation extends Simulation{
         return qu;
     }
 
-    @Override
-    public void setupSimulation(){
-        for (int i = 0; i < myGrid.length; i++) {
-            for (int j = 0; j < myGrid[i].length; j++) {
-                if (i == 3) {
-                    myGrid[i][j] = new EmptyCell(i,j);
-                } else if (i % 2 == 0) {
-                    myGrid[i][j] = new AgentCell(i,j,"BLUE");
-                } else {
-                    myGrid[i][j] = new AgentCell(i,j,"RED");
-                }
-            }
+    private boolean percolates(){
+        for(int k=0; k<myGrid[0].length; k++) {
+            Cell cell=myGrid[myGrid.length - 1][k];
+            if (((StateChangeCell) cell).getState().equals("FULL")) return true;
         }
-    }
-*/
-
-    @Override
-    public Cell[][] updateGrid() {
-        return new Cell[0][];
-    }
+        return false;
+        }
 
     @Override
     public String getDataType(){
