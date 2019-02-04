@@ -12,9 +12,9 @@ public abstract class Simulation {
     protected List<Cell> myCellList = new ArrayList<Cell>();
 
     public static enum Bounds{
-        rows(1, 100),
+        rows(1, 30),
         columns(1,100),
-        speed (1, 100),
+        speed (1, 30),
         satisfaction (0, 1),
         spreadRate(0,1),
         growthRate(0,1),
