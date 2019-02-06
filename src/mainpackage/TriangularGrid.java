@@ -7,6 +7,11 @@ import java.util.List;
 
 public class TriangularGrid extends Grid{
 
+    TriangularGrid(int rows, int columns, List<Cell> list){
+        super(rows, columns, list);
+    }
+
+    @Override
     protected List<Cell> getImmediateNeighbors(Cell cell, Cell[][] myGrid){
         List <Cell> neighbors = new ArrayList<>();
         int row = cell.getRow();
@@ -18,6 +23,7 @@ public class TriangularGrid extends Grid{
         return neighbors;
     }
 
+    @Override
     protected List<Cell> getAllNeighbors(Cell cell, Cell[][] myGrid){
         List <Cell> neighbors = new ArrayList<>();
         int row = cell.getRow();
