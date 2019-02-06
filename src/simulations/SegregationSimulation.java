@@ -3,13 +3,14 @@ package simulations;
 import cells.AgentCell;
 import cells.Cell;
 import cells.EmptyCell;
+import mainpackage.Grid;
 
 import java.util.*;
 
 public class SegregationSimulation extends Simulation {
     public static final String DATA_TYPE = "SegregationSimulation";
     public static final List<String> DATA_FIELDS = List.of(
-            "title", "author", "rows", "columns", "speed", "satisfaction", "redRate", "blueRate");
+            "title", "author", "cellShape", "gridShape", "rows", "columns", "speed", "satisfaction", "redRate", "blueRate");
 
     public double mySatisfactionThreshold; // between 0 & 1
     private double myRacePercentage; // between 0 & 1, percentage made up by first Agent
@@ -28,7 +29,6 @@ public class SegregationSimulation extends Simulation {
      * @param myEmptyPercentage - ratio of total cells that should be empty
      */
     public SegregationSimulation(int numRows, int numCols, double mySatisfactionThreshold, double myRacePercentage, double myEmptyPercentage){
-        super(numRows,numCols);
         this.mySatisfactionThreshold = mySatisfactionThreshold;
         this.myRacePercentage = myRacePercentage;
         this.myEmptyPercentage = myEmptyPercentage;
@@ -39,14 +39,14 @@ public class SegregationSimulation extends Simulation {
      * Constructor needed to initialize from XML
      */
     public SegregationSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
-        super(Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
         this.mySatisfactionThreshold = Double.parseDouble(dataValues.get("satisfaction"));
-        myGrid = new Grid(cells);
+
+        myGrid = new Grid(Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")), cells);
         myDataValues = dataValues;
     }
 
     @Override
-    public Cell[][] updateGrid(){
+    public Grid advanceSimulation(){
         myEmptyCells.clear();
         myCellsToMove.clear();
         myCellList.clear();
@@ -62,18 +62,18 @@ public class SegregationSimulation extends Simulation {
         }
         myCellList.addAll(myEmptyCells);
         myCellList.addAll(myCellsToMove);
-        myGrid = getNewGrid(this.myCellList);
+        myGrid.updateGrid(this.myCellList);
         return myGrid;
     }
 
-    private void checkAndSortCells(Cell[][] grid){
-        for(int i = 0; i < grid.length; i++){ // i = row number
-            for(int j = 0; j < grid[0].length; j++){ // j = column number
-                Cell cell = grid[i][j];
+    private void checkAndSortCells(Grid grid){
+        for(int i = 0; i < grid.getWidth(); i++){ // i = row number
+            for(int j = 0; j < grid.getHeight(); j++){ // j = column number
+                Cell cell = grid.getCell(i, j);
                 if(cell instanceof EmptyCell){ // if cell is EmptyCell
                     myEmptyCells.add(cell);
                 }
-                else if(cell instanceof AgentCell && ((AgentCell) cell).calculatePercentage(getNeighbors(cell)) < mySatisfactionThreshold){
+                else if(cell instanceof AgentCell && ((AgentCell) cell).calculatePercentage(myGrid.getAllNeighbors(cell)) < mySatisfactionThreshold){
                     myCellsToMove.add(cell);
                 }
                 else{ // add satisfied cells to list already to be added first

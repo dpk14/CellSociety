@@ -72,9 +72,9 @@ public abstract class Simulation {
      */
     public abstract void setupGrid();
 
-    public Simulation(int numRows, int numCols){
-        myGrid = new Cell[numRows][numCols];
-    }
+//    public Simulation(int numRows, int numCols){
+//        myGrid = new Cell[numRows][numCols];
+//    }
 
     /**
      * Updates and returns myGrid by updating the cell's positions according to the simulation's rules and then
@@ -82,7 +82,7 @@ public abstract class Simulation {
      * step function.
      * @return updated myGrid
      */
-    public abstract Cell[][] updateGrid();
+    public abstract Grid advanceSimulation();
 
     /**
      * Returns grid at start of initialization just so I can check we have the right grid to begin with
