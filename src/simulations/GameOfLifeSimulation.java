@@ -13,10 +13,10 @@ public class GameOfLifeSimulation extends Simulation{
             "title", "author", "rows", "columns", "speed", "populatedRate");
     private Map<String, String> myDataValues;
 
-    public GameOfLifeSimulation(int numRows, int numCols){
-        super(numRows, numCols);
-        myDataValues = new HashMap<>();
-    }
+//    public GameOfLifeSimulation(int numRows, int numCols){
+//        super(numRows, numCols);
+//        myDataValues = new HashMap<>();
+//    }
 
     public GameOfLifeSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
         super(Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
@@ -25,7 +25,7 @@ public class GameOfLifeSimulation extends Simulation{
     }
 
     @Override
-    public Cell[][] updateGrid(){
+    public Cell[][] advanceSimulation(){
         String state;
         myCellList.clear();
         for(int i = 0; i < myGrid.length; i++){ // i = row number
