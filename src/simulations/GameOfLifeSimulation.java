@@ -2,6 +2,7 @@ package simulations;
 
 import cells.Cell;
 import cells.StateChangeCell;
+import mainpackage.Grid;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,38 +11,42 @@ import java.util.Map;
 public class GameOfLifeSimulation extends Simulation{
     public static final String DATA_TYPE = "GameOfLifeSimulation";
     public static final List<String> DATA_FIELDS = List.of(
-            "title", "author", "rows", "columns", "speed", "populatedRate");
+            "title", "author", "cellShape", "gridShape", "rows", "columns", "speed", "populatedRate");
     private Map<String, String> myDataValues;
 
+    /*
     public GameOfLifeSimulation(int numRows, int numCols){
         super(numRows, numCols);
         myDataValues = new HashMap<>();
     }
+   */
 
     public GameOfLifeSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
-        super(Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
-        myGrid = getNewGrid(cells);
+        int rows=Integer.parseInt(dataValues.get("rows"));
+        int columns=Integer.parseInt(dataValues.get("columns"));
+        String gridShape=dataValues.get("gridShape");
         myDataValues = dataValues;
     }
 
     @Override
-    public Cell[][] updateGrid(){
+    public Grid advanceSimulation(){
         String state;
         myCellList.clear();
-        for(int i = 0; i < myGrid.length; i++){ // i = row number
-            for(int j = 0; j < myGrid[0].length; j++){ // j = column number
-                Cell cell = myGrid[i][j];
+        for(int i = 0; i < myGrid.getHeight(); i++){ // i = row number
+            for(int j = 0; j < myGrid.getWidth(); j++){ // j = column number
+                Cell cell = myGrid.getCell(i, j);
                 state=((StateChangeCell) cell).getState();
                 cell=new StateChangeCell(i, j, editState(cell, state));
                 myCellList.add(cell);
             }
         }
-        myGrid = getNewGrid(myCellList);
+        myGrid.updateGrid(myCellList);
         return myGrid;
     }
 
     private String editState(Cell cell, String state){
-        List<Cell> neighbors=getTypedNeighbors(cell, "POPULATED");
+        List<Cell> neighbors=myGrid.getAllNeighbors(cell, myGrid);
+        List<Cell> neighbors=myGrid.getTypedNeighbors(cell, "POPULATED");
         if (state.equals("POPULATED") && (neighbors.size()<=1 || neighbors.size()>=4)) return "EMPTY";
         else if (state.equals("EMPTY") && neighbors.size()==3) return "POPULATED";
         return state;
