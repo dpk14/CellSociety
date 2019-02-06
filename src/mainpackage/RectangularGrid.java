@@ -5,9 +5,13 @@ import cells.Cell;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RectangularGrid {
+public class RectangularGrid extends Grid{
 
+    RectangularGrid(int rows, int columns, List<Cell> list){
+        super(rows, columns, list);
+    }
 
+    @Override
     protected List<Cell> getImmediateNeighbors(Cell cell, Cell[][] myGrid){
         List <Cell> neighbors = new ArrayList<>();
         int row = cell.getRow();
@@ -27,6 +31,7 @@ public class RectangularGrid {
         return neighbors;
     }
 
+    @Override
     protected List<Cell> getAllNeighbors(Cell cell, Cell[][] myGrid){
         List<Cell> neighbors = getImmediateNeighbors(cell, myGrid);
         int row = cell.getRow();

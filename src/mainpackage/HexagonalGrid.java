@@ -7,6 +7,10 @@ import java.util.List;
 
 public class HexagonalGrid extends Grid{
 
+    HexagonalGrid(int rows, int columns, List<Cell> list){
+        super(rows, columns, list);
+    }
+
     @Override
     protected List<Cell> getImmediateNeighbors(Cell cell, Cell[][] myGrid){
         List <Cell> neighbors = new ArrayList<>();
