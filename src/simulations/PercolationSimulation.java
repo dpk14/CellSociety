@@ -9,7 +9,7 @@ import java.util.*;
 public class PercolationSimulation extends Simulation{
     public static final String DATA_TYPE = "PercolationSimulation";
     public static final List<String> DATA_FIELDS = List.of(
-            "title", "author", "rows", "columns", "speed");
+            "title", "author", "rows", "columns", "speed", "openRate");
     private Map<String, String> myDataValues;
     public PercolationSimulation(int numRows, int numCols){
         super(numRows, numCols);
@@ -82,5 +82,12 @@ public class PercolationSimulation extends Simulation{
     @Override
     public void updateParameters(Map<String, String> map){
         myDataValues = map;
+    }
+
+    @Override
+    public void setupGrid(){
+        double openRate = Double.parseDouble(myDataValues.get("openRate"));
+        // while in most subclasses, you make the remaining cells "empty", remember here to make remaining ones closed.
+        // TODO create randomized grid and set to myGrid
     }
 }

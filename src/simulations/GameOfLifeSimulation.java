@@ -10,7 +10,7 @@ import java.util.Map;
 public class GameOfLifeSimulation extends Simulation{
     public static final String DATA_TYPE = "GameOfLifeSimulation";
     public static final List<String> DATA_FIELDS = List.of(
-            "title", "author", "rows", "columns", "speed");
+            "title", "author", "rows", "columns", "speed", "populatedRate");
     private Map<String, String> myDataValues;
 
     public GameOfLifeSimulation(int numRows, int numCols){
@@ -70,6 +70,12 @@ public class GameOfLifeSimulation extends Simulation{
             neighbors.add(myGrid[row+1][column+1]);
         }
         return neighbors;
+    }
+
+    @Override
+    public void setupGrid(){
+        double populatedRate = Double.parseDouble(myDataValues.get("populatedRate"));
+        // TODO create randomized grid and set to myGrid
     }
 
     @Override

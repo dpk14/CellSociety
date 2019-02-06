@@ -3,6 +3,8 @@
     <settings>
         <title>spreadingfire 2</title>
         <author>group14</author>
+        <cellShape>Square</cellShape>
+        <gridShape>RectangularGrid</gridShape>
         <rows>36</rows>
         <columns>36</columns>
         <speed>25</speed>
