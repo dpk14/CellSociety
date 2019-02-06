@@ -9,15 +9,15 @@ import java.util.*;
 public class SegregationSimulation extends Simulation {
     public static final String DATA_TYPE = "SegregationSimulation";
     public static final List<String> DATA_FIELDS = List.of(
-            "title", "author", "rows", "columns", "speed", "satisfaction");
+            "title", "author", "rows", "columns", "speed", "satisfaction", "redRate", "blueRate");
 
     public double mySatisfactionThreshold; // between 0 & 1
     private double myRacePercentage; // between 0 & 1, percentage made up by first Agent
     private double myEmptyPercentage; // between 0 & 1
 
     private Map<String, String> myDataValues;
-    private List<Cell> myEmptyCells = new ArrayList<Cell>();
-    private List<Cell> myCellsToMove = new ArrayList<Cell>();;
+    private List<Cell> myEmptyCells = new ArrayList<>();
+    private List<Cell> myCellsToMove = new ArrayList<>();
 
     /**
      *
@@ -127,5 +127,12 @@ public class SegregationSimulation extends Simulation {
     public void updateParameters(Map<String, String> map){
         mySatisfactionThreshold = Double.parseDouble(map.get("satisfaction"));
         myDataValues = map;
+    }
+
+    @Override
+    public void setupGrid(){
+        double redRate = Double.parseDouble(myDataValues.get("redRate"));
+        double blueRate = Double.parseDouble(myDataValues.get("blueRate"));
+        // TODO create randomized grid and set to myGrid
     }
 }

@@ -66,6 +66,11 @@ public abstract class Simulation {
      */
     public abstract void updateParameters(Map<String, String> map);
 
+    /**
+     *
+     */
+    public abstract void setupGrid();
+
     public Simulation(int numRows, int numCols){
         myGrid = new Cell[numRows][numCols];
     }

@@ -13,7 +13,8 @@ import java.util.Random;
 public class SpreadingFireSimulation extends Simulation{
     public static final String DATA_TYPE = "SpreadingFireSimulation";
     public static final List<String> DATA_FIELDS = List.of(
-            "title", "author", "rows", "columns", "speed", "spreadRate", "growthRate", "lightningRate");
+            "title", "author", "rows", "columns", "speed", "spreadRate", "growthRate", "lightningRate",
+            "treeRate", "burningRate");
     private Map<String, String> myDataValues;
 
     private double myProbCatch;
@@ -100,5 +101,11 @@ public class SpreadingFireSimulation extends Simulation{
         myDataValues = map;
     }
 
+    @Override
+    public void setupGrid(){
+        double treeRate = Double.parseDouble(myDataValues.get("treeRate"));
+        double burningRate = Double.parseDouble(myDataValues.get("burningRate"));
+        // TODO create randomized grid and set to myGrid
+    }
 
 }

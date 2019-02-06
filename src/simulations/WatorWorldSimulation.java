@@ -23,7 +23,7 @@ public class WatorWorldSimulation extends Simulation {
     public static final String DATA_TYPE = "WatorWorldSimulation";
     public static final List<String> DATA_FIELDS = List.of(
             "title", "author", "rows", "columns", "speed", "startEnergy",
-            "sharkReproductionMax", "fishReproductionMax", "energyGain");
+            "sharkReproductionMax", "fishReproductionMax", "energyGain", "fishRate", "sharkRate");
     private Map<String, String> myDataValues;
     public WatorWorldSimulation(int numRows, int numCols, int startEnergy, int energyGain, int sharkReproductionMax, int fishReproductionMax){
         super(numRows,numCols);
@@ -168,7 +168,7 @@ public class WatorWorldSimulation extends Simulation {
             neighbors.add(myGrid[Math.abs(row-(myGrid.length-1))][column]); //at grid edges, neighbors are also on opposite edge of grid
         }
         if(column==0 || column==myGrid[0].length-1){
-            neighbors.add(myGrid[row][Math.abs(column-(myGrid.length-1))]);; //at grid edges, neighbors are also on opposite edge of grid
+            neighbors.add(myGrid[row][Math.abs(column-(myGrid.length-1))]); //at grid edges, neighbors are also on opposite edge of grid
         }
         return neighbors;
     }
@@ -200,13 +200,11 @@ public class WatorWorldSimulation extends Simulation {
         mySharkReprodMax = (int) Math.floor(fishMax);
         myDataValues = map;
     }
-//=======
-//    //@Override
-//    public void updateSimulationParameters (int startEnergy, int energyGain, int sharkMax, int fishMax) {
-//        myStartEnergy = startEnergy;
-//        myEnergyGain = energyGain;
-//        mySharkReprodMax = sharkMax;
-//        myFishReprodMax = fishMax;
-//    }
-//>>>>>>> master
+
+    @Override
+    public void setupGrid(){
+        double fishRate = Double.parseDouble(myDataValues.get("fishRate"));
+        double sharkRate = Double.parseDouble(myDataValues.get("sharkRate"));
+        // TODO create randomized grid and set to myGrid
+    }
 }
