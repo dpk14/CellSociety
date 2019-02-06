@@ -56,6 +56,8 @@ public abstract class Grid {
         return myCellArray[0].length;
     }
 
-
+    public Cell[][] getMyCellArray () {
+        return myCellArray;
+    }
 
 }

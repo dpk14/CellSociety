@@ -46,7 +46,8 @@ public class Visualization {
         return currentSimType;
     }
 
-    public Node getRootNode (Cell[][] currentGrid) {
+    public Node getRootNode (Grid g) {
+        Cell[][] currentGrid = g.getMyCellArray();
         Group root = new Group();
         //root = renderSquareGrid(currentGrid, root);
         //root = renderTriGrid(currentGrid, root);
