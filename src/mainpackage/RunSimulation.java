@@ -1,6 +1,6 @@
 package mainpackage;
 
-import cells.Cell;
+import grids.Grid;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -107,7 +107,7 @@ public class RunSimulation extends Application {
         currentSimulation = new XMLParser("simType").getSimulation(new File(DATA_FILE));
         Grid initialGrid = currentSimulation.getMyGrid();
         newVisual = new Visualization(initialGrid.getHeight(), initialGrid.getWidth(), 1.0);
-        root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
+        root_grid.getChildren().add(newVisual.getRootNode(initialGrid.getMyCellArray()));
     }
 
     private void createUIComponents() {
@@ -210,7 +210,7 @@ public class RunSimulation extends Application {
     private void renderNextIteration() {
         // render next iteration
         root_grid.getChildren().clear();
-        Node n = newVisual.getRootNode(currentSimulation.advanceSimulation());
+        Node n = newVisual.getRootNode(currentSimulation.advanceSimulation().getMyCellArray());
         root_grid.getChildren().add(n);
     }
 
