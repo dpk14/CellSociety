@@ -13,7 +13,7 @@ import java.util.*;
 public class PercolationSimulation extends Simulation{
     public static final String DATA_TYPE = "PercolationSimulation";
     public static final List<String> DATA_FIELDS = List.of(
-            "title", "author", "rows", "columns", "speed", "openRate");
+            "title", "author", "rows", "columns", "cellShape", "gridShape", "speed", "openRate");
     private Map<String, String> myDataValues;
 
     public PercolationSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold

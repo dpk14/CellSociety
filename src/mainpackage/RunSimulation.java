@@ -184,6 +184,7 @@ public class RunSimulation extends Application {
         int sliderCounter = 4; // first important data field (comes after title, author, rows, columns...)
         for(int k = 0; k < sim.getMyDataValues().size() - 4; k++){
             String currentField = sim.getDataFields().get(sliderCounter);
+            if(sim.getMyDataValues().get(currentField).equals("")) continue;
             double value = Double.parseDouble(sim.getMyDataValues().get(currentField));
             Slider slider = createSlider(30, 550 + k*40, Simulation.Bounds.valueOf(currentField).getMin(),
                     Simulation.Bounds.valueOf(currentField).getMax(), value);

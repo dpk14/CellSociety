@@ -14,7 +14,7 @@ import java.util.Map;
 public class SpreadingFireSimulation extends Simulation{
     public static final String DATA_TYPE = "SpreadingFireSimulation";
     public static final List<String> DATA_FIELDS = List.of(
-            "title", "author", "rows", "columns", "speed", "spreadRate", "growthRate", "lightningRate",
+            "title", "author", "rows", "columns", "cellShape", "gridShape", "speed", "spreadRate", "growthRate", "lightningRate",
             "treeRate", "burningRate");
     private Map<String, String> myDataValues;
 

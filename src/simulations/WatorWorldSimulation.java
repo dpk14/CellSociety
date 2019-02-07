@@ -26,7 +26,7 @@ public class WatorWorldSimulation extends Simulation {
 
     public static final String DATA_TYPE = "WatorWorldSimulation";
     public static final List<String> DATA_FIELDS = List.of(
-            "title", "author", "rows", "columns", "speed", "startEnergy",
+            "title", "author", "rows", "columns", "cellShape", "gridShape", "speed", "startEnergy",
             "sharkReproductionMax", "fishReproductionMax", "energyGain", "fishRate", "sharkRate");
     private Map<String, String> myDataValues;
 

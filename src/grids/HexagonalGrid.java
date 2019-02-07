@@ -31,4 +31,8 @@ public class HexagonalGrid extends Grid{
         return neighbors;
     }
 
+    public List<Cell> getAllNeighbors(Cell cell){
+        return getImmediateNeighbors(cell);
+    }
+
 }
