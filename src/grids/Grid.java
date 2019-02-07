@@ -1,16 +1,21 @@
 package grids;
 
 import cells.Cell;
+import cells.EmptyCell;
 import cells.StateChangeCell;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Grid {
-    protected Cell[][] myCellArray;
+    private Cell[][] myCellArray;
+    private int myRows;
+    private int myColumns;
 
     public Grid(int rows, int columns, List<Cell> list){
-        myCellArray = getNewGrid(rows, columns, list);
+        myCellArray = getNewArray(rows, columns, list);
+        myRows=rows;
+        myColumns=columns;
     }
 
     public List<Cell> getImmediateNeighbors(Cell cell){
@@ -19,12 +24,12 @@ public abstract class Grid {
 
     public abstract List<Cell> getAllNeighbors(Cell cell);
 
-    public Cell[][] getNewGrid(int rows, int columns, List<Cell> list){
-        Cell[][] newGrid = new Cell[rows][columns];
+    public Cell[][] getNewArray(int rows, int columns, List<Cell> list){
+        Cell[][] newArray = new Cell[rows][columns];
         for(Cell cell : list){
-            newGrid[cell.getRow()][cell.getColumn()] = cell;
+            newArray[cell.getRow()][cell.getColumn()] = cell;
         }
-        return newGrid;
+        return newArray;
     }
 
     public void updateGrid(List<Cell> list){
@@ -33,16 +38,29 @@ public abstract class Grid {
         }
     }
 
+    public List<Cell> fillWithEmpty(List<Cell> myCellList){
+        for(int i = 0; i < myRows; i++) { // i = row number
+            for (int j = 0; j < myColumns; j++) { // j = column number
+                if (myCellArray[i][j]==null) {
+                    Cell empty=new EmptyCell(i, j);
+                    myCellArray[i][j]=empty;
+                    myCellList.add(empty);
+                }
+            }
+        }
+        return myCellList;
+    }
+
     public Cell getCell(int row, int column){
         return myCellArray[row][column];
     }
 
     public int getHeight(){
-        return myCellArray.length;
+        return myRows;
     }
 
     public int getWidth(){
-        return myCellArray[0].length;
+        return myColumns;
     }
 
     public Cell[][] getMyCellArray(){
