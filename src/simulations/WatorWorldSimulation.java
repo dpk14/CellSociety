@@ -42,16 +42,6 @@ public class WatorWorldSimulation extends Simulation {
         mySliderInfo.put("fishReproductionMax", dataValues.get("fishReproductionMax"));
     }
 
-    protected void initializeCellList(){
-        for(int i = 0; i < myGrid.getHeight(); i++) { // i = row number
-            for (int j = 0; j < myGrid.getWidth(); j++) { // j = column number
-                myCellList.add(myGrid.getCell(i, j));
-            }
-        }
-
-    }
-
-
     @Override
     public Grid advanceSimulation() {
         initializeCellList();
@@ -132,16 +122,6 @@ public class WatorWorldSimulation extends Simulation {
             }
             else myCellList.add(new EmptyCell(currentRow, currentCol));
         }
-    }
-
-    private Cell move(ArrayList<Cell> movable_spots, Cell current){
-        Cell newLocation;
-        if (movable_spots.size()==0) return current;
-        else {
-            Random rand = new Random();
-            newLocation = movable_spots.get(rand.nextInt(movable_spots.size()));
-        }
-        return newLocation;
     }
 
     private List<Cell> removeTakenSpots(List<Cell> neighbors){

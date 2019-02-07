@@ -3,10 +3,11 @@ package cells;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
-public class SugarPatch extends Cell{
+public class SugarPatch extends Cell implements Comparator<Cell> {
 
     public static final String DATA_TYPE = "FishCell";
     public static final List<String> DATA_FIELDS = List.of("reproductionTime");
@@ -57,6 +58,13 @@ public class SugarPatch extends Cell{
         myAgent=agent;
     }
 
+    public int getSugar(){
+        return mySugar;
+    }
 
+    @Override
+    public int compare(Cell a, Cell b){
+        return ((SugarPatch) a).getSugar()-((SugarPatch) b).getSugar();
+    }
 
 }

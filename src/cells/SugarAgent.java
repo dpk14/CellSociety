@@ -20,4 +20,7 @@ public class SugarAgent {
         mySugar-=myMetabolism;
     }
 
+    public int getMyVision(){
+        return myVision;
+    }
 }

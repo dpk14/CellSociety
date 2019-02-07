@@ -7,10 +7,7 @@ import grids.HexagonalGrid;
 import grids.RectangularGrid;
 import grids.TriangularGrid;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class Simulation {
     protected Grid myGrid;
@@ -106,12 +103,12 @@ public abstract class Simulation {
     public abstract void setupGrid();
 
     protected void initializeCellList(){
-        Cell[][] myCellArray=myGrid.getMyCellArray();
         for(int i = 0; i < myGrid.getHeight(); i++) { // i = row number
             for (int j = 0; j < myGrid.getWidth(); j++) { // j = column number
                 myCellList.add(myGrid.getCell(i, j));
             }
         }
+
     }
 
     /**
@@ -138,5 +135,14 @@ public abstract class Simulation {
         return specificNeighbors;
     }
 
+    protected Cell move(ArrayList<Cell> movable_spots, Cell current){
+        Cell newLocation;
+        if (movable_spots.size()==0) return current;
+        else {
+            Random rand = new Random();
+            newLocation = movable_spots.get(rand.nextInt(movable_spots.size()));
+        }
+        return newLocation;
+    }
 
 }
