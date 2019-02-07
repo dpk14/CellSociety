@@ -1,4 +1,4 @@
-package mainpackage;
+package grids;
 
 import cells.Cell;
 import cells.StateChangeCell;
@@ -33,15 +33,6 @@ public abstract class Grid {
         }
     }
 
-//    public List<Cell> getTypedNeighbors(Cell cell, String type) {
-//        List<Cell> neighbors = getNeighbors(cell);
-//        List<Cell> specificNeighbors=new ArrayList<Cell>();
-//        for(Cell neighbor: neighbors){
-//            if (((StateChangeCell) neighbor).getState().equals(type)) specificNeighbors.add(neighbor);
-//        }
-//        return specificNeighbors;
-//    }
-
     public Cell getCell(int row, int column){
         return myCellArray[row][column];
     }
@@ -54,6 +45,8 @@ public abstract class Grid {
         return myCellArray[0].length;
     }
 
-
+    public Cell[][] getMyCellArray(){
+        return myCellArray;
+    }
 
 }

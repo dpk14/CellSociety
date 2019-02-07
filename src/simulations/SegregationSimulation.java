@@ -3,7 +3,7 @@ package simulations;
 import cells.AgentCell;
 import cells.Cell;
 import cells.EmptyCell;
-import mainpackage.Grid;
+import grids.Grid;
 
 import java.util.*;
 
@@ -18,22 +18,6 @@ public class SegregationSimulation extends Simulation {
 
     private List<Cell> myEmptyCells = new ArrayList<>();
     private List<Cell> myCellsToMove = new ArrayList<>();
-
-//    /**
-//     *
-//     * @param numRows - number of rows in desired grid
-//     * @param numCols - number of columns in desired grid
-//     * @param mySatisfactionThreshold - if ratio of a cell's neighbors is below this number, then it is "unsatisfied" and must move
-//     * @param myRacePercentage - ratio of total AgentCells made up by first agent type
-//     * @param myEmptyPercentage - ratio of total cells that should be empty
-//     */
-//    public SegregationSimulation(int numRows, int numCols, double mySatisfactionThreshold, double myRacePercentage, double myEmptyPercentage){
-//        super(numRows,numCols);
-//        this.mySatisfactionThreshold = mySatisfactionThreshold;
-//        this.myRacePercentage = myRacePercentage;
-//        this.myEmptyPercentage = myEmptyPercentage;
-//        myDataValues = new LinkedHashMap<>();
-//    }
 
     /**
      * Constructor needed to initialize from XML

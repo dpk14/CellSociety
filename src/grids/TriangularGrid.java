@@ -1,4 +1,4 @@
-package mainpackage;
+package grids;
 
 import cells.Cell;
 

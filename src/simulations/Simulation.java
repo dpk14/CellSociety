@@ -2,10 +2,10 @@ package simulations;
 
 import cells.Cell;
 import cells.StateChangeCell;
-import mainpackage.Grid;
-import mainpackage.HexagonalGrid;
-import mainpackage.RectangularGrid;
-import mainpackage.TriangularGrid;
+import grids.Grid;
+import grids.HexagonalGrid;
+import grids.RectangularGrid;
+import grids.TriangularGrid;
 
 import java.util.ArrayList;
 import java.util.List;

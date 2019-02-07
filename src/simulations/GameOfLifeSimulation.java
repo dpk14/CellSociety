@@ -2,9 +2,8 @@ package simulations;
 
 import cells.Cell;
 import cells.StateChangeCell;
-import mainpackage.Grid;
+import grids.Grid;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
