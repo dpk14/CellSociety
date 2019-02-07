@@ -4,8 +4,7 @@ import cells.Cell;
 import cells.EmptyCell;
 import cells.StateChangeCell;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public abstract class Grid {
     private Cell[][] myCellArray;
@@ -23,6 +22,29 @@ public abstract class Grid {
     }
 
     public abstract List<Cell> getAllNeighbors(Cell cell);
+
+    public List<Cell> getVisibleNeighbors(Cell cell, int vision){
+        Queue<Cell> qu=new LinkedList<Cell>();
+        HashMap<Cell, Integer> neighborMap=new HashMap<Cell, Integer>();
+        List<Cell> totalNeighbors=new ArrayList<Cell>();
+        neighborMap.put(cell, 0);
+        qu.add(cell);
+        Cell current;
+        List<Cell> neighbors;
+        while(qu.size()!=0){
+            current=qu.remove();
+            int index=neighborMap.get(current);
+            if(index>vision) break;
+            neighbors=getImmediateNeighbors(current);
+            for(Cell neighbor: neighbors){
+                if(!neighborMap.containsKey(neighbor)) neighborMap.put(neighbor, index+1);
+                qu.add(neighbor);
+            }
+        }
+        neighborMap.remove(cell);
+        for(Cell neighbor: neighborMap.keySet()) totalNeighbors.add(neighbor);
+        return totalNeighbors;
+    }
 
     public Cell[][] getNewArray(int rows, int columns, List<Cell> list){
         Cell[][] newArray = new Cell[rows][columns];
