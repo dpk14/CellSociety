@@ -107,7 +107,7 @@ public class RunSimulation extends Application {
         currentSimulation = new XMLParser("simType").getSimulation(new File(DATA_FILE));
         Grid initialGrid = currentSimulation.getMyGrid();
         newVisual = new Visualization(initialGrid.getHeight(), initialGrid.getWidth(), 1.0);
-        root_grid.getChildren().add(newVisual.getRootNode(initialGrid.getMyCellArray()));
+        root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
     }
 
     private void createUIComponents() {
@@ -181,10 +181,9 @@ public class RunSimulation extends Application {
     private HashMap<String, Slider> createMySliders(Simulation sim, Group root){
         HashMap<String, Slider> sliderMap = new LinkedHashMap<>();
         double applyButtonY = 0;
-        int sliderCounter = 4; // first important data field (comes after title, author, rows, columns...)
-        for(int k = 0; k < sim.getMyDataValues().size() - 4; k++){
-            String currentField = sim.getDataFields().get(sliderCounter);
-            if(sim.getMyDataValues().get(currentField).equals("")) continue;
+        int k = 0;
+        for(String currentField : sim.getMySliderInfo().keySet()){
+            //if(sim.getMyDataValues().get(currentField).equals("")) continue;
             double value = Double.parseDouble(sim.getMyDataValues().get(currentField));
             Slider slider = createSlider(30, 550 + k*40, Simulation.Bounds.valueOf(currentField).getMin(),
                     Simulation.Bounds.valueOf(currentField).getMax(), value);
@@ -193,10 +192,9 @@ public class RunSimulation extends Application {
             label.setLayoutX(180);
             label.setLayoutY(550 + k*40);
             root.getChildren().addAll(label, slider);
-            if(k == sim.getMyDataValues().size() - 5) applyButtonY = 550 + ++k*40;
-            sliderCounter++;
+            k++;
         }
-        myApplyButton = createButton("Apply", 30, applyButtonY, false);
+        myApplyButton = createButton("Apply", 30, 550 + 40*k, false);
         return sliderMap;
     }
 
@@ -211,7 +209,7 @@ public class RunSimulation extends Application {
     private void renderNextIteration() {
         // render next iteration
         root_grid.getChildren().clear();
-        Node n = newVisual.getRootNode(currentSimulation.advanceSimulation().getMyCellArray());
+        Node n = newVisual.getRootNode(currentSimulation.advanceSimulation());
         root_grid.getChildren().add(n);
     }
 

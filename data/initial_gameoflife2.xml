@@ -4,7 +4,7 @@
         <title>gameoflife 2</title>
         <author>group14</author>
         <cellShape>Square</cellShape>
-        <gridShape>RectangularGrid</gridShape>
+        <gridShape>HexagonalGrid</gridShape>
         <rows>72</rows>
         <columns>72</columns>
         <speed>25</speed>
