@@ -20,10 +20,7 @@ public class GameOfLifeSimulation extends Simulation{
 //    }
 
     public GameOfLifeSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
-        int rows=Integer.parseInt(dataValues.get("rows"));
-        int columns=Integer.parseInt(dataValues.get("columns"));
-        String gridShape=dataValues.get("gridShape");
-        myDataValues = dataValues;
+        super(dataValues, cells);
     }
 
     @Override

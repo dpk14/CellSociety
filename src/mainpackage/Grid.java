@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Grid {
-    private Cell[][] myCellArray;
+    protected Cell[][] myCellArray;
 
     public Grid(int rows, int columns, List<Cell> list){
         myCellArray = getNewGrid(rows, columns, list);
@@ -17,9 +17,7 @@ public abstract class Grid {
       return new ArrayList<Cell>();
     }
 
-    public List<Cell> getAllNeighbors(Cell cell){
-        return new ArrayList<Cell>();
-    }
+    public abstract List<Cell> getAllNeighbors(Cell cell /*, Cell[][] myGrid*/);
 
     public Cell[][] getNewGrid(int rows, int columns, List<Cell> list){
         Cell[][] newGrid = new Cell[rows][columns];
@@ -35,14 +33,14 @@ public abstract class Grid {
         }
     }
 
-    public List<Cell> getTypedNeighbors(Cell cell, String type) {
-        List<Cell> neighbors = getNeighbors(cell);
-        List<Cell> specificNeighbors=new ArrayList<Cell>();
-        for(Cell neighbor: neighbors){
-            if (((StateChangeCell) neighbor).getState().equals(type)) specificNeighbors.add(neighbor);
-        }
-        return specificNeighbors;
-    }
+//    public List<Cell> getTypedNeighbors(Cell cell, String type) {
+//        List<Cell> neighbors = getNeighbors(cell);
+//        List<Cell> specificNeighbors=new ArrayList<Cell>();
+//        for(Cell neighbor: neighbors){
+//            if (((StateChangeCell) neighbor).getState().equals(type)) specificNeighbors.add(neighbor);
+//        }
+//        return specificNeighbors;
+//    }
 
     public Cell getCell(int row, int column){
         return myCellArray[row][column];

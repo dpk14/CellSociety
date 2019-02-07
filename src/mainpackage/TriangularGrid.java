@@ -7,7 +7,7 @@ import java.util.List;
 
 public class TriangularGrid extends Grid{
 
-    TriangularGrid(int rows, int columns, List<Cell> list){
+    public TriangularGrid(int rows, int columns, List<Cell> list){
         super(rows, columns, list);
     }
 

@@ -13,36 +13,36 @@ public class SegregationSimulation extends Simulation {
             "title", "author", "cellShape", "gridShape", "rows", "columns", "speed", "satisfaction", "redRate", "blueRate");
 
     public double mySatisfactionThreshold; // between 0 & 1
-    private double myRacePercentage; // between 0 & 1, percentage made up by first Agent
-    private double myEmptyPercentage; // between 0 & 1
+    private double myBluePercentage; // between 0 & 1, percentage made up by first Agent
+    private double myRedPercentage; // between 0 & 1
 
-    private Map<String, String> myDataValues;
     private List<Cell> myEmptyCells = new ArrayList<>();
     private List<Cell> myCellsToMove = new ArrayList<>();
 
-    /**
-     *
-     * @param numRows - number of rows in desired grid
-     * @param numCols - number of columns in desired grid
-     * @param mySatisfactionThreshold - if ratio of a cell's neighbors is below this number, then it is "unsatisfied" and must move
-     * @param myRacePercentage - ratio of total AgentCells made up by first agent type
-     * @param myEmptyPercentage - ratio of total cells that should be empty
-     */
-    public SegregationSimulation(int numRows, int numCols, double mySatisfactionThreshold, double myRacePercentage, double myEmptyPercentage){
-        this.mySatisfactionThreshold = mySatisfactionThreshold;
-        this.myRacePercentage = myRacePercentage;
-        this.myEmptyPercentage = myEmptyPercentage;
-        myDataValues = new LinkedHashMap<>();
-    }
+//    /**
+//     *
+//     * @param numRows - number of rows in desired grid
+//     * @param numCols - number of columns in desired grid
+//     * @param mySatisfactionThreshold - if ratio of a cell's neighbors is below this number, then it is "unsatisfied" and must move
+//     * @param myRacePercentage - ratio of total AgentCells made up by first agent type
+//     * @param myEmptyPercentage - ratio of total cells that should be empty
+//     */
+//    public SegregationSimulation(int numRows, int numCols, double mySatisfactionThreshold, double myRacePercentage, double myEmptyPercentage){
+//        super(numRows,numCols);
+//        this.mySatisfactionThreshold = mySatisfactionThreshold;
+//        this.myRacePercentage = myRacePercentage;
+//        this.myEmptyPercentage = myEmptyPercentage;
+//        myDataValues = new LinkedHashMap<>();
+//    }
 
     /**
      * Constructor needed to initialize from XML
      */
     public SegregationSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
-        this.mySatisfactionThreshold = Double.parseDouble(dataValues.get("satisfaction"));
-
-        myGrid = new Grid(Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")), cells);
-        myDataValues = dataValues;
+        super(dataValues, cells);
+        mySatisfactionThreshold = Double.parseDouble(dataValues.get("satisfaction"));
+        myBluePercentage = Double.parseDouble(dataValues.get("blueRate"));
+        myRedPercentage = Double.parseDouble(dataValues.get("redRate"));
     }
 
     @Override
@@ -62,18 +62,18 @@ public class SegregationSimulation extends Simulation {
         }
         myCellList.addAll(myEmptyCells);
         myCellList.addAll(myCellsToMove);
-        myGrid.updateGrid(this.myCellList);
+        myGrid.updateGrid(myCellList);
         return myGrid;
     }
 
     private void checkAndSortCells(Grid grid){
-        for(int i = 0; i < grid.getWidth(); i++){ // i = row number
-            for(int j = 0; j < grid.getHeight(); j++){ // j = column number
+        for(int i = 0; i < grid.getHeight(); i++){ // i = row number
+            for(int j = 0; j < grid.getWidth(); j++){ // j = column number
                 Cell cell = grid.getCell(i, j);
                 if(cell instanceof EmptyCell){ // if cell is EmptyCell
                     myEmptyCells.add(cell);
                 }
-                else if(cell instanceof AgentCell && ((AgentCell) cell).calculatePercentage(myGrid.getAllNeighbors(cell)) < mySatisfactionThreshold){
+                else if(cell instanceof AgentCell && ((AgentCell) cell).calculatePercentage(grid.getAllNeighbors(cell)) < mySatisfactionThreshold){
                     myCellsToMove.add(cell);
                 }
                 else{ // add satisfied cells to list already to be added first

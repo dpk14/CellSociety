@@ -7,7 +7,7 @@ import java.util.List;
 
 public class HexagonalGrid extends Grid{
 
-    HexagonalGrid(int rows, int columns, List<Cell> list){
+    public HexagonalGrid(int rows, int columns, List<Cell> list){
         super(rows, columns, list);
     }
 

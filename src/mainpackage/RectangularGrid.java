@@ -7,7 +7,7 @@ import java.util.List;
 
 public class RectangularGrid extends Grid{
 
-    RectangularGrid(int rows, int columns, List<Cell> list){
+    public RectangularGrid(int rows, int columns, List<Cell> list){
         super(rows, columns, list);
     }
 
