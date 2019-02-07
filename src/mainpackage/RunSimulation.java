@@ -235,10 +235,6 @@ public class RunSimulation extends Application {
         }
     }
 
-    public static void main(String[] args){
-        launch(args);
-    }
-
     //create an interface of key and mouse inputs, which toggles a call to mainpackage.Simulation.initializeGrid
 
 }

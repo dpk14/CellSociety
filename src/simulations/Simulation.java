@@ -60,7 +60,8 @@ public abstract class Simulation {
                 System.out.println("HEX");
                 myGrid = new HexagonalGrid(numRows, numCols, cells);
                 break;
-            // Assumes data field will always be assigned one of these three, can check in parser
+            default:
+                throw new IllegalStateException();
         }
     }
 
@@ -104,6 +105,8 @@ public abstract class Simulation {
      *
      */
     public abstract void setupGrid();
+
+    //public abstract void changeCell();
 
     /**
      * Updates and returns myGrid by updating the cell's positions according to the simulation's rules and then
