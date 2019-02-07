@@ -1,11 +1,11 @@
 package simulations;
 
-import cells.Cell;
-import cells.SugarAgent;
-import cells.SugarPatch;
+import cells.*;
 import grids.Grid;
-
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import java.util.*;
+import java.util.List;
 
 
 public class SugarScapeSimulation extends Simulation{
@@ -17,17 +17,17 @@ public class SugarScapeSimulation extends Simulation{
             "sharkReproductionMax", "fishReproductionMax", "energyGain", "fishRate", "sharkRate");
 
     public Grid advanceSimulation(){
-        nextGrid=new Grid(myGrid.getHeight(), myGrid.getWidth());
         initializeCellList();
-        Collections.shuffle(CellList);
-        for(int i = 0; i < myGrid.getHeight(); i++){ // i = row number
-            for(int j = 0; j < myGrid.getWidth(); j++){
-                Cell cell = myGrid.getCell(i,j);
+        Collections.shuffle(myCellList);
+        List<Cell> randomizedList=new ArrayList<Cell>(myCellList);
+        myCellList.clear();
+        myTakenSpots.clear();
+        for(Cell cell: randomizedList){
                 if (((SugarPatch) cell).hasAgent()){
-                    cell.moveAgent(cell, ((SugarPatch) cell).getAgent());
+                    myTakenSpots.add(cell);
+                    checkAgent(cell, ((SugarPatch) cell).getAgent(), cell.getRow(), cell.getColumn());
                 }
             }
-    }
     }
 
     private Comparator<Cell> SugarComparator=new Comparator<Cell>(){
@@ -37,8 +37,8 @@ public class SugarScapeSimulation extends Simulation{
         }
     };
 
-private void moveAgent(Cell cell, SugarAgent agent) {
-    List<Cell> goodNeighbors = myGrid.getVisibleNeighbors(cell, agent.getMyVision());
+private void checkAgent(Cell patch, SugarAgent agent, int currentRow, int currentCol) {
+    List<Cell> goodNeighbors = myGrid.getVisibleNeighbors(patch, agent.getMyVision());
     List<Cell> bestNeighbors = new ArrayList<Cell>();
 
     Collections.sort(goodNeighbors, SugarComparator);
@@ -49,8 +49,19 @@ private void moveAgent(Cell cell, SugarAgent agent) {
         if (((SugarPatch) neighbor).getSugar()<maxSugar) break;
         bestNeighbors.add(neighbor);
     }
-
-    Cell otherCell = move(bestNeighbors, cell);
+    int
+    Cell otherPatch = move(bestNeighbors, patch);
+    Cell newLocation=new Cell(otherPatch.getRow(), otherPatch.getColumn(), Color.WHITE);
+    if(!(newLocation.getRow()==currentRow && newLocation.getColumn()==currentCol)){
+        moveAgent(patch, otherPatch);
+        myTakenSpots.add(newLocation);
+        myCellList.add(fish);
+        if (((FishCell) fish).canReproduce()) {
+            ((FishCell) fish).setMyTurnsSurvived(0);
+            myCellList.add(new FishCell(currentRow, currentCol, myFishReprodMax));
+        }
+        else myCellList.add(new EmptyCell(currentRow, currentCol));
+    }
 }
 
     public List<Cell> getVisibleNeighbors(Cell cell, int vision){

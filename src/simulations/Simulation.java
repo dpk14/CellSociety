@@ -12,6 +12,7 @@ import java.util.*;
 public abstract class Simulation {
     protected Grid myGrid;
     protected List<Cell> myCellList = new ArrayList<Cell>();
+    protected ArrayList<Cell> myTakenSpots=new ArrayList<>();
     protected Map<String, String> myDataValues;
     protected Map<String, String> mySliderInfo;
     public enum Bounds{
@@ -135,7 +136,7 @@ public abstract class Simulation {
         return specificNeighbors;
     }
 
-    protected Cell move(ArrayList<Cell> movable_spots, Cell current){
+    protected Cell move(List<Cell> movable_spots, Cell current){
         Cell newLocation;
         if (movable_spots.size()==0) return current;
         else {
