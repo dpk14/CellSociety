@@ -16,7 +16,6 @@ public class SpreadingFireSimulation extends Simulation{
     public static final List<String> DATA_FIELDS = List.of(
             "title", "author", "rows", "columns", "cellShape", "gridShape", "speed", "spreadRate", "growthRate", "lightningRate",
             "treeRate", "burningRate");
-    private Map<String, String> myDataValues;
 
     private double myProbCatch;
     private double myProbLightning;
@@ -27,6 +26,10 @@ public class SpreadingFireSimulation extends Simulation{
         myProbCatch = Double.parseDouble(dataValues.get("spreadRate"));
         myProbGrow=Double.parseDouble(dataValues.get("growthRate"));
         myProbLightning=Double.parseDouble(dataValues.get("lightningRate"));
+        mySliderInfo.put("speed", dataValues.get("speed"));
+        mySliderInfo.put("spreadRate", dataValues.get("spreadRate"));
+        mySliderInfo.put("growthRate", dataValues.get("growthRate"));
+        mySliderInfo.put("lightningRate", dataValues.get("lightningRate"));
     }
 
     @Override
@@ -43,11 +46,6 @@ public class SpreadingFireSimulation extends Simulation{
         }
         myGrid.updateGrid(myCellList);
         return myGrid;
-    }
-
-    @Override
-    public Map<String, String> getMyDataValues(){
-        return myDataValues;
     }
 
     private String randomizeState(Cell cell, String state){

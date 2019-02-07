@@ -28,7 +28,6 @@ public class WatorWorldSimulation extends Simulation {
     public static final List<String> DATA_FIELDS = List.of(
             "title", "author", "rows", "columns", "cellShape", "gridShape", "speed", "startEnergy",
             "sharkReproductionMax", "fishReproductionMax", "energyGain", "fishRate", "sharkRate");
-    private Map<String, String> myDataValues;
 
     public WatorWorldSimulation(Map<String, String> dataValues, List<Cell> cells){
         super(dataValues, cells);
@@ -36,7 +35,12 @@ public class WatorWorldSimulation extends Simulation {
         myEnergyGain=Integer.parseInt(dataValues.get("energyGain"));
         mySharkReprodMax=Integer.parseInt(dataValues.get("sharkReproductionMax"));
         myFishReprodMax=Integer.parseInt(dataValues.get("fishReproductionMax"));
-        initializeCellList();
+        mySliderInfo.put("speed", dataValues.get("speed"));
+        mySliderInfo.put("startEnergy", dataValues.get("startEnergy"));
+        mySliderInfo.put("energyGain", dataValues.get("energyGain"));
+        mySliderInfo.put("sharkReproductionMax", dataValues.get("sharkReproductionMax"));
+        mySliderInfo.put("fishReproductionMax", dataValues.get("fishReproductionMax"));
+
     }
 
     @Override
@@ -142,11 +146,6 @@ public class WatorWorldSimulation extends Simulation {
     @Override
     public String getDataType(){
         return DATA_TYPE;
-    }
-
-    @Override
-    public Map<String, String> getMyDataValues(){
-        return myDataValues;
     }
 
     @Override
