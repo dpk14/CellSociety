@@ -11,10 +11,10 @@ public class GameOfLifeSimulation extends Simulation{
     public static final String DATA_TYPE = "GameOfLifeSimulation";
     public static final List<String> DATA_FIELDS = List.of(
             "title", "author", "cellShape", "gridShape", "rows", "columns", "speed", "populatedRate");
-    private Map<String, String> myDataValues;
 
     public GameOfLifeSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
         super(dataValues, cells);
+        mySliderInfo.put("speed", dataValues.get("speed"));
     }
 
     @Override
@@ -55,11 +55,6 @@ public class GameOfLifeSimulation extends Simulation{
     @Override
     public String getDataType(){
         return DATA_TYPE;
-    }
-
-    @Override
-    public Map<String, String> getMyDataValues(){
-        return myDataValues;
     }
 
     @Override

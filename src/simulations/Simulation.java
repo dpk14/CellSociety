@@ -8,6 +8,7 @@ import grids.RectangularGrid;
 import grids.TriangularGrid;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,8 +16,8 @@ public abstract class Simulation {
     protected Grid myGrid;
     protected List<Cell> myCellList = new ArrayList<Cell>();
     protected Map<String, String> myDataValues;
-
-    public static enum Bounds{
+    protected Map<String, String> mySliderInfo;
+    public enum Bounds{
         rows(1, 30),
         columns(1,100),
         speed (1, 30),
@@ -43,15 +44,22 @@ public abstract class Simulation {
 
     public Simulation(Map<String, String> dataValues, List<Cell> cells){
         myDataValues = dataValues;
+        mySliderInfo = new HashMap<>();
         int numRows = Integer.parseInt(dataValues.get("rows"));
         int numCols = Integer.parseInt(dataValues.get("columns"));
         switch(myDataValues.get("gridShape")){
             case "RectangularGrid":
+                System.out.println("RECT");
                 myGrid = new RectangularGrid(numRows, numCols, cells);
+                break;
             case "TriangularGrid":
+                System.out.println("TRI");
                 myGrid = new TriangularGrid(numRows, numCols, cells);
+                break;
             case "HexagonalGrid":
+                System.out.println("HEX");
                 myGrid = new HexagonalGrid(numRows, numCols, cells);
+                break;
             // Assumes data field will always be assigned one of these three, can check in parser
         }
     }
@@ -62,7 +70,13 @@ public abstract class Simulation {
      * Strings). This is used to initialize the sliders to be on the values specified within the XML files.
      * @return Map<String, String> myDataValues
      */
-    public abstract Map<String, String> getMyDataValues();
+    public Map<String, String> getMyDataValues(){
+        return myDataValues;
+    }
+
+    public Map<String, String> getMySliderInfo(){
+        return mySliderInfo;
+    }
 
     /**
      * Returns myDataFields, which is defined within each subclass. The instance variable myDataFields is a List that
