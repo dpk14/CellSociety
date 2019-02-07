@@ -1,4 +1,4 @@
-package mainpackage;
+package grids;
 
 import cells.Cell;
 import cells.EmptyCell;
@@ -22,9 +22,7 @@ public abstract class Grid {
       return new ArrayList<Cell>();
     }
 
-    public List<Cell> getAllNeighbors(Cell cell){
-        return new ArrayList<Cell>();
-    }
+    public abstract List<Cell> getAllNeighbors(Cell cell);
 
     public Cell[][] getNewArray(int rows, int columns, List<Cell> list){
         Cell[][] newArray = new Cell[rows][columns];
@@ -65,6 +63,8 @@ public abstract class Grid {
         return myColumns;
     }
 
-
+    public Cell[][] getMyCellArray(){
+        return myCellArray;
+    }
 
 }

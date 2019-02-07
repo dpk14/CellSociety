@@ -2,7 +2,10 @@ package simulations;
 
 import cells.Cell;
 import cells.StateChangeCell;
-import mainpackage.Grid;
+import grids.Grid;
+import grids.HexagonalGrid;
+import grids.RectangularGrid;
+import grids.TriangularGrid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,12 +14,7 @@ import java.util.Map;
 public abstract class Simulation {
     protected Grid myGrid;
     protected List<Cell> myCellList = new ArrayList<Cell>();
-
-    /*
-    public Simulation(int numRows, int numCols){
-        myGrid = new Grid(numRows, numCols, );
-    }
-    */
+    protected Map<String, String> myDataValues;
 
     public static enum Bounds{
         rows(1, 30),
@@ -41,6 +39,21 @@ public abstract class Simulation {
 
         public double getMin(){ return min; }
         public double getMax(){ return max; }
+    }
+
+    public Simulation(Map<String, String> dataValues, List<Cell> cells){
+        myDataValues = dataValues;
+        int numRows = Integer.parseInt(dataValues.get("rows"));
+        int numCols = Integer.parseInt(dataValues.get("columns"));
+        switch(myDataValues.get("gridShape")){
+            case "RectangularGrid":
+                myGrid = new RectangularGrid(numRows, numCols, cells);
+            case "TriangularGrid":
+                myGrid = new TriangularGrid(numRows, numCols, cells);
+            case "HexagonalGrid":
+                myGrid = new HexagonalGrid(numRows, numCols, cells);
+            // Assumes data field will always be assigned one of these three, can check in parser
+        }
     }
 
     /**
@@ -77,10 +90,6 @@ public abstract class Simulation {
      *
      */
     public abstract void setupGrid();
-
-//    public Simulation(int numRows, int numCols){
-//        myGrid = new Cell[numRows][numCols];
-//    }
 
     /**
      * Updates and returns myGrid by updating the cell's positions according to the simulation's rules and then

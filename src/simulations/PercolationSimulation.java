@@ -3,7 +3,10 @@ package simulations;
 import cells.Cell;
 import cells.EmptyCell;
 import cells.StateChangeCell;
-import mainpackage.Grid;
+import cells.Cell;
+import cells.StateChangeCell;
+import grids.Grid;
+
 
 import java.util.*;
 
@@ -12,15 +15,9 @@ public class PercolationSimulation extends Simulation{
     public static final List<String> DATA_FIELDS = List.of(
             "title", "author", "rows", "columns", "speed", "openRate");
     private Map<String, String> myDataValues;
-    public PercolationSimulation(int numRows, int numCols){
-        super(numRows, numCols);
-        myDataValues = new HashMap<>();
-    }
 
     public PercolationSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
-        super(Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
-        myGrid = getNewGrid(cells);
-        myDataValues = dataValues;
+        super(dataValues, cells);
     }
 
     @Override

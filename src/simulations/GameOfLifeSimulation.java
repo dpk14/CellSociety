@@ -2,9 +2,8 @@ package simulations;
 
 import cells.Cell;
 import cells.StateChangeCell;
-import mainpackage.Grid;
+import grids.Grid;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,16 +13,8 @@ public class GameOfLifeSimulation extends Simulation{
             "title", "author", "cellShape", "gridShape", "rows", "columns", "speed", "populatedRate");
     private Map<String, String> myDataValues;
 
-//    public GameOfLifeSimulation(int numRows, int numCols){
-//        super(numRows, numCols);
-//        myDataValues = new HashMap<>();
-//    }
-
     public GameOfLifeSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
-        int rows=Integer.parseInt(dataValues.get("rows"));
-        int columns=Integer.parseInt(dataValues.get("columns"));
-        String gridShape=dataValues.get("gridShape");
-        myDataValues = dataValues;
+        super(dataValues, cells);
     }
 
     @Override

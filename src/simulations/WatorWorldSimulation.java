@@ -8,7 +8,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import mainpackage.Grid;
+import cells.Cell;
+import cells.StateChangeCell;
+import grids.Grid;
+
 
 import java.util.*;
 
@@ -26,23 +29,13 @@ public class WatorWorldSimulation extends Simulation {
             "title", "author", "rows", "columns", "speed", "startEnergy",
             "sharkReproductionMax", "fishReproductionMax", "energyGain", "fishRate", "sharkRate");
     private Map<String, String> myDataValues;
-    public WatorWorldSimulation(int numRows, int numCols, int startEnergy, int energyGain, int sharkReproductionMax, int fishReproductionMax){
-        super(numRows,numCols);
-        myStartEnergy=startEnergy;
-        myEnergyGain=energyGain;
-        mySharkReprodMax=sharkReproductionMax;
-        myFishReprodMax=fishReproductionMax;
-        myDataValues = new HashMap<>();
-    }
 
     public WatorWorldSimulation(Map<String, String> dataValues, List<Cell> cells){
-        super(Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
+        super(dataValues, cells);
         myStartEnergy=Integer.parseInt(dataValues.get("startEnergy"));
         myEnergyGain=Integer.parseInt(dataValues.get("energyGain"));
         mySharkReprodMax=Integer.parseInt(dataValues.get("sharkReproductionMax"));
         myFishReprodMax=Integer.parseInt(dataValues.get("fishReproductionMax"));
-        myGrid = getNewGrid(cells);
-        myDataValues = dataValues;
     }
 
     @Override

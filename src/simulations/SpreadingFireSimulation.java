@@ -2,7 +2,10 @@ package simulations;
 
 import cells.Cell;
 import cells.StateChangeCell;
-import mainpackage.Grid;
+import cells.Cell;
+import cells.StateChangeCell;
+import grids.Grid;
+
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,33 +22,12 @@ public class SpreadingFireSimulation extends Simulation{
     private double myProbLightning;
     private double myProbGrow;
 
-    public SpreadingFireSimulation(int numRows, int numCols){
-        super(numRows, numCols);
-        myDataValues = new HashMap<>();
-    }
-
     public SpreadingFireSimulation(Map<String, String> dataValues, List<Cell> cells) { // pass in list of strings representing rows, columns, sat threshold
-        super(Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
+        super(dataValues, cells);
         myProbCatch = Double.parseDouble(dataValues.get("spreadRate"));
         myProbGrow=Double.parseDouble(dataValues.get("growthRate"));
         myProbLightning=Double.parseDouble(dataValues.get("lightningRate"));
-        myGrid = getNewGrid(cells);
-        myDataValues = dataValues;
     }
-
-    public SpreadingFireSimulation(int numRows, int numCols, double probCatch, double probLightning, double probGrow){
-        super(numRows,numCols);
-        myProbCatch=probCatch;
-        myProbLightning=probLightning;
-        myProbGrow=probGrow;
-        myDataValues = new HashMap<>();
-    }
-
-    public SpreadingFireSimulation(List<String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
-        super(Integer.parseInt(dataValues.get(2)), Integer.parseInt(dataValues.get(3)));
-        myGrid = getNewGrid(cells);
-    }
-
 
     @Override
     public Grid advanceSimulation(){
