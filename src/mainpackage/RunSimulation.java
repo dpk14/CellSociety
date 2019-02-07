@@ -105,8 +105,8 @@ public class RunSimulation extends Application {
     private void setupSimulation() {
         onInitialGrid = true;
         currentSimulation = new XMLParser("simType").getSimulation(new File(DATA_FILE));
-        Cell[][] initialGrid = currentSimulation.getMyGrid();
-        newVisual = new Visualization(initialGrid.length, initialGrid[0].length, 1.0);
+        Grid initialGrid = currentSimulation.getMyGrid();
+        newVisual = new Visualization(initialGrid.getHeight(), initialGrid.getWidth(), 1.0);
         root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
     }
 
@@ -210,7 +210,7 @@ public class RunSimulation extends Application {
     private void renderNextIteration() {
         // render next iteration
         root_grid.getChildren().clear();
-        Node n = newVisual.getRootNode(currentSimulation.updateGrid());
+        Node n = newVisual.getRootNode(currentSimulation.advanceSimulation());
         root_grid.getChildren().add(n);
     }
 

@@ -78,6 +78,10 @@ public abstract class Simulation {
      */
     public abstract void setupGrid();
 
+//    public Simulation(int numRows, int numCols){
+//        myGrid = new Cell[numRows][numCols];
+//    }
+
     /**
      * Updates and returns myGrid by updating the cell's positions according to the simulation's rules and then
      * returning the result of getNewGrid(myCellList). This should be called by the RunSimulation class once within the
