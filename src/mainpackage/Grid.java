@@ -1,6 +1,7 @@
 package mainpackage;
 
 import cells.Cell;
+import cells.EmptyCell;
 import cells.StateChangeCell;
 
 import java.util.ArrayList;
@@ -8,9 +9,13 @@ import java.util.List;
 
 public abstract class Grid {
     private Cell[][] myCellArray;
+    private int myRows;
+    private int myColumns;
 
     public Grid(int rows, int columns, List<Cell> list){
-        myCellArray = getNewGrid(rows, columns, list);
+        myCellArray = getNewArray(rows, columns, list);
+        myRows=rows;
+        myColumns=columns;
     }
 
     public List<Cell> getImmediateNeighbors(Cell cell){
@@ -21,12 +26,12 @@ public abstract class Grid {
         return new ArrayList<Cell>();
     }
 
-    public Cell[][] getNewGrid(int rows, int columns, List<Cell> list){
-        Cell[][] newGrid = new Cell[rows][columns];
+    public Cell[][] getNewArray(int rows, int columns, List<Cell> list){
+        Cell[][] newArray = new Cell[rows][columns];
         for(Cell cell : list){
-            newGrid[cell.getRow()][cell.getColumn()] = cell;
+            newArray[cell.getRow()][cell.getColumn()] = cell;
         }
-        return newGrid;
+        return newArray;
     }
 
     public void updateGrid(List<Cell> list){
@@ -35,13 +40,17 @@ public abstract class Grid {
         }
     }
 
-    public List<Cell> getTypedNeighbors(Cell cell, String type) {
-        List<Cell> neighbors = getNeighbors(cell);
-        List<Cell> specificNeighbors=new ArrayList<Cell>();
-        for(Cell neighbor: neighbors){
-            if (((StateChangeCell) neighbor).getState().equals(type)) specificNeighbors.add(neighbor);
+    public List<Cell> fillWithEmpty(List<Cell> myCellList){
+        for(int i = 0; i < myRows; i++) { // i = row number
+            for (int j = 0; j < myColumns; j++) { // j = column number
+                if (myCellArray[i][j]==null) {
+                    Cell empty=new EmptyCell(i, j);
+                    myCellArray[i][j]=empty;
+                    myCellList.add(empty);
+                }
+            }
         }
-        return specificNeighbors;
+        return myCellList;
     }
 
     public Cell getCell(int row, int column){
@@ -49,11 +58,11 @@ public abstract class Grid {
     }
 
     public int getHeight(){
-        return myCellArray.length;
+        return myRows;
     }
 
     public int getWidth(){
-        return myCellArray[0].length;
+        return myColumns;
     }
 
 

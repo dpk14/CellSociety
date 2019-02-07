@@ -1,14 +1,12 @@
 package simulations;
 
-import cells.AgentCell;
 import cells.Cell;
-import cells.EmptyCell;
 import cells.StateChangeCell;
+import mainpackage.Grid;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class SpreadingFireSimulation extends Simulation{
     public static final String DATA_TYPE = "SpreadingFireSimulation";
@@ -50,18 +48,18 @@ public class SpreadingFireSimulation extends Simulation{
 
 
     @Override
-    public Cell[][] updateGrid(){
+    public Grid advanceSimulation(){
         String state;
         myCellList.clear();
-        for(int i = 0; i < myGrid.length; i++){ // i = row number
-            for(int j = 0; j < myGrid[0].length; j++){ // j = column number
-                Cell cell = myGrid[i][j];
+        for(int i = 0; i < myGrid.getHeight(); i++){ // i = row number
+            for(int j = 0; j < myGrid.getWidth(); j++){ // j = column number
+                Cell cell = myGrid.getCell(i,j);
                 state=((StateChangeCell) cell).getState();
                 if(((StateChangeCell) cell).getState().equals("BURNING")) myCellList.add(new StateChangeCell(i, j, "EMPTY"));
                 else myCellList.add(new StateChangeCell(i, j, randomizeState(cell, state)));
             }
         }
-        myGrid = getNewGrid(this.myCellList);
+        myGrid.updateGrid(myCellList);
         return myGrid;
     }
 
@@ -73,7 +71,8 @@ public class SpreadingFireSimulation extends Simulation{
     private String randomizeState(Cell cell, String state){
         double rand=Math.random();
         if(state.equals("TREE")){
-            int firecount=getTypedNeighbors(cell, "BURNING").size();
+            List<Cell> neighbors=myGrid.getImmediateNeighbors(cell);
+            int firecount=getTypedNeighbors(cell, "BURNING", neighbors).size();
             if(firecount!=0){
                 if (rand/firecount<myProbCatch) return "BURNING";
                 }

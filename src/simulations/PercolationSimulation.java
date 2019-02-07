@@ -3,6 +3,7 @@ package simulations;
 import cells.Cell;
 import cells.EmptyCell;
 import cells.StateChangeCell;
+import mainpackage.Grid;
 
 import java.util.*;
 
@@ -23,22 +24,23 @@ public class PercolationSimulation extends Simulation{
     }
 
     @Override
-    public Cell[][] updateGrid(){
+    public Grid advanceSimulation(){
         if (percolates()) return myGrid;
         Cell cell = new EmptyCell(0, 0);
-        List<Cell> openNeighbors;
+        List<Cell> neighbors;
         myCellList.clear();
         Queue<Cell> qu = openOne();
         while (qu.size() > 0) {
             cell = qu.remove();
-            if (getTypedNeighbors(cell, "FULL").size() > 0 || cell.getRow() == 0) {
+            neighbors=myGrid.getImmediateNeighbors(cell);
+            if (getTypedNeighbors(cell, "FULL", neighbors).size() > 0 || cell.getRow() == 0) {
                 ((StateChangeCell) cell).setState("FULL");
                 myCellList.add(cell);
-                openNeighbors = getTypedNeighbors(cell, "OPEN");
-                for (Cell open : openNeighbors) qu.add(open);
+                neighbors = getTypedNeighbors(cell, "OPEN", neighbors);
+                for (Cell open : neighbors) qu.add(open);
             }
         }
-        myGrid = getNewGrid(this.myCellList);
+        myGrid.updateGrid(myCellList);
         return myGrid;
     }
 
@@ -48,7 +50,7 @@ public class PercolationSimulation extends Simulation{
         Random rand=new Random();
 
         while(!((StateChangeCell) cell).getState().equals("CLOSED")) {
-            cell=myGrid[rand.nextInt(myGrid.length)][rand.nextInt(myGrid[0].length)];
+            cell=myGrid.getCell(rand.nextInt(myGrid.getHeight()), rand.nextInt(myGrid.getWidth()));
         }
 
         ((StateChangeCell) cell).setState("OPEN");
@@ -57,8 +59,8 @@ public class PercolationSimulation extends Simulation{
     }
 
     private boolean percolates(){
-        for(int k=0; k<myGrid[0].length; k++) {
-            Cell cell=myGrid[myGrid.length - 1][k];
+        for(int k=0; k<myGrid.getWidth(); k++) {
+            Cell cell=myGrid.getCell(myGrid.getHeight()-1, k);
             if (((StateChangeCell) cell).getState().equals("FULL")) return true;
         }
         return false;
