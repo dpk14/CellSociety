@@ -12,6 +12,12 @@ public abstract class Simulation {
     protected Grid myGrid;
     protected List<Cell> myCellList = new ArrayList<Cell>();
 
+    /*
+    public Simulation(int numRows, int numCols){
+        myGrid = new Grid(numRows, numCols, );
+    }
+    */
+
     public static enum Bounds{
         rows(1, 30),
         columns(1,100),
@@ -90,6 +96,14 @@ public abstract class Simulation {
      */
     public Grid getMyGrid() {
         return myGrid;
+    }
+
+    public List<Cell> getTypedNeighbors(Cell cell, String type, List<Cell> neighbors) {
+        List<Cell> specificNeighbors=new ArrayList<Cell>();
+        for(Cell neighbor: neighbors){
+            if (((StateChangeCell) neighbor).getState().equals(type)) specificNeighbors.add(neighbor);
+        }
+        return specificNeighbors;
     }
 
 

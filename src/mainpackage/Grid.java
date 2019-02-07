@@ -13,11 +13,11 @@ public abstract class Grid {
         myCellArray = getNewGrid(rows, columns, list);
     }
 
-    public List<Cell> getImmediateNeighbors(Cell cell, Cell[][] myGrid){
+    public List<Cell> getImmediateNeighbors(Cell cell){
       return new ArrayList<Cell>();
     }
 
-    public List<Cell> getAllNeighbors(Cell cell, Cell[][] myGrid){
+    public List<Cell> getAllNeighbors(Cell cell){
         return new ArrayList<Cell>();
     }
 
