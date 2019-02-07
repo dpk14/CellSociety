@@ -36,6 +36,7 @@ public class WatorWorldSimulation extends Simulation {
         myEnergyGain=Integer.parseInt(dataValues.get("energyGain"));
         mySharkReprodMax=Integer.parseInt(dataValues.get("sharkReproductionMax"));
         myFishReprodMax=Integer.parseInt(dataValues.get("fishReproductionMax"));
+        initializeCellList();
     }
 
     @Override

@@ -91,6 +91,15 @@ public abstract class Simulation {
      */
     public abstract void setupGrid();
 
+    protected void initializeCellList(){
+        Cell[][] myCellArray=myGrid.getMyCellArray();
+        for(int i = 0; i < myGrid.getHeight(); i++) { // i = row number
+            for (int j = 0; j < myGrid.getWidth(); j++) { // j = column number
+                myCellList.add(myGrid.getCell(i, j));
+            }
+        }
+    }
+
     /**
      * Updates and returns myGrid by updating the cell's positions according to the simulation's rules and then
      * returning the result of getNewGrid(myCellList). This should be called by the RunSimulation class once within the
@@ -107,7 +116,7 @@ public abstract class Simulation {
         return myGrid;
     }
 
-    public List<Cell> getTypedNeighbors(Cell cell, String type, List<Cell> neighbors) {
+    protected List<Cell> getTypedNeighbors(Cell cell, String type, List<Cell> neighbors) {
         List<Cell> specificNeighbors=new ArrayList<Cell>();
         for(Cell neighbor: neighbors){
             if (((StateChangeCell) neighbor).getState().equals(type)) specificNeighbors.add(neighbor);
