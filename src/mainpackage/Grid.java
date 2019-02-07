@@ -17,7 +17,7 @@ public abstract class Grid {
       return new ArrayList<Cell>();
     }
 
-    public abstract List<Cell> getAllNeighbors(Cell cell /*, Cell[][] myGrid*/);
+    public abstract List<Cell> getAllNeighbors(Cell cell);
 
     public Cell[][] getNewGrid(int rows, int columns, List<Cell> list){
         Cell[][] newGrid = new Cell[rows][columns];

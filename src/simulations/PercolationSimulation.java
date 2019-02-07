@@ -17,9 +17,7 @@ public class PercolationSimulation extends Simulation{
     }
 
     public PercolationSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
-        super(Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
-        myGrid = getNewGrid(cells);
-        myDataValues = dataValues;
+        super(dataValues, cells);
     }
 
     @Override
