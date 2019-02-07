@@ -43,7 +43,7 @@ public class SharkCell extends Cell {
     }
 
     public void decrementEnergy(){
-        this.myEnergy--;
+        myEnergy--;
     }
 
     public void setMyTurnsSurvived(int tracker){ this.myTurnsSurvived = tracker; }

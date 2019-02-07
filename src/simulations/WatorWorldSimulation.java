@@ -40,31 +40,48 @@ public class WatorWorldSimulation extends Simulation {
         mySliderInfo.put("energyGain", dataValues.get("energyGain"));
         mySliderInfo.put("sharkReproductionMax", dataValues.get("sharkReproductionMax"));
         mySliderInfo.put("fishReproductionMax", dataValues.get("fishReproductionMax"));
+    }
+
+    protected void initializeCellList(){
+        for(int i = 0; i < myGrid.getHeight(); i++) { // i = row number
+            for (int j = 0; j < myGrid.getWidth(); j++) { // j = column number
+                myCellList.add(myGrid.getCell(i, j));
+            }
+        }
 
     }
 
+
     @Override
     public Grid advanceSimulation() {
+        initializeCellList();
         Collections.shuffle(myCellList);
         List<Cell> randomizedList=new ArrayList<Cell>(myCellList);
         myCellList.clear();
         myTakenSpots.clear();
-        for(Cell cell: randomizedList){
+        for(Cell cell: randomizedList) {
+            if (cell instanceof SharkCell) {
+                myTakenSpots.add(cell);
+                ((SharkCell) cell).updateMyTurnsSurvived();
+                ((SharkCell) cell).decrementEnergy();
+                if (((SharkCell) cell).getMyEnergy() <= 0) myCellList.add(new EmptyCell(cell.getRow(), cell.getColumn()));
+                else sharkMover(cell, cell.getRow(), cell.getColumn());
+            }
+        }
+        myGrid.updateGrid(myCellList);
+        initializeCellList();
+        Collections.shuffle(myCellList);
+        randomizedList=new ArrayList<Cell>(myCellList);
+        myCellList.clear();
+        myTakenSpots.clear();
+        for(Cell cell: randomizedList) {
             if(cell instanceof FishCell) {
                 myTakenSpots.add(cell);
                 ((FishCell) cell).updateMyTurnsSurvived();
                 fishMover(cell, cell.getRow(), cell.getColumn());
             }
-            else if(cell instanceof SharkCell) {
-                myTakenSpots.add(cell);
-                ((SharkCell) cell).updateMyTurnsSurvived();
-                ((SharkCell) cell).decrementEnergy();
-                if(((SharkCell) cell).getMyEnergy()<=0) myCellList.add(new EmptyCell(cell.getRow(), cell.getColumn()));
-                else sharkMover(cell, cell.getRow(), cell.getColumn());
-            }
         }
         myGrid.updateGrid(myCellList);
-        myCellList=myGrid.fillWithEmpty(myCellList);
         return myGrid;
     }
 
