@@ -10,7 +10,7 @@ import java.util.*;
 public class SegregationSimulation extends Simulation {
     public static final String DATA_TYPE = "SegregationSimulation";
     public static final List<String> DATA_FIELDS = List.of(
-            "title", "author", "rows", "columns", "speed", "satisfaction", "redRate", "blueRate");
+            "title", "author", "cellShape", "gridShape", "rows", "columns", "speed", "satisfaction", "redRate", "blueRate");
 
     public double mySatisfactionThreshold; // between 0 & 1
     private double myRacePercentage; // between 0 & 1, percentage made up by first Agent
@@ -44,7 +44,7 @@ public class SegregationSimulation extends Simulation {
     }
 
     @Override
-    public Grid advance(){
+    public Grid advanceSimulation(){
         myEmptyCells.clear();
         myCellsToMove.clear();
         myCellList.clear();
@@ -60,7 +60,7 @@ public class SegregationSimulation extends Simulation {
         }
         myCellList.addAll(myEmptyCells);
         myCellList.addAll(myCellsToMove);
-        myGrid = updateGrid(this.myCellList);
+        myGrid.updateGrid(this.myCellList);
         return myGrid;
     }
 

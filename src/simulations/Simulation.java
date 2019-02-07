@@ -16,6 +16,12 @@ public abstract class Simulation {
     protected List<Cell> myCellList = new ArrayList<Cell>();
     protected Map<String, String> myDataValues;
 
+    /*
+    public Simulation(int numRows, int numCols){
+        myGrid = new Grid(numRows, numCols, );
+    }
+    */
+
     public static enum Bounds{
         rows(1, 30),
         columns(1,100),
@@ -97,7 +103,7 @@ public abstract class Simulation {
      * step function.
      * @return updated myGrid
      */
-    public abstract Grid advance();
+    public abstract Grid advanceSimulation();
 
     /**
      * Returns grid at start of initialization just so I can check we have the right grid to begin with
@@ -105,6 +111,14 @@ public abstract class Simulation {
      */
     public Grid getMyGrid() {
         return myGrid;
+    }
+
+    public List<Cell> getTypedNeighbors(Cell cell, String type, List<Cell> neighbors) {
+        List<Cell> specificNeighbors=new ArrayList<Cell>();
+        for(Cell neighbor: neighbors){
+            if (((StateChangeCell) neighbor).getState().equals(type)) specificNeighbors.add(neighbor);
+        }
+        return specificNeighbors;
     }
 
 
