@@ -93,4 +93,10 @@ public class SegregationSimulation extends Simulation {
         double blueRate = Double.parseDouble(myDataValues.get("blueRate"));
         // TODO create randomized grid and set to myGrid
     }
+
+//    @Override
+//    public void changeCell() {
+//        List<Cell> choices = List.of(new AgentCell(0,0,"BLUE"),
+//                new AgentCell(0,0,"BLUE"), new EmptyCell(0,0));
+//    }
 }
