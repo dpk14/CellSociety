@@ -8,6 +8,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.paint.Paint;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ public class PopulationGraph {
     private Map<Paint, Integer> map;
     private Group root;
     private List<XYChart.Series> plots;
-    private int counter = 1;
+    private int counter;
 
 
     private CategoryAxis xAxis = new CategoryAxis();
@@ -32,11 +33,11 @@ public class PopulationGraph {
         for (Paint p : m.keySet()) {
             XYChart.Series s = new XYChart.Series();
             s.setName(p.toString());
+
             plots.add(s);
             lineChart.getData().add(s);
         }
-
-
+        counter = 1;
     }
 
     public void addPoint(Map<Paint, Integer> m) {
@@ -55,13 +56,14 @@ public class PopulationGraph {
             for (XYChart.Series s : plots) {
                 if (s.getName().equals(p.toString())) {
                     s.getData().add(new XYChart.Data(Integer.toString(counter), m.get(p)));
-                    counter++;
+
                 }
 
 //                System.out.println(s.getName());
 //                System.out.println(p.toString());
             }
         }
+        counter++;
     }
 
     private boolean existAsSeries(Paint p) {
@@ -77,7 +79,8 @@ public class PopulationGraph {
     public Node getGraphRootNode() {
         lineChart.setLayoutX(0);
         lineChart.setLayoutY(540);
-        lineChart.setMaxWidth(600);
+        //lineChart.setMaxWidth(850);
+        lineChart.setMinWidth(800);
         lineChart.setMaxHeight(250);
         return lineChart;
     }

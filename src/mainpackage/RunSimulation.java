@@ -212,16 +212,9 @@ public class RunSimulation {
     private void renderNextIteration() {
         // render next iteration
         root_grid.getChildren().clear();
-
         Grid g = currentSimulation.advanceSimulation();
-
         Map<Paint, Integer> m = g.getMapOfCellCount();
-
         graph.addPoint(m);
-
-        //root_graph.getChildren().add(graph.getGraphRootNode());
-
-
 
 //        for (Paint p : m.keySet()) {
 //            System.out.println(p + "||" + m.get(p));
