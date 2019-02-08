@@ -22,8 +22,8 @@ import static javafx.application.Application.launch;
 public class Main extends Application {
 
     public static final String TITLE = "Cellular Automaton Simulation";
-    public static final int WIDTH = 525;
-    public static final int HEIGHT = 780;
+    public static final int WIDTH = 810;
+    public static final int HEIGHT = 810;
     public static final Paint BACKGROUND = Color.AZURE;
 
     private int FRAMES_PER_SECOND = 15;
