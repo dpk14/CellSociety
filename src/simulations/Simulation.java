@@ -2,15 +2,9 @@ package simulations;
 
 import cells.Cell;
 import cells.StateChangeCell;
-import grids.Grid;
-import grids.HexagonalGrid;
-import grids.RectangularGrid;
-import grids.TriangularGrid;
+import grids.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class Simulation {
     protected Grid myGrid;
@@ -47,22 +41,15 @@ public abstract class Simulation {
         mySliderInfo = new HashMap<>();
         int numRows = Integer.parseInt(dataValues.get("rows"));
         int numCols = Integer.parseInt(dataValues.get("columns"));
-        switch(myDataValues.get("gridShape")){
-            case "RectangularGrid":
-                System.out.println("RECT");
-                myGrid = new RectangularGrid(numRows, numCols, cells);
-                break;
-            case "TriangularGrid":
-                System.out.println("TRI");
-                myGrid = new TriangularGrid(numRows, numCols, cells);
-                break;
-            case "HexagonalGrid":
-                System.out.println("HEX");
-                myGrid = new HexagonalGrid(numRows, numCols, cells);
-                break;
-            default:
-                throw new IllegalStateException();
-        }
+        myGrid = createGrid(myDataValues.get("gridShape"), numRows, numCols, cells);
+    }
+
+    public Simulation(Map<String, String> dataValues){
+        myDataValues = dataValues;
+        mySliderInfo = new HashMap<>();
+        int numRows = Integer.parseInt(dataValues.get("rows"));
+        int numCols = Integer.parseInt(dataValues.get("columns"));
+        setupGrid();
     }
 
     /**
@@ -78,13 +65,6 @@ public abstract class Simulation {
     public Map<String, String> getMySliderInfo(){
         return mySliderInfo;
     }
-
-    /**
-     * Returns myDataFields, which is defined within each subclass. The instance variable myDataFields is a List that
-     * contains a simulation's data fields as strings.
-     * @return List<String> myDataFields
-     */
-    public abstract List<String> getDataFields();
 
     /**
      * Returns a String representing the Simulation subclass. This is used when creating an instance of a Simulation
@@ -132,5 +112,32 @@ public abstract class Simulation {
         return specificNeighbors;
     }
 
+    protected abstract void setupSliderInfo();
+
+    protected boolean evaluateOdds(double probability){
+        double rand = Math.random();
+        return (rand <= probability);
+    }
+
+    protected Grid createGrid(String gridShape, int numRows, int numCols, List<Cell> cells){
+        Grid grid;
+        switch(gridShape){
+            case "RectangularGrid":
+                System.out.println("RECT");
+                grid = new RectangularGrid(numRows, numCols, cells);
+                break;
+            case "TriangularGrid":
+                System.out.println("TRI");
+                grid = new TriangularGrid(numRows, numCols, cells);
+                break;
+            case "HexagonalGrid":
+                System.out.println("HEX");
+                grid = new HexagonalGrid(numRows, numCols, cells);
+                break;
+            default:
+                throw new IllegalStateException();
+        }
+        return grid;
+    }
 
 }

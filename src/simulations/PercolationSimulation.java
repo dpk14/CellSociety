@@ -12,12 +12,17 @@ import java.util.*;
 
 public class PercolationSimulation extends Simulation{
     public static final String DATA_TYPE = "PercolationSimulation";
-    public static final List<String> DATA_FIELDS = List.of(
-            "title", "author", "rows", "columns", "cellShape", "gridShape", "speed", "openRate");
+//    public static final List<String> DATA_FIELDS = List.of(
+//            "title", "author", "rows", "columns", "cellShape", "gridShape", "speed", "openRate");
 
     public PercolationSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
         super(dataValues, cells);
-        mySliderInfo.put("speed", dataValues.get("speed"));
+        setupSliderInfo();
+    }
+
+    public PercolationSimulation(Map<String, String> dataValues){
+        super(dataValues);
+        setupSliderInfo();
     }
 
     @Override
@@ -39,6 +44,11 @@ public class PercolationSimulation extends Simulation{
         }
         myGrid.updateGrid(myCellList);
         return myGrid;
+    }
+
+    @Override
+    protected void setupSliderInfo() {
+        mySliderInfo.put("speed", myDataValues.get("speed"));
     }
 
     private Queue<Cell> openOne(){
@@ -69,19 +79,28 @@ public class PercolationSimulation extends Simulation{
     }
 
     @Override
-    public List<String> getDataFields(){
-        return DATA_FIELDS;
-    }
-
-    @Override
     public void updateParameters(Map<String, String> map){
         myDataValues = map;
     }
 
     @Override
     public void setupGrid(){
+        List<Cell> cells = new ArrayList<>();
+        int rows = Integer.parseInt(myDataValues.get("rows"));
+        int cols = Integer.parseInt(myDataValues.get("columns"));
         double openRate = Double.parseDouble(myDataValues.get("openRate"));
-        // while in most subclasses, you make the remaining cells "empty", remember here to make remaining ones closed.
-        // TODO create randomized grid and set to myGrid
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < cols; j++){
+                Cell cell;
+                if(evaluateOdds(openRate)){
+                    cell = new StateChangeCell(i, j, "OPEN");
+                }
+                else{
+                    cell = new StateChangeCell(i, j, "CLOSED");
+                }
+                cells.add(cell);
+            }
+        }
+        myGrid = createGrid(myDataValues.get("gridShape"), rows, cols, cells);
     }
 }

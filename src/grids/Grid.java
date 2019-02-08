@@ -18,9 +18,7 @@ public abstract class Grid {
         myColumns=columns;
     }
 
-    public List<Cell> getImmediateNeighbors(Cell cell){
-      return new ArrayList<Cell>();
-    }
+    public abstract List<Cell> getImmediateNeighbors(Cell cell);
 
     public abstract List<Cell> getAllNeighbors(Cell cell);
 
