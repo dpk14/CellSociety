@@ -50,7 +50,9 @@ public class Visualization {
         return currentSimType;
     }
 
+
     public Node getRootNode (Grid currentGrid) {
+
         Group root = new Group();
         if(currentGrid instanceof RectangularGrid){
             root = renderSquareGrid(currentGrid.getMyCellArray(), root);

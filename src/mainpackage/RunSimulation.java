@@ -1,37 +1,37 @@
 package mainpackage;
 
 import grids.Grid;
-import javafx.animation.KeyFrame;
+
 import javafx.animation.Timeline;
-import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import simulations.Simulation;
 
 import java.io.File;
 import java.util.*;
 
-public class RunSimulation extends Application {
-    private String DATA_FILE = "data/locationConfig/spreadingfire_hexagon_36x36.xml";
-    public static final String TITLE = "Cellular Automaton Simulation";
-    public static final int SIZE = 600;
-    public static final Paint BACKGROUND = Color.AZURE;
+public class RunSimulation {
 
+    public static final int btnXPosition = 10;
+    public static final int btnYPosition = 520;
+    public static final int slidersXPosition = 510;
+
+    private String DATA_FILE = "data/locationConfig/segregation_hexagon_36x36.xml";
     private Timeline animation;
-    private Scene myScene;
-    private Group root;
+    private Group root = new Group();
     private Group root_grid = new Group();
     private Group root_other = new Group();
+    private Group root_graph = new Group();
 
     private Visualization newVisual;
     private Simulation currentSimulation;
@@ -43,6 +43,7 @@ public class RunSimulation extends Application {
     private Button myApplyButton;
     private Button myNextIterationButton;
     private Button myLoadFileButton;
+    private Button myNewWindowButton;
     private Map<String, Slider> mySliders;
 
     private Stage s;
@@ -54,52 +55,92 @@ public class RunSimulation extends Application {
     private boolean startedSliding = false;
     private boolean startedAnimation = false;
 
-    private int FRAMES_PER_SECOND = 15;
-    private int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
-    private double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+    RunSimulation(Timeline a) {
+        animation = a;
+    }
+
+    public Group getNode() {
+        setupSimulation();
+        createUIComponents();
 
 
-    @Override
-    public void start(Stage stage){
-        // attach scene to the stage and display it
-        myScene = setupGame(SIZE, (int) (SIZE * 1.35), BACKGROUND);
-        s = stage;
-        stage.setScene(myScene);
-        stage.setTitle(TITLE);
-        stage.show();
-        attachGameLoop();
+        createGraph();
+
+        root.getChildren().add(root_other);
+        root.getChildren().add(root_grid);
+        root.getChildren().add(root_graph);
+        return root;
+    }
+
+    private void createGraph() {
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("Month");
+        final LineChart<String,Number> lineChart = new LineChart<>(xAxis,yAxis);
+
+        XYChart.Series series1 = new XYChart.Series();
+        series1.setName("Portfolio 1");
+        series1.getData().add(new XYChart.Data("Jan", 23));
+        series1.getData().add(new XYChart.Data("Feb", 14));
+        series1.getData().add(new XYChart.Data("Mar", 15));
+        series1.getData().add(new XYChart.Data("Apr", 24));
+        series1.getData().add(new XYChart.Data("May", 34));
+        series1.getData().add(new XYChart.Data("Jun", 36));
+        series1.getData().add(new XYChart.Data("Jul", 22));
+        series1.getData().add(new XYChart.Data("Aug", 45));
+        series1.getData().add(new XYChart.Data("Sep", 43));
+        series1.getData().add(new XYChart.Data("Oct", 17));
+        series1.getData().add(new XYChart.Data("Nov", 29));
+        series1.getData().add(new XYChart.Data("Dec", 25));
+
+        XYChart.Series series2 = new XYChart.Series();
+        series2.setName("Portfolio 2");
+        series2.getData().add(new XYChart.Data("Jan", 33));
+        series2.getData().add(new XYChart.Data("Feb", 34));
+        series2.getData().add(new XYChart.Data("Mar", 25));
+        series2.getData().add(new XYChart.Data("Apr", 44));
+        series2.getData().add(new XYChart.Data("May", 39));
+        series2.getData().add(new XYChart.Data("Jun", 16));
+        series2.getData().add(new XYChart.Data("Jul", 55));
+        series2.getData().add(new XYChart.Data("Aug", 54));
+        series2.getData().add(new XYChart.Data("Sep", 48));
+        series2.getData().add(new XYChart.Data("Oct", 27));
+        series2.getData().add(new XYChart.Data("Nov", 37));
+        series2.getData().add(new XYChart.Data("Dec", 29));
+
+        XYChart.Series series3 = new XYChart.Series();
+        series3.setName("Portfolio 3");
+        series3.getData().add(new XYChart.Data("Jan", 44));
+        series3.getData().add(new XYChart.Data("Feb", 35));
+        series3.getData().add(new XYChart.Data("Mar", 36));
+        series3.getData().add(new XYChart.Data("Apr", 33));
+        series3.getData().add(new XYChart.Data("May", 31));
+        series3.getData().add(new XYChart.Data("Jun", 26));
+        series3.getData().add(new XYChart.Data("Jul", 22));
+        series3.getData().add(new XYChart.Data("Aug", 25));
+        series3.getData().add(new XYChart.Data("Sep", 43));
+        series3.getData().add(new XYChart.Data("Oct", 44));
+        series3.getData().add(new XYChart.Data("Nov", 45));
+        series3.getData().add(new XYChart.Data("Dec", 44));
+
+        lineChart.getData().addAll(series1, series2, series3);
+        lineChart.setLayoutX(0);
+        lineChart.setLayoutY(540);
+        lineChart.setMaxWidth(600);
+        lineChart.setMaxHeight(250);
+        root_graph.getChildren().add(lineChart);
     }
 
     private void openFile(File f) {
         DATA_FILE = f.getAbsolutePath();
         root_other.getChildren().clear();
+        root_grid.getChildren().clear();
         root.getChildren().clear();
         setupSimulation();
         createUIComponents();
         root.getChildren().add(root_other);
         root.getChildren().add(root_grid);
-
-    }
-
-    private void attachGameLoop() {
-        var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
-        animation = new Timeline();
-        animation.setCycleCount(Timeline.INDEFINITE);
-        animation.getKeyFrames().add(frame);
-        animation.setRate(animation.getCycleDuration().toSeconds() * mySliders.get("speed").getValue());
-        animation.play();
-    }
-
-    private Scene setupGame(int width, int height, Paint background){
-        root = new Group();
-        Scene scene = new Scene(root, width, height, background);
-
-        setupSimulation();
-        createUIComponents();
-        root.getChildren().add(root_other);
-        root.getChildren().add(root_grid);
-        scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
-        return scene;
+        root.getChildren().add(root_graph);
     }
 
     private void setupSimulation() {
@@ -113,12 +154,14 @@ public class RunSimulation extends Application {
     private void createUIComponents() {
         // add other components (i.e. not grid)
         mySliders = createMySliders(currentSimulation, root_other);
-        myLoadFileButton = createButton("Load simulation (.xml)", 50,510,false);
-        myNextIterationButton = createButton(">", 450, 550, false);
-        myResetButton = createButton("Reset", 450, 580, false);
-        myStartButton = createButton("Start", 450, 610, true);
-        myStopButton = createButton("Stop", 450, 640, true);;
-        root_other.getChildren().addAll(myLoadFileButton, myNextIterationButton, myResetButton, myApplyButton, myStartButton, myStopButton);
+        myLoadFileButton = createButton("Load simulation (.xml)", slidersXPosition,0,false);
+        myNextIterationButton = createButton(">", btnXPosition, btnYPosition, false);
+        myResetButton = createButton("Reset", btnXPosition + 40, btnYPosition, false);
+        myStartButton = createButton("Start", btnXPosition + 100, btnYPosition, true);
+        myStopButton = createButton("Stop", btnXPosition + 160, btnYPosition, true);
+
+        root_other.getChildren().addAll(myLoadFileButton, myNextIterationButton,
+                myResetButton, myApplyButton, myStartButton, myNewWindowButton, myStopButton);
         setButtonHandlers();
     }
 
@@ -148,6 +191,9 @@ public class RunSimulation extends Application {
                     && selectedFile.getName().substring(selectedFile.getName().lastIndexOf(".") + 1).equals("xml")) {
                 openFile(selectedFile);
             }
+        });
+        myNewWindowButton.setOnAction(event -> {
+
         });
     }
 
@@ -181,20 +227,22 @@ public class RunSimulation extends Application {
     private HashMap<String, Slider> createMySliders(Simulation sim, Group root){
         HashMap<String, Slider> sliderMap = new LinkedHashMap<>();
         double applyButtonY = 0;
-        int k = 0;
+        int k = 1;
         for(String currentField : sim.getMySliderInfo().keySet()){
             //if(sim.getMyDataValues().get(currentField).equals("")) continue;
             double value = Double.parseDouble(sim.getMyDataValues().get(currentField));
-            Slider slider = createSlider(30, 550 + k*40, Simulation.Bounds.valueOf(currentField).getMin(),
+            Slider slider = createSlider(slidersXPosition, k*40, Simulation.Bounds.valueOf(currentField).getMin(),
                     Simulation.Bounds.valueOf(currentField).getMax(), value);
             sliderMap.put(currentField, slider);
             Label label = new Label(currentField);
-            label.setLayoutX(180);
-            label.setLayoutY(550 + k*40);
+            label.setLayoutX(slidersXPosition + 150);
+            label.setLayoutY(k*40);
             root.getChildren().addAll(label, slider);
             k++;
         }
-        myApplyButton = createButton("Apply", 30, 550 + 40*k, false);
+        myApplyButton = createButton("Apply", slidersXPosition, 40*k, false);
+        k++;
+        myNewWindowButton = createButton("New Window", slidersXPosition, 40*k, false);
         return sliderMap;
     }
 
@@ -213,7 +261,7 @@ public class RunSimulation extends Application {
         root_grid.getChildren().add(n);
     }
 
-    private void step(double elapsedTime){
+    public void stepThru(double elapsedTime){
         // update grid
         // receive a Node from visualization class
         myNextIterationButton.setDisable(startedAnimation);
@@ -228,13 +276,6 @@ public class RunSimulation extends Application {
         myApplyButton.setDisable(startedAnimation);
         if (startedAnimation) renderNextIteration();
     }
-
-    private void handleKeyInput (KeyCode code) {
-        if (code == KeyCode.RIGHT) {
-            renderNextIteration();
-        }
-    }
-
     //create an interface of key and mouse inputs, which toggles a call to mainpackage.Simulation.initializeGrid
 
 }
