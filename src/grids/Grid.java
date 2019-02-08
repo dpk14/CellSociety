@@ -3,9 +3,12 @@ package grids;
 import cells.Cell;
 import cells.EmptyCell;
 import cells.StateChangeCell;
+import javafx.scene.paint.Paint;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class Grid {
     private Cell[][] myCellArray;
@@ -64,5 +67,22 @@ public abstract class Grid {
     public Cell[][] getMyCellArray(){
         return myCellArray;
     }
+
+    public Map<Paint, Integer> getMapOfCellCount() {
+        Map<Paint, Integer> m = new HashMap<>();
+        for (int i = 0; i < myCellArray.length; i++) {
+            for (int j = 0; j < myCellArray[i].length; j++) {
+                Paint p = myCellArray[i][j].getMyColor();
+                if (m == null || ! m.containsKey(p)) {
+                    m.put(p, 1);
+                }
+                else {
+                    m.put(p, m.get(p) + 1);
+                }
+            }
+        }
+        return m;
+    }
+
 
 }

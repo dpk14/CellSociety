@@ -1,5 +1,6 @@
 package mainpackage;
 
+import cells.Cell;
 import grids.Grid;
 
 import javafx.animation.Timeline;
@@ -13,10 +14,12 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import simulations.Simulation;
 
+import java.awt.*;
 import java.io.File;
 import java.util.*;
 
@@ -32,6 +35,8 @@ public class RunSimulation {
     private Group root_grid = new Group();
     private Group root_other = new Group();
     private Group root_graph = new Group();
+
+    private PopulationGraph graph;
 
     private Visualization newVisual;
     private Simulation currentSimulation;
@@ -63,78 +68,19 @@ public class RunSimulation {
         setupSimulation();
         createUIComponents();
 
-
-        createGraph();
-
         root.getChildren().add(root_other);
         root.getChildren().add(root_grid);
         root.getChildren().add(root_graph);
         return root;
     }
 
-    private void createGraph() {
-        final CategoryAxis xAxis = new CategoryAxis();
-        final NumberAxis yAxis = new NumberAxis();
-        xAxis.setLabel("Month");
-        final LineChart<String,Number> lineChart = new LineChart<>(xAxis,yAxis);
 
-        XYChart.Series series1 = new XYChart.Series();
-        series1.setName("Portfolio 1");
-        series1.getData().add(new XYChart.Data("Jan", 23));
-        series1.getData().add(new XYChart.Data("Feb", 14));
-        series1.getData().add(new XYChart.Data("Mar", 15));
-        series1.getData().add(new XYChart.Data("Apr", 24));
-        series1.getData().add(new XYChart.Data("May", 34));
-        series1.getData().add(new XYChart.Data("Jun", 36));
-        series1.getData().add(new XYChart.Data("Jul", 22));
-        series1.getData().add(new XYChart.Data("Aug", 45));
-        series1.getData().add(new XYChart.Data("Sep", 43));
-        series1.getData().add(new XYChart.Data("Oct", 17));
-        series1.getData().add(new XYChart.Data("Nov", 29));
-        series1.getData().add(new XYChart.Data("Dec", 25));
-
-        XYChart.Series series2 = new XYChart.Series();
-        series2.setName("Portfolio 2");
-        series2.getData().add(new XYChart.Data("Jan", 33));
-        series2.getData().add(new XYChart.Data("Feb", 34));
-        series2.getData().add(new XYChart.Data("Mar", 25));
-        series2.getData().add(new XYChart.Data("Apr", 44));
-        series2.getData().add(new XYChart.Data("May", 39));
-        series2.getData().add(new XYChart.Data("Jun", 16));
-        series2.getData().add(new XYChart.Data("Jul", 55));
-        series2.getData().add(new XYChart.Data("Aug", 54));
-        series2.getData().add(new XYChart.Data("Sep", 48));
-        series2.getData().add(new XYChart.Data("Oct", 27));
-        series2.getData().add(new XYChart.Data("Nov", 37));
-        series2.getData().add(new XYChart.Data("Dec", 29));
-
-        XYChart.Series series3 = new XYChart.Series();
-        series3.setName("Portfolio 3");
-        series3.getData().add(new XYChart.Data("Jan", 44));
-        series3.getData().add(new XYChart.Data("Feb", 35));
-        series3.getData().add(new XYChart.Data("Mar", 36));
-        series3.getData().add(new XYChart.Data("Apr", 33));
-        series3.getData().add(new XYChart.Data("May", 31));
-        series3.getData().add(new XYChart.Data("Jun", 26));
-        series3.getData().add(new XYChart.Data("Jul", 22));
-        series3.getData().add(new XYChart.Data("Aug", 25));
-        series3.getData().add(new XYChart.Data("Sep", 43));
-        series3.getData().add(new XYChart.Data("Oct", 44));
-        series3.getData().add(new XYChart.Data("Nov", 45));
-        series3.getData().add(new XYChart.Data("Dec", 44));
-
-        lineChart.getData().addAll(series1, series2, series3);
-        lineChart.setLayoutX(0);
-        lineChart.setLayoutY(540);
-        lineChart.setMaxWidth(600);
-        lineChart.setMaxHeight(250);
-        root_graph.getChildren().add(lineChart);
-    }
 
     private void openFile(File f) {
         DATA_FILE = f.getAbsolutePath();
         root_other.getChildren().clear();
         root_grid.getChildren().clear();
+        root_graph.getChildren().clear();
         root.getChildren().clear();
         setupSimulation();
         createUIComponents();
@@ -146,9 +92,18 @@ public class RunSimulation {
     private void setupSimulation() {
         onInitialGrid = true;
         currentSimulation = new XMLParser("simType").getSimulation(new File(DATA_FILE));
+
         Grid initialGrid = currentSimulation.getMyGrid();
         newVisual = new Visualization(initialGrid.getHeight(), initialGrid.getWidth(), 1.0);
         root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
+
+        root_graph.getChildren().clear();
+
+//        for (Paint p : initialGrid.getMapOfCellCount().keySet()) {
+//            System.out.println(p + "||" + initialGrid.getMapOfCellCount().get(p));
+//        }
+        graph = new PopulationGraph(initialGrid.getMapOfCellCount());
+        root_graph.getChildren().add(graph.getGraphRootNode());
     }
 
     private void createUIComponents() {
@@ -257,9 +212,27 @@ public class RunSimulation {
     private void renderNextIteration() {
         // render next iteration
         root_grid.getChildren().clear();
-        Node n = newVisual.getRootNode(currentSimulation.advanceSimulation());
+
+        Grid g = currentSimulation.advanceSimulation();
+
+        Map<Paint, Integer> m = g.getMapOfCellCount();
+
+        graph.addPoint(m);
+
+        //root_graph.getChildren().add(graph.getGraphRootNode());
+
+
+
+//        for (Paint p : m.keySet()) {
+//            System.out.println(p + "||" + m.get(p));
+//        }
+
+        Node n = newVisual.getRootNode(g);
         root_grid.getChildren().add(n);
     }
+
+
+
 
     public void stepThru(double elapsedTime){
         // update grid
