@@ -26,7 +26,7 @@ public class RunSimulation {
     public static final int btnYPosition = 520;
     public static final int slidersXPosition = 510;
 
-    private String DATA_FILE = "data/locationConfig/segregation_hexagon_36x36.xml";
+    private String DATA_FILE = "data/locationConfig/spreadingfire_hexagon_36x36.xml";
     private Timeline animation;
     private Group root = new Group();
     private Group root_grid = new Group();

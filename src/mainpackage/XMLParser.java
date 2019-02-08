@@ -48,8 +48,8 @@ public class XMLParser {
 
     private Simulation createSimulation(String simType, Element settings, Element grid) {
         Map<String, String> dataValues = extractSimParameters(settings);
-        // TEMPORARY, FOR TESTING RANDOM-CONFIG XML FILES WITH SEGREGATION
-        if(simType.equals(SegregationSimulation.DATA_TYPE)) return new SegregationSimulation(dataValues);;
+//        // TEMPORARY, FOR TESTING RANDOM-CONFIG XML FILES WITH SEGREGATION
+//        if(simType.equals(SegregationSimulation.DATA_TYPE)) return new SegregationSimulation(dataValues);
         List<Cell> cells;
         cells = getCells(grid, Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
         switch (simType) {
