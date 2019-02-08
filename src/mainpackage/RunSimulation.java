@@ -1,35 +1,27 @@
 package mainpackage;
 
 import grids.Grid;
-import javafx.animation.KeyFrame;
+
 import javafx.animation.Timeline;
-import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import simulations.Simulation;
 
 import java.io.File;
-import java.sql.Time;
 import java.util.*;
 
 public class RunSimulation {
-    private String DATA_FILE = "data/locationConfig/segregation_hexagon_36x36.xml";
-//    public static final String TITLE = "Cellular Automaton Simulation";
-//    public static final int SIZE = 600;
-//    public static final Paint BACKGROUND = Color.AZURE;
 
+    public static final int btnXPosition = 380;
+    public static final int slidersXPosition = 40;
+
+    private String DATA_FILE = "data/locationConfig/segregation_hexagon_36x36.xml";
     private Timeline animation;
-    private Scene myScene;
     private Group root = new Group();
     private Group root_grid = new Group();
     private Group root_other = new Group();
@@ -44,6 +36,7 @@ public class RunSimulation {
     private Button myApplyButton;
     private Button myNextIterationButton;
     private Button myLoadFileButton;
+    private Button myNewWindowButton;
     private Map<String, Slider> mySliders;
 
     private Stage s;
@@ -87,6 +80,7 @@ public class RunSimulation {
     private void openFile(File f) {
         DATA_FILE = f.getAbsolutePath();
         root_other.getChildren().clear();
+        root_grid.getChildren().clear();
         root.getChildren().clear();
         setupSimulation();
         createUIComponents();
@@ -94,27 +88,6 @@ public class RunSimulation {
         root.getChildren().add(root_grid);
 
     }
-
-//    private void attachGameLoop() {
-//        var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
-//        animation = new Timeline();
-//        animation.setCycleCount(Timeline.INDEFINITE);
-//        animation.getKeyFrames().add(frame);
-//        animation.setRate(animation.getCycleDuration().toSeconds() * mySliders.get("speed").getValue());
-//        animation.play();
-//    }
-
-//    private Scene setupGame(int width, int height, Paint background){
-//        root = new Group();
-//        Scene scene = new Scene(root, width, height, background);
-//
-//        setupSimulation();
-//        createUIComponents();
-//        root.getChildren().add(root_other);
-//        root.getChildren().add(root_grid);
-//        scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
-//        return scene;
-//    }
 
     private void setupSimulation() {
         onInitialGrid = true;
@@ -127,12 +100,15 @@ public class RunSimulation {
     private void createUIComponents() {
         // add other components (i.e. not grid)
         mySliders = createMySliders(currentSimulation, root_other);
-        myLoadFileButton = createButton("Load simulation (.xml)", 50,510,false);
-        myNextIterationButton = createButton(">", 450, 550, false);
-        myResetButton = createButton("Reset", 450, 580, false);
-        myStartButton = createButton("Start", 450, 610, true);
-        myStopButton = createButton("Stop", 450, 640, true);;
-        root_other.getChildren().addAll(myLoadFileButton, myNextIterationButton, myResetButton, myApplyButton, myStartButton, myStopButton);
+        myLoadFileButton = createButton("Load simulation (.xml)", slidersXPosition,510,false);
+        myNextIterationButton = createButton(">", btnXPosition, 550, false);
+        myResetButton = createButton("Reset", btnXPosition, 580, false);
+        myStartButton = createButton("Start", btnXPosition, 610, true);
+        myStopButton = createButton("Stop", btnXPosition, 640, true);
+        myNewWindowButton = createButton("New Window", btnXPosition, 700, false);
+
+        root_other.getChildren().addAll(myLoadFileButton, myNextIterationButton,
+                myResetButton, myApplyButton, myStartButton, myNewWindowButton, myStopButton);
         setButtonHandlers();
     }
 
@@ -162,6 +138,9 @@ public class RunSimulation {
                     && selectedFile.getName().substring(selectedFile.getName().lastIndexOf(".") + 1).equals("xml")) {
                 openFile(selectedFile);
             }
+        });
+        myNewWindowButton.setOnAction(event -> {
+
         });
     }
 
@@ -199,7 +178,7 @@ public class RunSimulation {
         for(String currentField : sim.getMySliderInfo().keySet()){
             //if(sim.getMyDataValues().get(currentField).equals("")) continue;
             double value = Double.parseDouble(sim.getMyDataValues().get(currentField));
-            Slider slider = createSlider(30, 550 + k*40, Simulation.Bounds.valueOf(currentField).getMin(),
+            Slider slider = createSlider(slidersXPosition, 550 + k*40, Simulation.Bounds.valueOf(currentField).getMin(),
                     Simulation.Bounds.valueOf(currentField).getMax(), value);
             sliderMap.put(currentField, slider);
             Label label = new Label(currentField);
@@ -231,8 +210,10 @@ public class RunSimulation {
         // update grid
         // receive a Node from visualization class
         myNextIterationButton.setDisable(startedAnimation);
+        //myResetButton.setDisable(true);
         myResetButton.setDisable(onInitialGrid);
         myStartButton.setDisable(startedAnimation);
+        //myStartButton.setDisable(false);
         myStopButton.setDisable(!startedAnimation);
 
         for (String s : mySliders.keySet()) {
@@ -242,13 +223,6 @@ public class RunSimulation {
         myApplyButton.setDisable(startedAnimation);
         if (startedAnimation) renderNextIteration();
     }
-
-//    private void handleKeyInput (KeyCode code) {
-//        if (code == KeyCode.RIGHT) {
-//            renderNextIteration();
-//        }
-//    }
-
     //create an interface of key and mouse inputs, which toggles a call to mainpackage.Simulation.initializeGrid
 
 }
