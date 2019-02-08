@@ -22,7 +22,6 @@ public class SegregationSimulation extends Simulation {
     /**
      * Constructor needed to initialize from XML
      */
-
     public SegregationSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
         super(dataValues, cells);
         mySatisfactionThreshold = Double.parseDouble(dataValues.get("satisfaction"));
