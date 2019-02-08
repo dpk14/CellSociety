@@ -1,4 +1,4 @@
-package mainpackage;
+package grids;
 
 import cells.Cell;
 
@@ -7,24 +7,24 @@ import java.util.List;
 
 public class TriangularGrid extends Grid{
 
-    TriangularGrid(int rows, int columns, List<Cell> list){
+    public TriangularGrid(int rows, int columns, List<Cell> list){
         super(rows, columns, list);
     }
 
     @Override
-    protected List<Cell> getImmediateNeighbors(Cell cell, Cell[][] myGrid){
+    public List<Cell> getImmediateNeighbors(Cell cell){
         List <Cell> neighbors = new ArrayList<>();
         int row = cell.getRow();
         int column = cell.getColumn();
-        if(column != 0) neighbors.add(myGrid[row][column-1]);
-        if(column != myGrid[0].length-1) neighbors.add(myGrid[row][column+1]);
-        if (row!=0 && (row+column)%2==0) neighbors.add(myGrid[row-1][column]);
-        if (row!=myGrid.length-1 && (row+column)%2!=0) neighbors.add(myGrid[row+1][column]);
+        if(column != 0) neighbors.add(this.getCell(row, column-1));
+        if(column != this.getWidth()-1) neighbors.add(this.getCell(row, column+1));
+        if (row!=0 && (row+column)%2==0) neighbors.add(this.getCell(row-1,column));
+        if (row!=this.getHeight()-1 && (row+column)%2!=0) neighbors.add(this.getCell(row+1,column));
         return neighbors;
     }
 
     @Override
-    protected List<Cell> getAllNeighbors(Cell cell, Cell[][] myGrid){
+    public List<Cell> getAllNeighbors(Cell cell){
         List <Cell> neighbors = new ArrayList<>();
         int row = cell.getRow();
         int column = cell.getColumn();
@@ -41,13 +41,12 @@ public class TriangularGrid extends Grid{
             rowlist[rowlist.length-2]=1;
         }
         for(int k=0; k<rowlist.length; k++)
-            if(row+rowlist[k]>=0 && column+collist[k]>=0 && row+rowlist[k]<=myGrid.length-1 && column+collist[k]<=myGrid[0].length-1){
-                neighbors.add(myGrid[row+rowlist[k]][column+collist[k]]);
+            if(row+rowlist[k]>=0 && column+collist[k]>=0 && row+rowlist[k]<=this.getHeight()-1 && column+collist[k]<=this.getWidth()-1){
+                neighbors.add(this.getCell(row+rowlist[k], column+collist[k]));
             }
         return neighbors;
     }
 }
-
 
 
 

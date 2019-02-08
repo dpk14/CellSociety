@@ -1,6 +1,6 @@
 package mainpackage;
 
-import cells.Cell;
+import grids.Grid;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -19,17 +19,18 @@ import javafx.util.Duration;
 import simulations.Simulation;
 
 import java.io.File;
+import java.sql.Time;
 import java.util.*;
 
-public class RunSimulation extends Application {
-    private String DATA_FILE = "data/initial_segregation1.xml";
-    public static final String TITLE = "Cellular Automaton Simulation";
-    public static final int SIZE = 600;
-    public static final Paint BACKGROUND = Color.AZURE;
+public class RunSimulation {
+    private String DATA_FILE = "data/locationConfig/segregation_hexagon_36x36.xml";
+//    public static final String TITLE = "Cellular Automaton Simulation";
+//    public static final int SIZE = 600;
+//    public static final Paint BACKGROUND = Color.AZURE;
 
     private Timeline animation;
     private Scene myScene;
-    private Group root;
+    private Group root = new Group();
     private Group root_grid = new Group();
     private Group root_other = new Group();
 
@@ -55,20 +56,33 @@ public class RunSimulation extends Application {
     private boolean startedAnimation = false;
 
     private int FRAMES_PER_SECOND = 15;
-    private int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
-    private double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+//    private int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
+//    private double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
 
 
-    @Override
-    public void start(Stage stage){
-        // attach scene to the stage and display it
-        myScene = setupGame(SIZE, (int) (SIZE * 1.35), BACKGROUND);
-        s = stage;
-        stage.setScene(myScene);
-        stage.setTitle(TITLE);
-        stage.show();
-        attachGameLoop();
+//    @Override
+//    public void start(Stage stage){
+//        // attach scene to the stage and display it
+//        myScene = setupGame(SIZE, (int) (SIZE * 1.35), BACKGROUND);
+//        s = stage;
+//        stage.setScene(myScene);
+//        stage.setTitle(TITLE);
+//        stage.show();
+//        attachGameLoop();
+//    }
+
+    RunSimulation(Timeline a) {
+        animation = a;
     }
+
+    public Group getNode() {
+        setupSimulation();
+        createUIComponents();
+        root.getChildren().add(root_other);
+        root.getChildren().add(root_grid);
+        return root;
+    }
+
 
     private void openFile(File f) {
         DATA_FILE = f.getAbsolutePath();
@@ -81,26 +95,26 @@ public class RunSimulation extends Application {
 
     }
 
-    private void attachGameLoop() {
-        var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
-        animation = new Timeline();
-        animation.setCycleCount(Timeline.INDEFINITE);
-        animation.getKeyFrames().add(frame);
-        animation.setRate(animation.getCycleDuration().toSeconds() * mySliders.get("speed").getValue());
-        animation.play();
-    }
+//    private void attachGameLoop() {
+//        var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
+//        animation = new Timeline();
+//        animation.setCycleCount(Timeline.INDEFINITE);
+//        animation.getKeyFrames().add(frame);
+//        animation.setRate(animation.getCycleDuration().toSeconds() * mySliders.get("speed").getValue());
+//        animation.play();
+//    }
 
-    private Scene setupGame(int width, int height, Paint background){
-        root = new Group();
-        Scene scene = new Scene(root, width, height, background);
-
-        setupSimulation();
-        createUIComponents();
-        root.getChildren().add(root_other);
-        root.getChildren().add(root_grid);
-        scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
-        return scene;
-    }
+//    private Scene setupGame(int width, int height, Paint background){
+//        root = new Group();
+//        Scene scene = new Scene(root, width, height, background);
+//
+//        setupSimulation();
+//        createUIComponents();
+//        root.getChildren().add(root_other);
+//        root.getChildren().add(root_grid);
+//        scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
+//        return scene;
+//    }
 
     private void setupSimulation() {
         onInitialGrid = true;
@@ -181,9 +195,9 @@ public class RunSimulation extends Application {
     private HashMap<String, Slider> createMySliders(Simulation sim, Group root){
         HashMap<String, Slider> sliderMap = new LinkedHashMap<>();
         double applyButtonY = 0;
-        int sliderCounter = 4; // first important data field (comes after title, author, rows, columns...)
-        for(int k = 0; k < sim.getMyDataValues().size() - 4; k++){
-            String currentField = sim.getDataFields().get(sliderCounter);
+        int k = 0;
+        for(String currentField : sim.getMySliderInfo().keySet()){
+            //if(sim.getMyDataValues().get(currentField).equals("")) continue;
             double value = Double.parseDouble(sim.getMyDataValues().get(currentField));
             Slider slider = createSlider(30, 550 + k*40, Simulation.Bounds.valueOf(currentField).getMin(),
                     Simulation.Bounds.valueOf(currentField).getMax(), value);
@@ -192,10 +206,9 @@ public class RunSimulation extends Application {
             label.setLayoutX(180);
             label.setLayoutY(550 + k*40);
             root.getChildren().addAll(label, slider);
-            if(k == sim.getMyDataValues().size() - 5) applyButtonY = 550 + ++k*40;
-            sliderCounter++;
+            k++;
         }
-        myApplyButton = createButton("Apply", 30, applyButtonY, false);
+        myApplyButton = createButton("Apply", 30, 550 + 40*k, false);
         return sliderMap;
     }
 
@@ -214,7 +227,7 @@ public class RunSimulation extends Application {
         root_grid.getChildren().add(n);
     }
 
-    private void step(double elapsedTime){
+    public void stepThru(double elapsedTime){
         // update grid
         // receive a Node from visualization class
         myNextIterationButton.setDisable(startedAnimation);
@@ -230,15 +243,11 @@ public class RunSimulation extends Application {
         if (startedAnimation) renderNextIteration();
     }
 
-    private void handleKeyInput (KeyCode code) {
-        if (code == KeyCode.RIGHT) {
-            renderNextIteration();
-        }
-    }
-
-    public static void main(String[] args){
-        launch(args);
-    }
+//    private void handleKeyInput (KeyCode code) {
+//        if (code == KeyCode.RIGHT) {
+//            renderNextIteration();
+//        }
+//    }
 
     //create an interface of key and mouse inputs, which toggles a call to mainpackage.Simulation.initializeGrid
 

@@ -8,6 +8,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import cells.Cell;
+import cells.StateChangeCell;
+import grids.Grid;
+
 
 import java.util.*;
 
@@ -22,55 +26,29 @@ public class WatorWorldSimulation extends Simulation {
 
     public static final String DATA_TYPE = "WatorWorldSimulation";
     public static final List<String> DATA_FIELDS = List.of(
-            "title", "author", "rows", "columns", "speed", "startEnergy",
+            "title", "author", "rows", "columns", "cellShape", "gridShape", "speed", "startEnergy",
             "sharkReproductionMax", "fishReproductionMax", "energyGain", "fishRate", "sharkRate");
-    private Map<String, String> myDataValues;
-    public WatorWorldSimulation(int numRows, int numCols, int startEnergy, int energyGain, int sharkReproductionMax, int fishReproductionMax){
-        super(numRows,numCols);
-        myStartEnergy=startEnergy;
-        myEnergyGain=energyGain;
-        mySharkReprodMax=sharkReproductionMax;
-        myFishReprodMax=fishReproductionMax;
-        myDataValues = new HashMap<>();
-    }
 
     public WatorWorldSimulation(Map<String, String> dataValues, List<Cell> cells){
-        super(Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
+        super(dataValues, cells);
         myStartEnergy=Integer.parseInt(dataValues.get("startEnergy"));
         myEnergyGain=Integer.parseInt(dataValues.get("energyGain"));
         mySharkReprodMax=Integer.parseInt(dataValues.get("sharkReproductionMax"));
         myFishReprodMax=Integer.parseInt(dataValues.get("fishReproductionMax"));
-        myGrid = getNewGrid(cells);
-        myDataValues = dataValues;
-    }
+        mySliderInfo.put("speed", dataValues.get("speed"));
+        mySliderInfo.put("startEnergy", dataValues.get("startEnergy"));
+        mySliderInfo.put("energyGain", dataValues.get("energyGain"));
+        mySliderInfo.put("sharkReproductionMax", dataValues.get("sharkReproductionMax"));
+        mySliderInfo.put("fishReproductionMax", dataValues.get("fishReproductionMax"));
 
-    private ArrayList<Cell> randomizeCellVisitation(){
-        ArrayList<Cell> randomizedList=new ArrayList<Cell>();
-        for(int i = 0; i < myGrid.length; i++) { // i = row number
-            for (int j = 0; j < myGrid[0].length; j++) { // j = column number
-                randomizedList.add(myGrid[i][j]);
-            }
-        }
-        Collections.shuffle(randomizedList);
-        return randomizedList;
     }
 
     @Override
-    protected Cell[][] getNewGrid(List<Cell> list){
-        Cell[][] newGrid = super.getNewGrid(list);
-        for(int i = 0; i < newGrid.length; i++) { // i = row number
-            for (int j = 0; j < newGrid[0].length; j++) { // j = column number
-                if (newGrid[i][j]==null) newGrid[i][j]=new EmptyCell(i, j);
-            }
-        }
-        return newGrid;
-    }
-
-    @Override
-    public Cell[][] updateGrid() {
+    public Grid advanceSimulation() {
+        Collections.shuffle(myCellList);
+        List<Cell> randomizedList=new ArrayList<Cell>(myCellList);
         myCellList.clear();
         myTakenSpots.clear();
-        ArrayList<Cell> randomizedList=randomizeCellVisitation();
         for(Cell cell: randomizedList){
             if(cell instanceof FishCell) {
                 myTakenSpots.add(cell);
@@ -85,13 +63,14 @@ public class WatorWorldSimulation extends Simulation {
                 else sharkMover(cell, cell.getRow(), cell.getColumn());
             }
         }
-        myGrid = getNewGrid(this.myCellList);
+        myGrid.updateGrid(myCellList);
+        myCellList=myGrid.fillWithEmpty(myCellList);
         return myGrid;
     }
 
     public void fishMover(Cell fish, int currentRow, int currentCol) {
             ArrayList<Cell> emptyNeighbors=new ArrayList<Cell>();
-            List<Cell> neighbors = getNeighbors(fish);
+            List<Cell> neighbors = myGrid.getImmediateNeighbors(fish);
             neighbors=removeTakenSpots(neighbors);
             for (Cell neighbor : neighbors) {
                 if (neighbor instanceof EmptyCell) emptyNeighbors.add(neighbor);
@@ -115,7 +94,7 @@ public class WatorWorldSimulation extends Simulation {
         ArrayList<Cell> fishNeighbors=new ArrayList<Cell>();
         ArrayList<Cell> availableNeighbors;
 
-        List<Cell> neighbors = getNeighbors(shark);
+        List<Cell> neighbors = myGrid.getImmediateNeighbors(shark);
         neighbors=removeTakenSpots(neighbors);
         for (Cell neighbor : neighbors) {
             if (neighbor instanceof EmptyCell) emptyNeighbors.add(neighbor);
@@ -160,20 +139,6 @@ public class WatorWorldSimulation extends Simulation {
     }
 
     @Override
-    protected List<Cell> getNeighbors(Cell cell) {
-        List<Cell> neighbors = super.getNeighbors(cell);
-        int row = cell.getRow();
-        int column = cell.getColumn();
-        if(row==0 || row==myGrid.length-1){
-            neighbors.add(myGrid[Math.abs(row-(myGrid.length-1))][column]); //at grid edges, neighbors are also on opposite edge of grid
-        }
-        if(column==0 || column==myGrid[0].length-1){
-            neighbors.add(myGrid[row][Math.abs(column-(myGrid.length-1))]); //at grid edges, neighbors are also on opposite edge of grid
-        }
-        return neighbors;
-    }
-
-    @Override
     public List<String> getDataFields(){
         return DATA_FIELDS;
     }
@@ -181,11 +146,6 @@ public class WatorWorldSimulation extends Simulation {
     @Override
     public String getDataType(){
         return DATA_TYPE;
-    }
-
-    @Override
-    public Map<String, String> getMyDataValues(){
-        return myDataValues;
     }
 
     @Override

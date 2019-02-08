@@ -2,17 +2,22 @@ package simulations;
 
 import cells.Cell;
 import cells.StateChangeCell;
-import mainpackage.Grid;
+import grids.Grid;
+import grids.HexagonalGrid;
+import grids.RectangularGrid;
+import grids.TriangularGrid;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public abstract class Simulation {
     protected Grid myGrid;
     protected List<Cell> myCellList = new ArrayList<Cell>();
-
-    public static enum Bounds{
+    protected Map<String, String> myDataValues;
+    protected Map<String, String> mySliderInfo;
+    public enum Bounds{
         rows(1, 30),
         columns(1,100),
         speed (1, 30),
@@ -37,13 +42,42 @@ public abstract class Simulation {
         public double getMax(){ return max; }
     }
 
+    public Simulation(Map<String, String> dataValues, List<Cell> cells){
+        myDataValues = dataValues;
+        mySliderInfo = new HashMap<>();
+        int numRows = Integer.parseInt(dataValues.get("rows"));
+        int numCols = Integer.parseInt(dataValues.get("columns"));
+        switch(myDataValues.get("gridShape")){
+            case "RectangularGrid":
+                System.out.println("RECT");
+                myGrid = new RectangularGrid(numRows, numCols, cells);
+                break;
+            case "TriangularGrid":
+                System.out.println("TRI");
+                myGrid = new TriangularGrid(numRows, numCols, cells);
+                break;
+            case "HexagonalGrid":
+                System.out.println("HEX");
+                myGrid = new HexagonalGrid(numRows, numCols, cells);
+                break;
+            default:
+                throw new IllegalStateException();
+        }
+    }
+
     /**
      * Returns myDataValues, which is defined within each subclass. The instance variable myDataValues is a map with
      * strings representing a simulation's data fields as the keys and the corresponding numbers as the values (as
      * Strings). This is used to initialize the sliders to be on the values specified within the XML files.
      * @return Map<String, String> myDataValues
      */
-    public abstract Map<String, String> getMyDataValues();
+    public Map<String, String> getMyDataValues(){
+        return myDataValues;
+    }
+
+    public Map<String, String> getMySliderInfo(){
+        return mySliderInfo;
+    }
 
     /**
      * Returns myDataFields, which is defined within each subclass. The instance variable myDataFields is a List that
@@ -72,9 +106,7 @@ public abstract class Simulation {
      */
     public abstract void setupGrid();
 
-//    public Simulation(int numRows, int numCols){
-//        myGrid = new Cell[numRows][numCols];
-//    }
+    //public abstract void changeCell();
 
     /**
      * Updates and returns myGrid by updating the cell's positions according to the simulation's rules and then
@@ -90,6 +122,14 @@ public abstract class Simulation {
      */
     public Grid getMyGrid() {
         return myGrid;
+    }
+
+    public List<Cell> getTypedNeighbors(Cell cell, String type, List<Cell> neighbors) {
+        List<Cell> specificNeighbors=new ArrayList<Cell>();
+        for(Cell neighbor: neighbors){
+            if (((StateChangeCell) neighbor).getState().equals(type)) specificNeighbors.add(neighbor);
+        }
+        return specificNeighbors;
     }
 
 

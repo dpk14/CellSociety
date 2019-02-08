@@ -1,6 +1,10 @@
 package mainpackage;
 
 import cells.*;
+import grids.Grid;
+import grids.HexagonalGrid;
+import grids.RectangularGrid;
+import grids.TriangularGrid;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -46,12 +50,22 @@ public class Visualization {
         return currentSimType;
     }
 
-    public Node getRootNode (Grid g) {
-        Cell[][] currentGrid = g.getMyCellArray();
+
+    public Node getRootNode (Grid currentGrid) {
+
         Group root = new Group();
-        //root = renderSquareGrid(currentGrid, root);
-        //root = renderTriGrid(currentGrid, root);
-        root = renderHexGrid(currentGrid, root);
+        if(currentGrid instanceof RectangularGrid){
+            root = renderSquareGrid(currentGrid.getMyCellArray(), root);
+        }
+        else if(currentGrid instanceof TriangularGrid){
+            root = renderTriGrid(currentGrid.getMyCellArray(), root);
+        }
+        else if(currentGrid instanceof HexagonalGrid){
+            root = renderHexGrid(currentGrid.getMyCellArray(), root);
+        }
+        else{
+            // MAYBE THROW SOME EXCEPTION HERE JUST IN CASE
+        }
         return root;
     }
 
