@@ -69,7 +69,7 @@ public class WatorWorldSimulation extends Simulation {
 
     @Override
     protected void setupSliderInfo() {
-        mySliderInfo.put("speed", myDataValues.get("speed"));
+        super.setupSliderInfo();
         mySliderInfo.put("startEnergy", myDataValues.get("startEnergy"));
         mySliderInfo.put("energyGain", myDataValues.get("energyGain"));
         mySliderInfo.put("sharkReproductionMax", myDataValues.get("sharkReproductionMax"));
@@ -147,30 +147,21 @@ public class WatorWorldSimulation extends Simulation {
     }
 
     @Override
-    public String getDataType(){
-        return DATA_TYPE;
-    }
-
-    @Override
     public void updateParameters(Map<String, String> map) {
-        double start= Double.parseDouble(map.get("startEnergy"));
-        myStartEnergy = (int) Math.floor(start);
-        double gain= Double.parseDouble(map.get("energyGain"));
-        myEnergyGain = (int) Math.floor(gain);
-        double sharkMax=Double.parseDouble(map.get("sharkReproductionMax"));
-        mySharkReprodMax = (int) Math.floor(sharkMax);
-        double fishMax=Double.parseDouble(map.get("fishReproductionMax"));
-        mySharkReprodMax = (int) Math.floor(fishMax);
-        myDataValues = map;
+        super.updateParameters(map);
+        myStartEnergy = (int) Double.parseDouble(map.get("startEnergy"));
+        myEnergyGain = (int) Double.parseDouble(map.get("energyGain"));
+        mySharkReprodMax = (int) Double.parseDouble(map.get("sharkReproductionMax"));
+        mySharkReprodMax = (int) Double.parseDouble(map.get("fishReproductionMax"));
     }
 
     @Override
-    public void setupGrid(){
-        List<Cell> cells = new ArrayList<>();
+    protected Grid setupGridByProb(){
         int rows = Integer.parseInt(myDataValues.get("rows"));
         int cols = Integer.parseInt(myDataValues.get("columns"));
         double fishRate = Double.parseDouble(myDataValues.get("fishRate"));
         double sharkRate = Double.parseDouble(myDataValues.get("sharkRate"));
+        List<Cell> cells = new ArrayList<>();
         for(int i = 0; i < rows; i++){
             for(int j = 0; j < cols; j++){
                 Cell cell;
@@ -187,6 +178,45 @@ public class WatorWorldSimulation extends Simulation {
                 cells.add(cell);
             }
         }
-        myGrid = createGrid(myDataValues.get("gridShape"), rows, cols, cells);
+        return createGrid(myDataValues.get("gridShape"), rows, cols, cells);
+    }
+
+    @Override
+    protected Grid setupGridByQuota() {
+        int rows = Integer.parseInt(myDataValues.get("rows"));
+        int cols = Integer.parseInt(myDataValues.get("columns"));
+        int fishRate = (int) Double.parseDouble(myDataValues.get("fishRate"));
+        int sharkRate = (int) Double.parseDouble(myDataValues.get("sharkRate"));
+        List<String> states = new ArrayList<>();
+        List<Cell> cells = new ArrayList<>();
+        for (int k = 0; k < fishRate; k++) {
+            states.add("FISH");
+        }
+        for (int k = 0; k < sharkRate; k++) {
+            states.add("SHARK");
+        }
+        for (int k = 0; k < (rows * cols - fishRate - sharkRate + 1); k++) {
+            states.add("EMPTY");
+        }
+        Collections.shuffle(states);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                String state = states.remove(0);
+                if (state.equals("FISH")) {
+                    cells.add(new FishCell(i, j, Integer.parseInt(myDataValues.get("fishReproductionMax"))));
+                }
+                else if (state.equals("SHARK")) {
+                    cells.add(new SharkCell(i, j, Integer.parseInt(myDataValues.get("sharkReproductionMax")),
+                            Integer.parseInt(myDataValues.get("startEnergy")), Integer.parseInt(myDataValues.get("energyGain"))));
+                }
+                else if (state.equals("EMPTY")) {
+                    cells.add(new EmptyCell(i, j));
+                }
+                else {
+                    throw new RuntimeException("Cell type not allowed in " + DATA_TYPE);
+                }
+            }
+        }
+        return createGrid(myDataValues.get("gridShape"), rows, cols, cells);
     }
 }

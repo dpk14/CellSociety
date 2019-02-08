@@ -3,16 +3,18 @@
     <settings>
         <title>watorworld 1</title>
         <author>group14</author>
-        <generatorType>location</generatorType>
-        <cellShape>Square</cellShape>
-        <gridShape>RectangularGrid</gridShape>
-        <rows>12</rows>
-        <columns>12</columns>
+        <generatorType>probability</generatorType>
+        <cellShape>Triangle</cellShape>
+        <gridShape>TriangularGrid</gridShape>
+        <rows>40</rows>
+        <columns>60</columns>
         <speed>25</speed>
         <startEnergy>5</startEnergy>
         <sharkReproductionMax>20</sharkReproductionMax>
         <fishReproductionMax>5</fishReproductionMax>
         <energyGain>5</energyGain>
+        <sharkRate>0.10</sharkRate>
+        <fishRate>0.50</fishRate>
     </settings>
 
     <grid>
