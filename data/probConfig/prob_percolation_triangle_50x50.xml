@@ -1,0 +1,14 @@
+<?xml version = "1.0"?>
+<data simType = "PercolationSimulation">
+    <settings>
+        <title>percolation 1</title>
+        <author>group14</author>
+        <generatorType>probability</generatorType>
+        <cellShape>Triangle</cellShape>
+        <gridShape>TriangularGrid</gridShape>
+        <rows>50</rows>
+        <columns>50</columns>
+        <speed>25</speed>
+        <openRate>0.25</openRate>>
+    </settings>
+</data>
