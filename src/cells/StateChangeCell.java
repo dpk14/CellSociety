@@ -28,8 +28,7 @@ public class StateChangeCell extends Cell{
 
     private void setColor() {
         Paint p;
-        if (myState.equals("EMPTY")) { p = COLOR_EMPTY; }
-        else if (myState.equals("POPULATED")) { p = COLOR_POPULATED; }
+        if (myState.equals("POPULATED")) { p = COLOR_POPULATED; }
         else if (myState.equals("FULL")) { p = COLOR_FULL;}
         else if (myState.equals("CLOSED")) { p = COLOR_CLOSED; }
         else if (myState.equals("OPEN")) { p = COLOR_OPEN; }
@@ -53,6 +52,5 @@ public class StateChangeCell extends Cell{
     public String getState(){
         return myState;
     }
-
 
 }

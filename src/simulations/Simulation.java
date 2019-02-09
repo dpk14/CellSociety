@@ -103,13 +103,15 @@ public abstract class Simulation {
      */
     public abstract void setupGrid();
 
-    protected void initializeCellList(){
+    protected List<Cell> initializeCellList(){
+        List<Cell> list=new ArrayList<Cell>();
         for(int i = 0; i < myGrid.getHeight(); i++) { // i = row number
             for (int j = 0; j < myGrid.getWidth(); j++) { // j = column number
-                myCellList.add(myGrid.getCell(i, j));
+                list.add(myGrid.getCell(i, j));
             }
         }
-
+        Collections.shuffle(list);
+        return list;
     }
 
     /**

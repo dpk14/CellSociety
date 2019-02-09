@@ -23,4 +23,8 @@ public class SugarAgent {
     public int getMyVision(){
         return myVision;
     }
+
+    public void addSugar(int sugar){
+        mySugar+=sugar;
+    }
 }
