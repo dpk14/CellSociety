@@ -3,16 +3,18 @@ package simulations;
 import cells.Cell;
 import cells.StateChangeCell;
 import grids.*;
+import javafx.scene.control.Slider;
 
 import java.util.*;
 
 public abstract class Simulation {
     protected Grid myGrid;
-    protected List<Cell> myCellList = new ArrayList<Cell>();
+    protected List<Cell> myCellList = new ArrayList<>();
     protected Map<String, String> myDataValues;
     protected Map<String, String> mySliderInfo;
+    protected Map<String, String> mySpecialSliderInfo;
     public enum Bounds{
-        rows(1, 30),
+        rows(1, 100),
         columns(1,100),
         speed (1, 30),
         satisfaction (0, 1),
@@ -22,7 +24,15 @@ public abstract class Simulation {
         startEnergy(1,100),
         sharkReproductionMax(1,100),
         fishReproductionMax(1,100),
-        energyGain(1,10);
+        energyGain(1,10),
+        populatedRate(0,1),
+        openRate(0,1),
+        blueRate(0,1),
+        redRate(0,1),
+        treeRate(0,1),
+        burningRate(0,1),
+        fishRate(0,1),
+        sharkRate(0,1);
 
         private double min;
         private double max;
@@ -38,7 +48,6 @@ public abstract class Simulation {
 
     public Simulation(Map<String, String> dataValues, List<Cell> cells){
         myDataValues = dataValues;
-        mySliderInfo = new HashMap<>();
         int numRows = Integer.parseInt(dataValues.get("rows"));
         int numCols = Integer.parseInt(dataValues.get("columns"));
         myGrid = createGrid(myDataValues.get("gridShape"), numRows, numCols, cells);
@@ -46,10 +55,39 @@ public abstract class Simulation {
 
     public Simulation(Map<String, String> dataValues){
         myDataValues = dataValues;
-        mySliderInfo = new HashMap<>();
-        int numRows = Integer.parseInt(dataValues.get("rows"));
-        int numCols = Integer.parseInt(dataValues.get("columns"));
-        setupGrid();
+        setupGrid(myDataValues.get("generatorType"));
+    }
+
+    public static Simulation createNewSimulation(String simType, Map<String, String> dataValues, List<Cell> cells){
+        switch (simType) {
+            case SegregationSimulation.DATA_TYPE:
+                return new SegregationSimulation(dataValues, cells);
+            case WatorWorldSimulation.DATA_TYPE:
+                return new WatorWorldSimulation(dataValues, cells);
+            case PercolationSimulation.DATA_TYPE:
+                return new PercolationSimulation(dataValues, cells);
+            case SpreadingFireSimulation.DATA_TYPE:
+                return new SpreadingFireSimulation(dataValues, cells);
+            case GameOfLifeSimulation.DATA_TYPE:
+                return new GameOfLifeSimulation(dataValues, cells);
+        }
+        throw new RuntimeException("not any kind of Simulation");
+    }
+
+    public static Simulation createNewSimulation(String simType, Map<String, String> dataValues){
+        switch (simType) {
+            case SegregationSimulation.DATA_TYPE:
+                return new SegregationSimulation(dataValues);
+            case WatorWorldSimulation.DATA_TYPE:
+                return new WatorWorldSimulation(dataValues);
+            case PercolationSimulation.DATA_TYPE:
+                return new PercolationSimulation(dataValues);
+            case SpreadingFireSimulation.DATA_TYPE:
+                return new SpreadingFireSimulation(dataValues);
+            case GameOfLifeSimulation.DATA_TYPE:
+                return new GameOfLifeSimulation(dataValues);
+        }
+        throw new RuntimeException("not any kind of Simulation");
     }
 
     /**
@@ -66,35 +104,9 @@ public abstract class Simulation {
         return mySliderInfo;
     }
 
-    /**
-     * Returns a String representing the Simulation subclass. This is used when creating an instance of a Simulation
-     * subclass within the XMLParser according to the simulation specified within the XML file being read.
-     * @return String data type
-     */
-    public abstract String getDataType();
-
-    /**
-     * Updates the instance variable myDataValues defined within each Simulation subclass to match the given map.
-     * It also updates all the parameters within a Simulation to match the values within the given map. This is always
-     * called from within carryOutApply. The map passed is always created using the values from mySliders.
-     * @param map
-     */
-    public abstract void updateParameters(Map<String, String> map);
-
-    /**
-     *
-     */
-    public abstract void setupGrid();
-
-    //public abstract void changeCell();
-
-    /**
-     * Updates and returns myGrid by updating the cell's positions according to the simulation's rules and then
-     * returning the result of getNewGrid(myCellList). This should be called by the RunSimulation class once within the
-     * step function.
-     * @return updated myGrid
-     */
-    public abstract Grid advanceSimulation();
+    public Map<String, String> getMySpecialSliderInfo(){
+        return mySpecialSliderInfo;
+    }
 
     /**
      * Returns grid at start of initialization just so I can check we have the right grid to begin with
@@ -111,8 +123,6 @@ public abstract class Simulation {
         }
         return specificNeighbors;
     }
-
-    protected abstract void setupSliderInfo();
 
     protected boolean evaluateOdds(double probability){
         double rand = Math.random();
@@ -135,9 +145,68 @@ public abstract class Simulation {
                 grid = new HexagonalGrid(numRows, numCols, cells);
                 break;
             default:
-                throw new IllegalStateException();
+                throw new RuntimeException("No such grid type.");
         }
         return grid;
     }
+
+    /**
+     * Updates the instance variable myDataValues defined within each Simulation subclass to match the given map.
+     * It also updates all the parameters within a Simulation to match the values within the given map. This is always
+     * called from within carryOutApply. The map passed is always created using the values from mySliders.
+     * //@param map
+     */
+    public void updateParameters(){
+        for(String s : myDataValues.keySet()){
+            if(mySliderInfo.containsKey(s)) {
+                mySliderInfo.put(s, myDataValues.get(s));
+                if(mySliderInfo.containsKey(s)) {
+                    mySpecialSliderInfo.put(s, myDataValues.get(s));
+                }
+            }
+        }
+    }
+
+    protected void setupSliderInfo(){
+        mySliderInfo = new LinkedHashMap<>();
+        mySpecialSliderInfo = new LinkedHashMap<>();
+        mySpecialSliderInfo.put("rows", myDataValues.get("rows"));
+        mySpecialSliderInfo.put("columns", myDataValues.get("columns"));
+        mySliderInfo.put("rows", myDataValues.get("rows"));
+        mySliderInfo.put("columns", myDataValues.get("columns"));
+        mySliderInfo.put("speed", myDataValues.get("speed"));
+    }
+
+    /**
+     *
+     */
+    public void setupGrid(String generationType){
+        switch(myDataValues.get("generatorType")){
+            case "probability":
+                myGrid = setupGridByProb();
+                break;
+            case "quota":
+                myGrid = setupGridByQuota();
+                break;
+            default:
+                throw new RuntimeException("No such generationType");
+        }
+    }
+
+    /**
+     * Updates and returns myGrid by updating the cell's positions according to the simulation's rules and then
+     * returning the result of getNewGrid(myCellList). This should be called by the RunSimulation class once within the
+     * step function.
+     * @return updated myGrid
+     */
+    public abstract Grid advanceSimulation();
+
+    protected abstract Grid setupGridByProb();
+
+    protected abstract Grid setupGridByQuota();
+
+    public abstract String getSimType();
+
+    //public abstract void changeCell();
 
 }

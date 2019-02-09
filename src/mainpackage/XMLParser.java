@@ -11,10 +11,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class XMLParser {
     public static final String ERROR_MESSAGE = "XML file does not represent %s";
@@ -41,34 +38,25 @@ public class XMLParser {
      */
     public Simulation getSimulation(File dataFile){
         Element root = getRootElement(dataFile);
+        return createSimulation(root.getAttribute(TYPE_ATTRIBUTE),  root);
+    }
+
+    private Simulation createSimulation(String simType, Element root) {
         Element settings = (Element) root.getElementsByTagName("settings").item(0);
-        Element grid = (Element) root.getElementsByTagName("grid").item(0);
-        return createSimulation(root.getAttribute(TYPE_ATTRIBUTE), settings, grid);
-    }
-
-    private Simulation createSimulation(String simType, Element settings, Element grid) {
         Map<String, String> dataValues = extractSimParameters(settings);
-//        // TEMPORARY, FOR TESTING RANDOM-CONFIG XML FILES WITH SEGREGATION
-//        if(simType.equals(SegregationSimulation.DATA_TYPE)) return new SegregationSimulation(dataValues);
-        List<Cell> cells;
-        cells = getCells(grid, Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
-        switch (simType) {
-            case SegregationSimulation.DATA_TYPE:
-                return new SegregationSimulation(dataValues, cells);
-            case WatorWorldSimulation.DATA_TYPE:
-                return new WatorWorldSimulation(dataValues, cells);
-            case PercolationSimulation.DATA_TYPE:
-                return new PercolationSimulation(dataValues, cells);
-            case SpreadingFireSimulation.DATA_TYPE:
-                return new SpreadingFireSimulation(dataValues, cells);
-            case GameOfLifeSimulation.DATA_TYPE:
-                return new GameOfLifeSimulation(dataValues, cells);
+        switch(settings.getElementsByTagName("generatorType").item(0).getTextContent()){
+            case "probability" : case "quota" :
+                return Simulation.createNewSimulation(simType, dataValues);
+            default:
+                Element grid = (Element) root.getElementsByTagName("grid").item(0);
+                List<Cell> cells = getCells(grid, Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
+                return Simulation.createNewSimulation(simType, dataValues, cells);
         }
-        throw new XMLException(ERROR_MESSAGE, "any kind of Simulation");
+
     }
 
-    public Map<String, String> extractSimParameters(Node settings){
-        HashMap<String, String> dataValues = new HashMap<>();
+    private Map<String, String> extractSimParameters(Node settings){
+        HashMap<String, String> dataValues = new LinkedHashMap<>();
         NodeList nodeList = settings.getChildNodes();
         for(int k = 0; k < nodeList.getLength(); k++){
             if (nodeList.item(k).getNodeType() == Node.ELEMENT_NODE) {

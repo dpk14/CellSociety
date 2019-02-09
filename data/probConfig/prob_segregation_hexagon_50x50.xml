@@ -3,12 +3,13 @@
     <settings>
         <title>initial segregation 1</title>
         <author>group14</author>
+        <generatorType>probability</generatorType>
         <cellShape>Hexagon</cellShape>
         <gridShape>HexagonalGrid</gridShape>
         <rows>50</rows>
         <columns>50</columns>
-        <speed>5</speed>
-        <satisfaction>0.5</satisfaction>
+        <speed>1</speed>
+        <satisfaction>0.75</satisfaction>
         <redRate>0.3</redRate>
         <blueRate>0.3</blueRate>
     </settings>

@@ -1,11 +1,14 @@
 package simulations;
 
+import cells.AgentCell;
 import cells.Cell;
+import cells.EmptyCell;
 import cells.StateChangeCell;
 import grids.Grid;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -50,10 +53,23 @@ public class SpreadingFireSimulation extends Simulation{
 
     @Override
     protected void setupSliderInfo() {
-        mySliderInfo.put("speed", myDataValues.get("speed"));
+        super.setupSliderInfo();
         mySliderInfo.put("spreadRate", myDataValues.get("spreadRate"));
         mySliderInfo.put("growthRate", myDataValues.get("growthRate"));
         mySliderInfo.put("lightningRate", myDataValues.get("lightningRate"));
+
+        if(!myDataValues.containsKey("treeRate")) {
+            System.out.println("DFGHJK");
+            mySliderInfo.put("treeRate", "0");
+            mySpecialSliderInfo.put("treeRate", "0");
+            myDataValues.put("treeRate", "0");
+        }
+        if(!myDataValues.containsKey("burningRate")) {
+            mySliderInfo.put("burningRate", "0");
+            mySpecialSliderInfo.put("burningRate", "0");
+            myDataValues.put("burningRate", "0");
+        }
+        
     }
 
     private String randomizeState(Cell cell, String state){
@@ -70,26 +86,21 @@ public class SpreadingFireSimulation extends Simulation{
         return state;
     }
 
-    @Override
-    public String getDataType(){
-        return DATA_TYPE;
-    }
+//    @Override
+//    public void updateParameters(Map<String, String> map) {
+//        super.updateParameters(map);
+//        myProbCatch = Double.parseDouble(map.get("spreadRate"));
+//        myProbGrow = Double.parseDouble(map.get("growthRate"));
+//        myProbLightning = Double.parseDouble(map.get("lightningRate"));
+//    }
 
     @Override
-    public void updateParameters(Map<String, String> map) {
-        myProbCatch = Double.parseDouble(map.get("spreadRate"));
-        myProbGrow = Double.parseDouble(map.get("growthRate"));
-        myProbLightning = Double.parseDouble(map.get("lightningRate"));
-        myDataValues = map;
-    }
-
-    @Override
-    public void setupGrid(){
-        List<Cell> cells = new ArrayList<>();
-        int rows = Integer.parseInt(myDataValues.get("rows"));
-        int cols = Integer.parseInt(myDataValues.get("columns"));
+    protected Grid setupGridByProb(){
+        int rows = (int) Double.parseDouble(myDataValues.get("rows"));
+        int cols = (int) Double.parseDouble(myDataValues.get("columns"));
         double treeRate = Double.parseDouble(myDataValues.get("treeRate"));
         double burningRate = Double.parseDouble(myDataValues.get("burningRate"));
+        List<Cell> cells = new ArrayList<>();
         for(int i = 0; i < rows; i++){
             for(int j = 0; j < cols; j++){
                 Cell cell;
@@ -105,7 +116,42 @@ public class SpreadingFireSimulation extends Simulation{
                 cells.add(cell);
             }
         }
-        myGrid = createGrid(myDataValues.get("gridShape"), rows, cols, cells);
+        return createGrid(myDataValues.get("gridShape"), rows, cols, cells);
     }
 
+    @Override
+    protected Grid setupGridByQuota() {
+        int rows = (int) Double.parseDouble(myDataValues.get("rows"));
+        int cols = (int) Double.parseDouble(myDataValues.get("columns"));
+        int treeRate = (int) Double.parseDouble(myDataValues.get("treeRate"));
+        int burningRate = (int) Double.parseDouble(myDataValues.get("burningRate"));
+        List<String> states = new ArrayList<>();
+        List<Cell> cells = new ArrayList<>();
+        for (int k = 0; k < treeRate; k++) {
+            states.add("TREE");
+        }
+        for (int k = 0; k < burningRate; k++) {
+            states.add("BURNING");
+        }
+        for (int k = 0; k < (rows * cols - burningRate - treeRate + 1); k++) {
+            states.add("EMPTY");
+        }
+        Collections.shuffle(states);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                String state = states.remove(0);
+                if (state.equals("TREE") || state.equals("BURNING") || state.equals("EMPTY")) {
+                    cells.add(new StateChangeCell(i, j, state));
+                } else {
+                    throw new RuntimeException("Cell type not allowed in " + DATA_TYPE);
+                }
+            }
+        }
+        return createGrid(myDataValues.get("gridShape"), rows, cols, cells);
+    }
+
+    @Override
+    public String getSimType(){
+        return DATA_TYPE;
+    }
 }
