@@ -59,6 +59,7 @@ public class Main extends Application {
 
         Scene scene = new Scene(root, width, height, background);
         scenes.put(scene, r);
+        scene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
         return scene;
     }
 
@@ -74,6 +75,13 @@ public class Main extends Application {
         for (Map.Entry<Scene, RunSimulation> entry :  scenes.entrySet()) {
             RunSimulation y = entry.getValue();
             y.stepThru(elapsedTime);
+        }
+    }
+
+    private void handleMouseInput (double x, double y) {
+        for (Map.Entry<Scene, RunSimulation> entry :  scenes.entrySet()) {
+            //RunSimulation y = entry.getValue();
+
         }
     }
 
