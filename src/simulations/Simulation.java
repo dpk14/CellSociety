@@ -3,6 +3,7 @@ package simulations;
 import cells.Cell;
 import cells.StateChangeCell;
 import grids.*;
+import javafx.scene.control.Slider;
 
 import java.util.*;
 
@@ -11,6 +12,7 @@ public abstract class Simulation {
     protected List<Cell> myCellList = new ArrayList<>();
     protected Map<String, String> myDataValues;
     protected Map<String, String> mySliderInfo;
+    protected Map<String, String> mySpecialSliderInfo;
     public enum Bounds{
         rows(1, 100),
         columns(1,100),
@@ -38,7 +40,7 @@ public abstract class Simulation {
 
     public Simulation(Map<String, String> dataValues, List<Cell> cells){
         myDataValues = dataValues;
-        mySliderInfo = new LinkedHashMap<>();
+        setupSliderInfo();
         int numRows = Integer.parseInt(dataValues.get("rows"));
         int numCols = Integer.parseInt(dataValues.get("columns"));
         myGrid = createGrid(myDataValues.get("gridShape"), numRows, numCols, cells);
@@ -46,7 +48,7 @@ public abstract class Simulation {
 
     public Simulation(Map<String, String> dataValues){
         myDataValues = dataValues;
-        mySliderInfo = new LinkedHashMap<>();
+        setupSliderInfo();
         setupGrid(myDataValues.get("generatorType"));
     }
 
@@ -94,6 +96,10 @@ public abstract class Simulation {
 
     public Map<String, String> getMySliderInfo(){
         return mySliderInfo;
+    }
+
+    public Map<String, String> getMySpecialSliderInfo(){
+        return mySpecialSliderInfo;
     }
 
     /**
@@ -151,6 +157,15 @@ public abstract class Simulation {
         mySliderInfo = map;
     }
 
+    protected void setupSliderInfo(){
+        mySliderInfo = new LinkedHashMap<>();
+        mySpecialSliderInfo = new LinkedHashMap<>();
+        mySpecialSliderInfo.put("rows", myDataValues.get("rows"));
+        mySpecialSliderInfo.put("columns", myDataValues.get("columns"));
+        mySliderInfo.put("rows", myDataValues.get("rows"));
+        mySliderInfo.put("columns", myDataValues.get("columns"));
+    }
+
     /**
      *
      */
@@ -175,15 +190,11 @@ public abstract class Simulation {
      */
     public abstract Grid advanceSimulation();
 
-    protected void setupSliderInfo(){
-        mySliderInfo.put("rows", myDataValues.get("rows"));
-        mySliderInfo.put("columns", myDataValues.get("columns"));
-        mySliderInfo.put("speed", myDataValues.get("speed"));
-    }
-
     protected abstract Grid setupGridByProb();
 
     protected abstract Grid setupGridByQuota();
+
+    public abstract String getSimType();
 
     //public abstract void changeCell();
 

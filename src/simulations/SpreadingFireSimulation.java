@@ -136,4 +136,9 @@ public class SpreadingFireSimulation extends Simulation{
         }
         return createGrid(myDataValues.get("gridShape"), rows, cols, cells);
     }
+
+    @Override
+    public String getSimType(){
+        return DATA_TYPE;
+    }
 }

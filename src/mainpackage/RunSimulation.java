@@ -180,6 +180,7 @@ public class RunSimulation {
             onInitialGrid = false;
         });
         myApplyButton.setOnAction(event -> {
+            System.out.println("PRESSED");
             animation.setRate(animation.getCycleDuration().toSeconds() * mySliders.get("speed").getValue());
             carryOutApply(currentSimulation);
             //must update parameters
@@ -248,10 +249,28 @@ public class RunSimulation {
 
     private void carryOutApply(Simulation sim){
         Map<String, String> map = sim.getMyDataValues();
+        boolean shouldReplace = false;
         for(String s : map.keySet()){
-            if(mySliders.containsKey(s)) map.put(s, Double.toString(mySliders.get(s).getValue()));
+            if(!mySliders.containsKey(s)){
+                continue;
+            }
+            // if one of the "foundational" sliders is edited, will need to create new simulation
+            if(sim.getMySpecialSliderInfo().containsKey(s) && sim.getMySpecialSliderInfo().get(s) != map.get(s)){
+                shouldReplace = true;
+            }
+            map.put(s, Double.toString(mySliders.get(s).getValue()));
         }
-        sim.updateParameters(map);
+        if(shouldReplace) {
+            String simType = currentSimulation.getSimType();
+            currentSimulation = Simulation.createNewSimulation(simType, map);
+            onInitialGrid = true;
+            Grid initialGrid = currentSimulation.getMyGrid();
+            newVisual = new Visualization(initialGrid.getHeight(), initialGrid.getWidth(), 1.0);
+            root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
+        }
+        else {
+            sim.updateParameters(map);
+        }
     }
 
     private void renderNextIteration() {

@@ -108,4 +108,9 @@ public class GameOfLifeSimulation extends Simulation{
     public void updateParameters(Map<String, String> map){
         super.updateParameters(map);
     }
+
+    @Override
+    public String getSimType(){
+        return DATA_TYPE;
+    }
 }
