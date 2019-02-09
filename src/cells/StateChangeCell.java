@@ -8,7 +8,7 @@ public class StateChangeCell extends Cell{
     String myState;
 
     public static final String DATA_TYPE = "StateChangeCell";
-    public static final List<String> DATA_FIELDS = List.of("state");
+//    public static final List<String> DATA_FIELDS = List.of("state");
 
     public static final Paint COLOR_EMPTY = Color.WHITESMOKE;
     public static final Paint COLOR_POPULATED = Color.BLACK;

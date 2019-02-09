@@ -10,17 +10,17 @@ import java.util.List;
 
 public class SharkCell extends Cell {
     public static final String DATA_TYPE = "SharkCell";
-    public static final List<String> DATA_FIELDS = List.of("reproductionTime", "energy", "energyGain");
+//    public static final List<String> DATA_FIELDS = List.of("reproductionTime", "energy", "energyGain");
     public static final Paint COLOR_SHARK = Color.GREY;
         private int myTurnsSurvived;
         private int myReproductionTime;
         private int myEnergy;
         private int myEnergyGain;
 
-        public SharkCell(int row, int column, int maxtrack, int energy, int energyGain) {
+        public SharkCell(int row, int column, int reproductionTime, int energy, int energyGain) {
         super(row, column, COLOR_SHARK);
         this.myTurnsSurvived=0;
-        this.myReproductionTime=maxtrack;
+        this.myReproductionTime=reproductionTime;
         this.myEnergy=energy;
         this.myEnergyGain=energyGain;
     }

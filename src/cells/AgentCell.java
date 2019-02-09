@@ -11,8 +11,8 @@ public class AgentCell extends Cell {
     public static final Paint COLOR_AGENT_RED = Color.RED;
     public static final Paint COLOR_AGENT_BLUE = Color.BLUE;
     public static final String DATA_TYPE = "AgentCell";
-    public static final List<String> DATA_FIELDS = List.of(
-            "race");
+//    public static final List<String> DATA_FIELDS = List.of(
+//            "race");
 
     public AgentCell(int row, int column, String myType){
         super(row, column, COLOR_AGENT_RED);

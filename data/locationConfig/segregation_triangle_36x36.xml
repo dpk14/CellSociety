@@ -3,6 +3,7 @@
     <settings>
         <title>initial segregation 2</title>
         <author>group14</author>
+        <generatorType>location</generatorType>
         <cellShape>Square</cellShape>
         <gridShape>TriangularGrid</gridShape>
         <rows>36</rows>

@@ -8,7 +8,7 @@ public class FishCell extends Cell {
 
     public static final Paint COLOR_FISH = Color.ORANGE;
     public static final String DATA_TYPE = "FishCell";
-    public static final List<String> DATA_FIELDS = List.of("reproductionTime");
+//    public static final List<String> DATA_FIELDS = List.of("reproductionTime");
     private int myTurnsSurvived;
     private int myReproductionTime;
 

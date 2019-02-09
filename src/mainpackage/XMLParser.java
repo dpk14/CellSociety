@@ -1,6 +1,8 @@
 package mainpackage;
 
 import cells.*;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import simulations.*;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -9,10 +11,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class XMLParser {
     public static final String ERROR_MESSAGE = "XML file does not represent %s";
@@ -39,9 +38,32 @@ public class XMLParser {
      */
     public Simulation getSimulation(File dataFile){
         Element root = getRootElement(dataFile);
+        return createSimulation(root.getAttribute(TYPE_ATTRIBUTE),  root);
+    }
+
+    private Simulation createSimulation(String simType, Element root) {
         Element settings = (Element) root.getElementsByTagName("settings").item(0);
-        Element grid = (Element) root.getElementsByTagName("grid").item(0);
-        return createSimulation(root.getAttribute(TYPE_ATTRIBUTE), settings, grid);
+        Map<String, String> dataValues = extractSimParameters(settings);
+        switch(settings.getElementsByTagName("generatorType").item(0).getTextContent()){
+            case "probability" : case "quota" :
+                return Simulation.createNewSimulation(simType, dataValues);
+            default:
+                Element grid = (Element) root.getElementsByTagName("grid").item(0);
+                List<Cell> cells = getCells(grid, Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
+                return Simulation.createNewSimulation(simType, dataValues, cells);
+        }
+
+    }
+
+    private Map<String, String> extractSimParameters(Node settings){
+        HashMap<String, String> dataValues = new LinkedHashMap<>();
+        NodeList nodeList = settings.getChildNodes();
+        for(int k = 0; k < nodeList.getLength(); k++){
+            if (nodeList.item(k).getNodeType() == Node.ELEMENT_NODE) {
+                dataValues.put(nodeList.item(k).getNodeName(), nodeList.item(k).getTextContent());
+            }
+        }
+        return dataValues;
     }
 
     private ArrayList<Cell> getCells(Element grid, int rows, int columns){
@@ -57,72 +79,35 @@ public class XMLParser {
         return cells;
     }
 
-    private Simulation createSimulation(String simType, Element settings, Element grid) {
-        Map<String, String> dataValues;
-        List<Cell> cells;
-        switch (simType) {
-            case SegregationSimulation.DATA_TYPE:
-                dataValues = getDataValues(settings, SegregationSimulation.DATA_FIELDS);
-                cells = getCells(grid, Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
-                return new SegregationSimulation(dataValues, cells);
-            case WatorWorldSimulation.DATA_TYPE:
-                dataValues = getDataValues(settings, WatorWorldSimulation.DATA_FIELDS);
-                cells = getCells(grid, Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
-                return new WatorWorldSimulation(dataValues, cells);
-            case PercolationSimulation.DATA_TYPE:
-                dataValues = getDataValues(settings, PercolationSimulation.DATA_FIELDS);
-                cells = getCells(grid, Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
-                return new PercolationSimulation(dataValues, cells);
-            case SpreadingFireSimulation.DATA_TYPE:
-                dataValues = getDataValues(settings, SpreadingFireSimulation.DATA_FIELDS);
-                cells = getCells(grid, Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
-                return new SpreadingFireSimulation(dataValues, cells);
-            case GameOfLifeSimulation.DATA_TYPE:
-                dataValues = getDataValues(settings, GameOfLifeSimulation.DATA_FIELDS);
-                cells = getCells(grid, Integer.parseInt(dataValues.get("rows")), Integer.parseInt(dataValues.get("columns")));
-                return new GameOfLifeSimulation(dataValues, cells);
-        }
-        throw new XMLException(ERROR_MESSAGE, "any kind of Simulation");
-    }
-
     private Cell createCell(int row, int col, String cellType,  Element root){
         ArrayList<String> dataValues = new ArrayList<>();
         dataValues.add(Integer.toString(row));
         dataValues.add(Integer.toString(col));
+        dataValues.addAll(extractCellParameters(root));
         switch (cellType) {
             case AgentCell.DATA_TYPE :
-                dataValues.addAll(getCellValues(root, AgentCell.DATA_FIELDS));
                 return new AgentCell(dataValues);
             case EmptyCell.DATA_TYPE :
-                dataValues.addAll(getCellValues(root, EmptyCell.DATA_FIELDS));
                 return new EmptyCell(dataValues);
             case FishCell.DATA_TYPE :
-                dataValues.addAll(getCellValues(root, FishCell.DATA_FIELDS));
                 return new FishCell(dataValues);
             case SharkCell.DATA_TYPE :
-                dataValues.addAll(getCellValues(root, SharkCell.DATA_FIELDS));
                 return new SharkCell(dataValues);
             case StateChangeCell.DATA_TYPE :
-                dataValues.addAll(getCellValues(root, StateChangeCell.DATA_FIELDS));
                 return new StateChangeCell(dataValues);
         }
         throw new XMLException(CELL_ERROR_MESSAGE, cellType);
     }
 
-    private Map<String, String> getDataValues(Element root, List<String> dataFields){
-        Map<String, String> dataValues = new HashMap<>();
-        for(String field : dataFields){
-            dataValues.put(field, getTextValue(root, field));
+    private List<String> extractCellParameters(Element grid){
+        List<String> cellValues = new ArrayList<>();
+        NodeList nodeList = grid.getChildNodes();
+        for(int k = 0; k < nodeList.getLength(); k++){
+            if (nodeList.item(k).getNodeType() == Node.ELEMENT_NODE) {
+                cellValues.add(nodeList.item(k).getTextContent());
+            }
         }
-        return dataValues;
-    }
-
-    private List<String> getCellValues(Element root, List<String> dataFields){
-        List<String> dataValues = new ArrayList<>();
-        for(String field : dataFields){
-            dataValues.add(getTextValue(root, field));
-        }
-        return dataValues;
+        return cellValues;
     }
 
     // Get root element of an XML file
@@ -168,5 +153,4 @@ public class XMLParser {
             throw new XMLException(e);
         }
     }
-
 }

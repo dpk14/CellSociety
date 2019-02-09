@@ -1,0 +1,14 @@
+<?xml version = "1.0"?>
+<data simType = "GameOfLifeSimulation">
+    <settings>
+        <title>gameoflife 1</title>
+        <author>group14</author>
+        <generatorType>quota</generatorType>
+        <cellShape>Triangle</cellShape>
+        <gridShape>TriangularGrid</gridShape>
+        <rows>50</rows>
+        <columns>50</columns>
+        <speed>25</speed>
+        <populatedRate>1000</populatedRate>
+    </settings>
+</data>

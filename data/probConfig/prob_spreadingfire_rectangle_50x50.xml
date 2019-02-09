@@ -1,0 +1,18 @@
+<?xml version = "1.0"?>
+<data simType = "SpreadingFireSimulation">
+    <settings>
+        <title>spreadingfire 1</title>
+        <author>group14</author>
+        <generatorType>probability</generatorType>
+        <cellShape>Square</cellShape>
+        <gridShape>RectangularGrid</gridShape>
+        <rows>12</rows>
+        <columns>12</columns>
+        <speed>25</speed>
+        <spreadRate>0.90</spreadRate>
+        <growthRate>0.10</growthRate>
+        <lightningRate>0.05</lightningRate>
+        <treeRate>0.7</treeRate>
+        <burningRate>0.05</burningRate>
+    </settings>
+</data>

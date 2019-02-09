@@ -1,8 +1,5 @@
 package cells;
 
-
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Paint;
 
 
@@ -34,14 +31,6 @@ public class Cell {
 
     public int getColumn(){
         return myColumn;
-    }
-
-    public void setMyRow(int r) {
-        myRow = r;
-    }
-
-    public void setMyColumn(int c) {
-        myColumn = c;
     }
 
     public Paint getMyColor() {

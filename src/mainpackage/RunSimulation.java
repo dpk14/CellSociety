@@ -1,37 +1,42 @@
 package mainpackage;
 
+import cells.Cell;
 import grids.Grid;
-import javafx.animation.KeyFrame;
+
 import javafx.animation.Timeline;
-import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import simulations.Simulation;
 
+import java.awt.*;
 import java.io.File;
 import java.util.*;
 
-public class RunSimulation extends Application {
-    private String DATA_FILE = "data/locationConfig/segregation_hexagon_36x36.xml";
-    public static final String TITLE = "Cellular Automaton Simulation";
-    public static final int SIZE = 600;
-    public static final Paint BACKGROUND = Color.AZURE;
+public class RunSimulation {
 
+    public static final int btnXPosition = 10;
+    public static final int btnYPosition = 520;
+    public static final int slidersXPosition = 510;
+
+    private String DATA_FILE = "data/locationConfig/spreadingfire_hexagon_36x36.xml";
     private Timeline animation;
-    private Scene myScene;
-    private Group root;
+    private Group root = new Group();
     private Group root_grid = new Group();
     private Group root_other = new Group();
+    private Group root_graph = new Group();
+
+    private PopulationGraph graph;
 
     private Visualization newVisual;
     private Simulation currentSimulation;
@@ -43,6 +48,7 @@ public class RunSimulation extends Application {
     private Button myApplyButton;
     private Button myNextIterationButton;
     private Button myLoadFileButton;
+    private Button myNewWindowButton;
     private Map<String, Slider> mySliders;
 
     private Stage s;
@@ -54,71 +60,78 @@ public class RunSimulation extends Application {
     private boolean startedSliding = false;
     private boolean startedAnimation = false;
 
-    private int FRAMES_PER_SECOND = 15;
-    private int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
-    private double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-
-
-    @Override
-    public void start(Stage stage){
-        // attach scene to the stage and display it
-        myScene = setupGame(SIZE, (int) (SIZE * 1.35), BACKGROUND);
-        s = stage;
-        stage.setScene(myScene);
-        stage.setTitle(TITLE);
-        stage.show();
-        attachGameLoop();
+    RunSimulation(Timeline a) {
+        animation = a;
     }
+
+    public Group getNode() {
+        setupSimulation();
+        createUIComponents();
+
+        root.getChildren().add(root_other);
+        root.getChildren().add(root_grid);
+        root.getChildren().add(root_graph);
+        return root;
+    }
+
+
 
     private void openFile(File f) {
         DATA_FILE = f.getAbsolutePath();
         root_other.getChildren().clear();
+        root_grid.getChildren().clear();
+        root_graph.getChildren().clear();
         root.getChildren().clear();
         setupSimulation();
         createUIComponents();
         root.getChildren().add(root_other);
         root.getChildren().add(root_grid);
-
+        root.getChildren().add(root_graph);
     }
 
-    private void attachGameLoop() {
-        var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
-        animation = new Timeline();
-        animation.setCycleCount(Timeline.INDEFINITE);
-        animation.getKeyFrames().add(frame);
-        animation.setRate(animation.getCycleDuration().toSeconds() * mySliders.get("speed").getValue());
-        animation.play();
-    }
-
-    private Scene setupGame(int width, int height, Paint background){
-        root = new Group();
-        Scene scene = new Scene(root, width, height, background);
-
-        setupSimulation();
+    private void replaceSimulation(Simulation sim){
+        root_other.getChildren().clear();
+        root_grid.getChildren().clear();
+        root.getChildren().clear();
+        onInitialGrid = true;
+        currentSimulation = sim;
+        Grid initialGrid = currentSimulation.getMyGrid();
+        newVisual = new Visualization(initialGrid.getHeight(), initialGrid.getWidth(), 1.0);
+        root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
         createUIComponents();
         root.getChildren().add(root_other);
         root.getChildren().add(root_grid);
-        scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
-        return scene;
+        root.getChildren().add(root_graph);
     }
 
     private void setupSimulation() {
         onInitialGrid = true;
         currentSimulation = new XMLParser("simType").getSimulation(new File(DATA_FILE));
+
         Grid initialGrid = currentSimulation.getMyGrid();
         newVisual = new Visualization(initialGrid.getHeight(), initialGrid.getWidth(), 1.0);
         root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
+
+        root_graph.getChildren().clear();
+
+//        for (Paint p : initialGrid.getMapOfCellCount().keySet()) {
+//            System.out.println(p + "||" + initialGrid.getMapOfCellCount().get(p));
+//        }
+        graph = new PopulationGraph(initialGrid.getMapOfCellCount());
+        root_graph.getChildren().add(graph.getGraphRootNode());
     }
 
     private void createUIComponents() {
         // add other components (i.e. not grid)
         mySliders = createMySliders(currentSimulation, root_other);
-        myLoadFileButton = createButton("Load simulation (.xml)", 50,510,false);
-        myNextIterationButton = createButton(">", 450, 550, false);
-        myResetButton = createButton("Reset", 450, 580, false);
-        myStartButton = createButton("Start", 450, 610, true);
-        myStopButton = createButton("Stop", 450, 640, true);;
-        root_other.getChildren().addAll(myLoadFileButton, myNextIterationButton, myResetButton, myApplyButton, myStartButton, myStopButton);
+        myLoadFileButton = createButton("Load simulation (.xml)", slidersXPosition,0,false);
+        myNextIterationButton = createButton(">", btnXPosition, btnYPosition, false);
+        myResetButton = createButton("Reset", btnXPosition + 40, btnYPosition, false);
+        myStartButton = createButton("Start", btnXPosition + 100, btnYPosition, true);
+        myStopButton = createButton("Stop", btnXPosition + 160, btnYPosition, true);
+
+        root_other.getChildren().addAll(myLoadFileButton, myNextIterationButton,
+                myResetButton, myApplyButton, myStartButton, myNewWindowButton, myStopButton);
         setButtonHandlers();
     }
 
@@ -148,6 +161,9 @@ public class RunSimulation extends Application {
                     && selectedFile.getName().substring(selectedFile.getName().lastIndexOf(".") + 1).equals("xml")) {
                 openFile(selectedFile);
             }
+        });
+        myNewWindowButton.setOnAction(event -> {
+
         });
     }
 
@@ -181,39 +197,66 @@ public class RunSimulation extends Application {
     private HashMap<String, Slider> createMySliders(Simulation sim, Group root){
         HashMap<String, Slider> sliderMap = new LinkedHashMap<>();
         double applyButtonY = 0;
-        int k = 0;
+        int k = 1;
         for(String currentField : sim.getMySliderInfo().keySet()){
-            //if(sim.getMyDataValues().get(currentField).equals("")) continue;
-            double value = Double.parseDouble(sim.getMyDataValues().get(currentField));
-            Slider slider = createSlider(30, 550 + k*40, Simulation.Bounds.valueOf(currentField).getMin(),
+            double value = Double.parseDouble(sim.getMySliderInfo().get(currentField));
+            Slider slider = createSlider(slidersXPosition, k*40, Simulation.Bounds.valueOf(currentField).getMin(),
                     Simulation.Bounds.valueOf(currentField).getMax(), value);
             sliderMap.put(currentField, slider);
             Label label = new Label(currentField);
-            label.setLayoutX(180);
-            label.setLayoutY(550 + k*40);
+            label.setLayoutX(slidersXPosition + 150);
+            label.setLayoutY(k*40);
             root.getChildren().addAll(label, slider);
             k++;
         }
-        myApplyButton = createButton("Apply", 30, 550 + 40*k, false);
+        myApplyButton = createButton("Apply", slidersXPosition, 40*k, false);
+        k++;
+        myNewWindowButton = createButton("New Window", slidersXPosition, 40*k, false);
         return sliderMap;
     }
 
     private void carryOutApply(Simulation sim){
-        Map<String, String> map = sim.getMyDataValues();
-        for(String s : map.keySet()){
-            if(mySliders.containsKey(s)) map.put(s, Double.toString(mySliders.get(s).getValue()));
+        Map<String, String> dataValues = sim.getMyDataValues();
+        boolean shouldReplace = false;
+        for(String s : mySliders.keySet()){
+            // if one of the "foundational" sliders is edited, will need to create new simulation
+            if(sim.getMySpecialSliderInfo().containsKey(s) && mySliders.get(s).getValue() != Double.parseDouble(dataValues.get(s))){
+                shouldReplace = true;
+            }
+            dataValues.put(s, Double.toString(mySliders.get(s).getValue()));
         }
-        sim.updateParameters(map);
+        sim.updateParameters();
+        Map<String, String> copy = new LinkedHashMap<>(dataValues);
+        if(shouldReplace) {
+            copy.put("generatorType", "probability");
+            System.out.println("sim " + Double.parseDouble(currentSimulation.getMyDataValues().get("treeRate")));
+            System.out.println("copy " + Double.parseDouble(copy.get("treeRate")));
+            currentSimulation = Simulation.createNewSimulation(currentSimulation.getSimType(), copy);
+            System.out.println("sim " + Double.parseDouble(currentSimulation.getMyDataValues().get("treeRate")));
+            System.out.println("copy " + Double.parseDouble(copy.get("treeRate")));
+            replaceSimulation(currentSimulation);
+        }
     }
 
     private void renderNextIteration() {
         // render next iteration
         root_grid.getChildren().clear();
-        Node n = newVisual.getRootNode(currentSimulation.advanceSimulation());
+        Grid g = currentSimulation.advanceSimulation();
+        Map<Paint, Integer> m = g.getMapOfCellCount();
+        graph.addPoint(m);
+
+//        for (Paint p : m.keySet()) {
+//            System.out.println(p + "||" + m.get(p));
+//        }
+
+        Node n = newVisual.getRootNode(g);
         root_grid.getChildren().add(n);
     }
 
-    private void step(double elapsedTime){
+
+
+
+    public void stepThru(double elapsedTime){
         // update grid
         // receive a Node from visualization class
         myNextIterationButton.setDisable(startedAnimation);
@@ -228,17 +271,6 @@ public class RunSimulation extends Application {
         myApplyButton.setDisable(startedAnimation);
         if (startedAnimation) renderNextIteration();
     }
-
-    private void handleKeyInput (KeyCode code) {
-        if (code == KeyCode.RIGHT) {
-            renderNextIteration();
-        }
-    }
-
-    public static void main(String[] args){
-        launch(args);
-    }
-
     //create an interface of key and mouse inputs, which toggles a call to mainpackage.Simulation.initializeGrid
 
 }

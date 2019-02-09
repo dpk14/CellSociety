@@ -9,12 +9,12 @@ import java.util.*;
 
 public class SegregationSimulation extends Simulation {
     public static final String DATA_TYPE = "SegregationSimulation";
-    public static final List<String> DATA_FIELDS = List.of(
-            "title", "author", "cellShape", "gridShape", "rows", "columns", "speed", "satisfaction", "redRate", "blueRate");
+//    public static final List<String> DATA_FIELDS = List.of(
+//            "title", "author", "cellShape", "gridShape", "rows", "columns", "speed", "satisfaction", "redRate", "blueRate");
 
     public double mySatisfactionThreshold; // between 0 & 1
-    private double myBluePercentage; // between 0 & 1, percentage made up by first Agent
-    private double myRedPercentage; // between 0 & 1
+//    private double myBluePercentage; // between 0 & 1, percentage made up by first Agent
+//    private double myRedPercentage; // between 0 & 1
 
     private List<Cell> myEmptyCells = new ArrayList<>();
     private List<Cell> myCellsToMove = new ArrayList<>();
@@ -22,14 +22,17 @@ public class SegregationSimulation extends Simulation {
     /**
      * Constructor needed to initialize from XML
      */
-
     public SegregationSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
         super(dataValues, cells);
         mySatisfactionThreshold = Double.parseDouble(dataValues.get("satisfaction"));
-        mySliderInfo.put("satisfaction", dataValues.get("satisfaction"));
-        mySliderInfo.put("speed", dataValues.get("speed"));
+        setupSliderInfo();
         //myBluePercentage = Double.parseDouble(dataValues.get("blueRate"));
         //myRedPercentage = Double.parseDouble(dataValues.get("redRate"));
+    }
+
+    public SegregationSimulation(Map<String, String> dataValues){
+        super(dataValues);
+        setupSliderInfo();
     }
 
 
@@ -54,6 +57,23 @@ public class SegregationSimulation extends Simulation {
         return myGrid;
     }
 
+    @Override
+    protected void setupSliderInfo() {
+        super.setupSliderInfo();
+        mySliderInfo.put("satisfaction", myDataValues.get("satisfaction"));
+        mySliderInfo.put("blueRate", "0");
+        mySliderInfo.put("redRate", "0");
+
+        if(!myDataValues.containsKey("blueRate")){
+            mySpecialSliderInfo.put("blueRate", "0");
+            myDataValues.put("blueRate", "0");
+        }
+        if(!myDataValues.containsKey("redRate")){
+            mySpecialSliderInfo.put("redRate", "0");
+            myDataValues.put("redRate", "0");
+        }
+    }
+
     private void checkAndSortCells(Grid grid){
         for(int i = 0; i < grid.getHeight(); i++){ // i = row number
             for(int j = 0; j < grid.getWidth(); j++){ // j = column number
@@ -72,25 +92,74 @@ public class SegregationSimulation extends Simulation {
     }
 
     @Override
-    public List<String> getDataFields(){
-        return DATA_FIELDS;
+    protected Grid setupGridByProb(){
+        int rows = Integer.parseInt(myDataValues.get("rows"));
+        int cols = Integer.parseInt(myDataValues.get("columns"));
+        double redRate = Double.parseDouble(myDataValues.get("redRate"));
+        double blueRate = Double.parseDouble(myDataValues.get("blueRate"));
+        List<Cell> cells = new ArrayList<>();
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < cols; j++){
+                Cell cell;
+                if(evaluateOdds(redRate)){
+                    cell = new AgentCell(i, j, "RED");
+                }
+                else if(evaluateOdds(blueRate)){
+                    cell = new AgentCell(i, j, "BLUE");
+                }
+                else{
+                    cell = new EmptyCell(i, j);
+                }
+                cells.add(cell);
+            }
+        }
+        return createGrid(myDataValues.get("gridShape"), rows, cols, cells);
     }
 
     @Override
-    public String getDataType(){
+    protected Grid setupGridByQuota(){
+        int rows = Integer.parseInt(myDataValues.get("rows"));
+        int cols = Integer.parseInt(myDataValues.get("columns"));
+        int redRate = (int) Double.parseDouble(myDataValues.get("redRate"));
+        int blueRate = (int) Double.parseDouble(myDataValues.get("blueRate"));
+        List<String> states = new ArrayList<>();
+        List<Cell> cells = new ArrayList<>();
+        for(int k = 0; k < redRate; k++){
+            states.add("RED");
+        }
+        for(int k = 0; k < blueRate; k++){
+            states.add("BLUE");
+        }
+        for(int k = 0; k < (rows*cols-redRate-blueRate+1); k++){
+            states.add("EMPTY");
+        }
+        Collections.shuffle(states);
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < cols; j++){
+                String state = states.remove(0);
+                if(state.equals("RED") || state.equals("BLUE")) {
+                    cells.add(new AgentCell(i, j, state));
+                }
+                else if(state.equals("EMPTY")){
+                    cells.add(new EmptyCell(i, j));
+                }
+                else {
+                    throw new RuntimeException("Cell type not allowed in " + DATA_TYPE);
+                }
+            }
+        }
+        return createGrid(myDataValues.get("gridShape"), rows, cols, cells);
+    }
+
+    @Override
+    public String getSimType(){
         return DATA_TYPE;
     }
 
-    @Override
-    public void updateParameters(Map<String, String> map){
-        mySatisfactionThreshold = Double.parseDouble(map.get("satisfaction"));
-        myDataValues = map;
-    }
 
-    @Override
-    public void setupGrid(){
-        double redRate = Double.parseDouble(myDataValues.get("redRate"));
-        double blueRate = Double.parseDouble(myDataValues.get("blueRate"));
-        // TODO create randomized grid and set to myGrid
-    }
+//    @Override
+//    public void changeCell() {
+//        List<Cell> choices = List.of(new AgentCell(0,0,"BLUE"),
+//                new AgentCell(0,0,"BLUE"), new EmptyCell(0,0));
+//    }
 }
