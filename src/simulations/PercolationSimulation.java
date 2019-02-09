@@ -49,6 +49,11 @@ public class PercolationSimulation extends Simulation{
     @Override
     protected void setupSliderInfo() {
         super.setupSliderInfo();
+        if(!myDataValues.containsKey("openRate")){
+            mySliderInfo.put("openRate", "0");
+            mySpecialSliderInfo.put("openRate", "0");
+            myDataValues.put("openRate", "0");
+        }
     }
 
     private Queue<Cell> openOne(){
@@ -72,11 +77,6 @@ public class PercolationSimulation extends Simulation{
         }
         return false;
         }
-
-    @Override
-    public void updateParameters(Map<String, String> map){
-        super.updateParameters(map);
-    }
 
     @Override
     protected Grid setupGridByProb(){
@@ -125,5 +125,10 @@ public class PercolationSimulation extends Simulation{
             }
         }
         return createGrid(myDataValues.get("gridShape"), rows, cols, cells);
+    }
+
+    @Override
+    public String getSimType(){
+        return DATA_TYPE;
     }
 }

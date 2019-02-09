@@ -61,6 +61,17 @@ public class SegregationSimulation extends Simulation {
     protected void setupSliderInfo() {
         super.setupSliderInfo();
         mySliderInfo.put("satisfaction", myDataValues.get("satisfaction"));
+        mySliderInfo.put("blueRate", "0");
+        mySliderInfo.put("redRate", "0");
+
+        if(!myDataValues.containsKey("blueRate")){
+            mySpecialSliderInfo.put("blueRate", "0");
+            myDataValues.put("blueRate", "0");
+        }
+        if(!myDataValues.containsKey("redRate")){
+            mySpecialSliderInfo.put("redRate", "0");
+            myDataValues.put("redRate", "0");
+        }
     }
 
     private void checkAndSortCells(Grid grid){
@@ -78,12 +89,6 @@ public class SegregationSimulation extends Simulation {
                 }
             }
         }
-    }
-
-    @Override
-    public void updateParameters(Map<String, String> map){
-        super.updateParameters(map);
-        mySatisfactionThreshold = Double.parseDouble(map.get("satisfaction"));
     }
 
     @Override
@@ -144,6 +149,11 @@ public class SegregationSimulation extends Simulation {
             }
         }
         return createGrid(myDataValues.get("gridShape"), rows, cols, cells);
+    }
+
+    @Override
+    public String getSimType(){
+        return DATA_TYPE;
     }
 
 

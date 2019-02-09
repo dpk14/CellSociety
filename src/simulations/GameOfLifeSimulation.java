@@ -45,6 +45,11 @@ public class GameOfLifeSimulation extends Simulation{
     @Override
     protected void setupSliderInfo() {
         super.setupSliderInfo();
+        if(!myDataValues.containsKey("populatedRate")){
+            myDataValues.put("populatedRate", "0");
+            mySliderInfo.put("populatedRate", "0");
+            mySpecialSliderInfo.put("populatedRate", "0");
+        }
     }
 
     private String editState(Cell cell, String state){
@@ -105,7 +110,7 @@ public class GameOfLifeSimulation extends Simulation{
     }
 
     @Override
-    public void updateParameters(Map<String, String> map){
-        super.updateParameters(map);
+    public String getSimType(){
+        return DATA_TYPE;
     }
 }

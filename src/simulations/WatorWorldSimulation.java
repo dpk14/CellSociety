@@ -72,8 +72,19 @@ public class WatorWorldSimulation extends Simulation {
         super.setupSliderInfo();
         mySliderInfo.put("startEnergy", myDataValues.get("startEnergy"));
         mySliderInfo.put("energyGain", myDataValues.get("energyGain"));
-        mySliderInfo.put("sharkReproductionMax", myDataValues.get("sharkReproductionMax"));
+        mySliderInfo.put("sharkReproductionMax", myDataValues.get("sharkReproductiveMax"));
         mySliderInfo.put("fishReproductionMax", myDataValues.get("fishReproductionMax"));
+
+        if(!myDataValues.containsKey("fishRate")) {
+            mySliderInfo.put("fishRate", "0");
+            mySpecialSliderInfo.put("fishRate", "0");
+            myDataValues.put("fishRate", "0");
+        }
+        if(!myDataValues.containsKey("sharkRate")) {
+            mySliderInfo.put("sharkRate", "0");
+            mySpecialSliderInfo.put("sharkRate", "0");
+            myDataValues.put("sharkRate", "0");
+        }
     }
 
     public void fishMover(Cell fish, int currentRow, int currentCol) {
@@ -146,14 +157,14 @@ public class WatorWorldSimulation extends Simulation {
         return reducedNeighbors;
     }
 
-    @Override
-    public void updateParameters(Map<String, String> map) {
-        super.updateParameters(map);
-        myStartEnergy = (int) Double.parseDouble(map.get("startEnergy"));
-        myEnergyGain = (int) Double.parseDouble(map.get("energyGain"));
-        mySharkReprodMax = (int) Double.parseDouble(map.get("sharkReproductionMax"));
-        mySharkReprodMax = (int) Double.parseDouble(map.get("fishReproductionMax"));
-    }
+//    @Override
+//    public void updateParameters(Map<String, String> map) {
+//        super.updateParameters(map);
+//        myStartEnergy = (int) Double.parseDouble(map.get("startEnergy"));
+//        myEnergyGain = (int) Double.parseDouble(map.get("energyGain"));
+//        mySharkReprodMax = (int) Double.parseDouble(map.get("sharkReproductionMax"));
+//        mySharkReprodMax = (int) Double.parseDouble(map.get("fishReproductionMax"));
+//    }
 
     @Override
     protected Grid setupGridByProb(){
@@ -218,5 +229,10 @@ public class WatorWorldSimulation extends Simulation {
             }
         }
         return createGrid(myDataValues.get("gridShape"), rows, cols, cells);
+    }
+
+    @Override
+    public String getSimType(){
+        return DATA_TYPE;
     }
 }
