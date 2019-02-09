@@ -6,12 +6,13 @@ import cells.StateChangeCell;
 import cells.SugarPatch;
 import grids.Grid;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class LangdonLoopSimulation extends Simulation{
 
-    public HashMap<Cell, String[]> mySplitLocations=new HashMap<Cell, String[]>();
+    public HashMap<Cell, Cell[]> mySplitLocations=new HashMap<Cell, Cell[]>();
 
     public Grid advanceSimulation() {
         myCellList.clear();
@@ -27,35 +28,62 @@ public class LangdonLoopSimulation extends Simulation{
         return myGrid;
     }
 
-    public void updatePosition(Cell cell, String state){
-        List<Cell> neighbors=myGrid.getImmediateNeighbors(cell);
-        if(((LangdonCell) cell).getState.equals("BLUE")) changeNeighborState(cell, neighbors, "BLACK", "BLUE");
-        else if(((LangdonCell) cell).getState.equals("BLACK")) changeNeighborState(cell, neighbors, "CYAN", "BLACK");
-        else if (((LangdonCell) cell).getState.equals("CYAN"))
-            if(getTypedNeighbors(cell,"BLUE", neighbors).size()>0) changeNeighborState(cell, neighbors, "BLUE", "CYAN");
-            else{
-                int[] direction=getDirection(cell, "BLACK", neighbors);
-                Cell ahead=myGrid.getCell(cell.getRow() + direction[0], cell.getColumn() + direction[1]);
-                myCellList.add(new LangdonCell(ahead.getRow(), ahead.getColumn(), "BLUE"));
-                ahead=myGrid.getCell(ahead.getRow() + direction[0], ahead.getColumn() + direction[1]);
-                if(((LangdonCell) ahead).getState.equals("RED")){ //if there is an already existing wall block in front, the loop has closed
-
-                    String blueLocation=
-
-                    mySplitLocations.add(myGrid.getCell(ahead.getRow() + direction[0], ahead.getColumn() + direction[1]);
+    public void updatePosition(Cell cell, String state) {
+        List<Cell> neighbors = myGrid.getImmediateNeighbors(cell);
+        int[] direction;
+        if (((LangdonCell) cell).getState().equals("BLUE")) changeNeighborState(cell, neighbors, "BLACK", "BLUE");
+        else if (((LangdonCell) cell).getState().equals("BLACK")) changeNeighborState(cell, neighbors, "CYAN", "BLACK");
+        else if (((LangdonCell) cell).getState().equals("CYAN")) {
+            if (getTypedNeighbors(cell, "BLUE", neighbors).size() > 0)
+                changeNeighborState(cell, neighbors, "BLUE", "CYAN");
+            else {
+                direction = getDirection(cell, "BLACK", neighbors);
+                Cell ahead1 = myGrid.getCell(cell.getRow() + direction[0], cell.getColumn() + direction[1]);
+                myCellList.add(new LangdonCell(ahead1.getRow(), ahead1.getColumn(), "BLUE"));
+                Cell ahead2 = myGrid.getCell(ahead1.getRow() + direction[0], ahead1.getColumn() + direction[1]);
+                if (((LangdonCell) ahead2).getState().equals("RED")) { //if there is an already existing wall block in front, the loop has closed
+                    Cell ahead3 = myGrid.getCell(ahead2.getRow() + direction[0], ahead2.getColumn() + direction[1]);
+                    markForSplitting(ahead3, direction);
                 }
-                changeNeighborState(cell, neighbors, "BLACK", "RED");
-                Go to that blue, get its neighbors.
-                If that blue has any red neighbors, change the red neimyGrid.getCell(cell.getRow() + rowDif, cell.getColumn() + colDif)ghbor to a blue
-                //when pipe turns in on self 	then mark that red neighbor’s column and row,
-                // find the difference. Use this info to mark the cell just ahead, store it as the key of a map with
-                // information specifying the direction. If rowDif is positive, then “DOWN” and PINK to be set to the
-                // right and white to the left, etc. Turn a Boolean count on. Don’t increment the counter yet tho,
-                // increment it only right before each iteration through the loop.
-                If black neighbors> 0, change all black neighbors to reds.
-
+                changeNeighborState(ahead1, neighbors, "BLACK", "RED");
             }
+        }
+        else if (((LangdonCell) cell).getState().equals("YELLOW")){
+            List<Cell> changedNeighbors=changeNeighborState(cell, neighbors, "GREEN", "BLUE");
+            if (changedNeighbors.size()>0){
+                Cell greenCell=changedNeighbors.get(0);
+                changeNeighborState(greenCell, neighbors, "BLACK", "RED");
+            }
+            else if (getTypedNeighbors(cell, "BLUE", neighbors).size()==0){
+                direction=getDirection(cell, "BLACK", neighbors);
+                Cell counterClckwse90 = myGrid.getCell(cell.getRow() - direction[1], cell.getColumn() + direction[0]);
+                myCellList.add(new LangdonCell(counterClckwse90.getRow(), counterClckwse90.getColumn(), "GREEN"));
+            }
+        }
+    }
 
+    public void markForSplitting(Cell splitLocation, int[] direction) {
+        int row = splitLocation.getRow();
+        int col = splitLocation.getColumn();
+        Cell[] splitterCells = new Cell[3]; //{blue location, pink location, white location}
+        if (direction[0] > 0) {
+            splitterCells[0] = new LangdonCell(row - 1, col, "BLUE");
+            splitterCells[1] = new LangdonCell(row, col - 1, "PINK");
+            splitterCells[2] = new LangdonCell(row, col + 1, "WHITE");
+        } else if (direction[0] < 0) {
+            splitterCells[0] = new LangdonCell(row + 1, col, "BLUE");
+            splitterCells[1] = new LangdonCell(row, col + 1, "PINK");
+            splitterCells[2] = new LangdonCell(row, col - 1, "WHITE");
+        } else if (direction[1] > 0) {
+            splitterCells[0] = new LangdonCell(row, col + 1, "BLUE");
+            splitterCells[1] = new LangdonCell(row - 1, col, "PINK");
+            splitterCells[2] = new LangdonCell(row + 1, col, "WHITE");
+        } else {
+            splitterCells[0] = new LangdonCell(row, col - 1, "BLUE");
+            splitterCells[1] = new LangdonCell(row + 1, col, "PINK");
+            splitterCells[2] = new LangdonCell(row - 1, col, "WHITE");
+        }
+        mySplitLocations.put(splitLocation, splitterCells);
     }
 
     private int[] getDirection(Cell cell, String stateofReferenceCell, List<Cell> neighbors) {
@@ -67,11 +95,15 @@ public class LangdonLoopSimulation extends Simulation{
         return direction;
     }
 
-    private void changeNeighborState(Cell cell, List<Cell> neighbors, String currentState, String newState){
+    private List<Cell> changeNeighborState(Cell cell, List<Cell> neighbors, String currentState, String newState){
+        List<Cell> changedNeighbors=new ArrayList<Cell>();
         for(Cell neighbor: neighbors){
-            if(((LangdonCell) cell).getState.equals(currentState)){
+            if(((LangdonCell) cell).getState().equals(currentState)){
                 myCellList.add(new LangdonCell(neighbor.getRow(), neighbor.getColumn(), newState));
+                changedNeighbors.add(neighbor);
             }
         }
+        return changedNeighbors;
     }
+
 }
