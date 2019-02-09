@@ -57,7 +57,6 @@ public class PopulationGraph {
                 if (s.getName().equals(p.toString())) {
                     s.getData().add(new XYChart.Data(Integer.toString(counter), m.get(p)));
                 }
-
 //                System.out.println(s.getName());
 //                System.out.println(p.toString());
             }
