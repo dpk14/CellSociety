@@ -9,6 +9,8 @@ import java.util.*;
 
 public abstract class Simulation {
     protected Grid myGrid;
+    protected List<Cell> myCellList = new ArrayList<Cell>();
+    protected ArrayList<Cell> myTakenSpots=new ArrayList<>();
     protected List<Cell> myCellList = new ArrayList<>();
     protected Map<String, String> myDataValues;
     protected Map<String, String> mySliderInfo;
@@ -193,6 +195,17 @@ public abstract class Simulation {
         }
     }
 
+    protected List<Cell> initializeCellList(){
+        List<Cell> list=new ArrayList<Cell>();
+        for(int i = 0; i < myGrid.getHeight(); i++) { // i = row number
+            for (int j = 0; j < myGrid.getWidth(); j++) { // j = column number
+                list.add(myGrid.getCell(i, j));
+            }
+        }
+        Collections.shuffle(list);
+        return list;
+    }
+
     /**
      * Updates and returns myGrid by updating the cell's positions according to the simulation's rules and then
      * returning the result of getNewGrid(myCellList). This should be called by the RunSimulation class once within the
@@ -203,10 +216,29 @@ public abstract class Simulation {
 
     protected abstract Grid setupGridByProb();
 
+    protected List<Cell> getTypedNeighbors(Cell cell, String type, List<Cell> neighbors) {
+        List<Cell> specificNeighbors=new ArrayList<Cell>();
+        for(Cell neighbor: neighbors){
+            if (((StateChangeCell) neighbor).getState().equals(type)) specificNeighbors.add(neighbor);
+        }
+        return specificNeighbors;
+    }
+
+    protected Cell move(List<Cell> movable_spots, Cell current){
+        Cell newLocation;
+        if (movable_spots.size()==0) return current;
+        else {
+            Random rand = new Random();
+            newLocation = movable_spots.get(rand.nextInt(movable_spots.size()));
+        }
+        return newLocation;
+    }
+
     protected abstract Grid setupGridByQuota();
 
     public abstract String getSimType();
 
     //public abstract void changeCell();
+
 
 }

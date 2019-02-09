@@ -3,6 +3,7 @@ package grids;
 import cells.Cell;
 import cells.EmptyCell;
 import cells.StateChangeCell;
+import cells.SugarPatch;
 import javafx.scene.paint.Paint;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class Grid {
+public class Grid {
     private Cell[][] myCellArray;
     private int myRows;
     private int myColumns;
@@ -21,9 +22,19 @@ public abstract class Grid {
         myColumns=columns;
     }
 
-    public abstract List<Cell> getImmediateNeighbors(Cell cell);
+    public Grid(int rows, int columns){
+        myCellArray = new Cell[rows][columns];
+        myRows=rows;
+        myColumns=columns;
+    }
 
-    public abstract List<Cell> getAllNeighbors(Cell cell);
+    public List<Cell> getImmediateNeighbors(Cell cell){
+      return new ArrayList<Cell>();
+    }
+
+    public List<Cell> getAllNeighbors(Cell cell) {
+        return new ArrayList<Cell>();
+    }
 
     public Cell[][] getNewArray(int rows, int columns, List<Cell> list){
         Cell[][] newArray = new Cell[rows][columns];

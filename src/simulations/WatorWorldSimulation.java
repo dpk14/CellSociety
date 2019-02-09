@@ -20,7 +20,6 @@ public class WatorWorldSimulation extends Simulation {
     private int myEnergyGain;
     private int mySharkReprodMax;
     private int myFishReprodMax;
-    private ArrayList<Cell> myTakenSpots=new ArrayList<>();
     public static final Paint COLOR_AGENT_RED = Color.RED;
 
     public static final String DATA_TYPE = "WatorWorldSimulation";
@@ -44,26 +43,34 @@ public class WatorWorldSimulation extends Simulation {
 
     @Override
     public Grid advanceSimulation() {
+        initializeCellList();
         Collections.shuffle(myCellList);
         List<Cell> randomizedList=new ArrayList<>(myCellList);
         myCellList.clear();
         myTakenSpots.clear();
-        for(Cell cell: randomizedList){
+        for(Cell cell: randomizedList) {
+            if (cell instanceof SharkCell) {
+                myTakenSpots.add(cell);
+                ((SharkCell) cell).updateMyTurnsSurvived();
+                ((SharkCell) cell).decrementEnergy();
+                if (((SharkCell) cell).getMyEnergy() <= 0) myCellList.add(new EmptyCell(cell.getRow(), cell.getColumn()));
+                else sharkMover(cell, cell.getRow(), cell.getColumn());
+            }
+        }
+        myGrid.updateGrid(myCellList);
+        initializeCellList();
+        Collections.shuffle(myCellList);
+        randomizedList=new ArrayList<Cell>(myCellList);
+        myCellList.clear();
+        myTakenSpots.clear();
+        for(Cell cell: randomizedList) {
             if(cell instanceof FishCell) {
                 myTakenSpots.add(cell);
                 ((FishCell) cell).updateMyTurnsSurvived();
                 fishMover(cell, cell.getRow(), cell.getColumn());
             }
-            else if(cell instanceof SharkCell) {
-                myTakenSpots.add(cell);
-                ((SharkCell) cell).updateMyTurnsSurvived();
-                ((SharkCell) cell).decrementEnergy();
-                if(((SharkCell) cell).getMyEnergy()<=0) myCellList.add(new EmptyCell(cell.getRow(), cell.getColumn()));
-                else sharkMover(cell, cell.getRow(), cell.getColumn());
-            }
         }
         myGrid.updateGrid(myCellList);
-        myCellList=myGrid.fillWithEmpty(myCellList);
         return myGrid;
     }
 
@@ -134,16 +141,6 @@ public class WatorWorldSimulation extends Simulation {
             }
             else myCellList.add(new EmptyCell(currentRow, currentCol));
         }
-    }
-
-    private Cell move(ArrayList<Cell> movable_spots, Cell current){
-        Cell newLocation;
-        if (movable_spots.size()==0) return current;
-        else {
-            Random rand = new Random();
-            newLocation = movable_spots.get(rand.nextInt(movable_spots.size()));
-        }
-        return newLocation;
     }
 
     private List<Cell> removeTakenSpots(List<Cell> neighbors){
