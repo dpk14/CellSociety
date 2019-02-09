@@ -11,7 +11,6 @@ public abstract class Simulation {
     protected Grid myGrid;
     protected List<Cell> myCellList = new ArrayList<Cell>();
     protected ArrayList<Cell> myTakenSpots=new ArrayList<>();
-    protected List<Cell> myCellList = new ArrayList<>();
     protected Map<String, String> myDataValues;
     protected Map<String, String> mySliderInfo;
     protected Map<String, String> mySpecialSliderInfo;
@@ -118,13 +117,6 @@ public abstract class Simulation {
         return myGrid;
     }
 
-    public List<Cell> getTypedNeighbors(Cell cell, String type, List<Cell> neighbors) {
-        List<Cell> specificNeighbors=new ArrayList<Cell>();
-        for(Cell neighbor: neighbors){
-            if (((StateChangeCell) neighbor).getState().equals(type)) specificNeighbors.add(neighbor);
-        }
-        return specificNeighbors;
-    }
 
     protected boolean evaluateOdds(double probability){
         double rand = Math.random();
