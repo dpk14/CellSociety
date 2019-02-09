@@ -143,6 +143,21 @@ public class RunSimulation {
         root.getChildren().add(root_graph);
     }
 
+    private void replaceSimulation(Simulation sim){
+        root_other.getChildren().clear();
+        root_grid.getChildren().clear();
+        root.getChildren().clear();
+        onInitialGrid = true;
+        currentSimulation = sim;
+        Grid initialGrid = currentSimulation.getMyGrid();
+        newVisual = new Visualization(initialGrid.getHeight(), initialGrid.getWidth(), 1.0);
+        root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
+        createUIComponents();
+        root.getChildren().add(root_other);
+        root.getChildren().add(root_grid);
+        root.getChildren().add(root_graph);
+    }
+
     private void setupSimulation() {
         onInitialGrid = true;
         currentSimulation = new XMLParser("simType").getSimulation(new File(DATA_FILE));
@@ -180,7 +195,6 @@ public class RunSimulation {
             onInitialGrid = false;
         });
         myApplyButton.setOnAction(event -> {
-            System.out.println("PRESSED");
             animation.setRate(animation.getCycleDuration().toSeconds() * mySliders.get("speed").getValue());
             carryOutApply(currentSimulation);
             //must update parameters
@@ -230,8 +244,7 @@ public class RunSimulation {
         double applyButtonY = 0;
         int k = 1;
         for(String currentField : sim.getMySliderInfo().keySet()){
-            //if(sim.getMyDataValues().get(currentField).equals("")) continue;
-            double value = Double.parseDouble(sim.getMyDataValues().get(currentField));
+            double value = Double.parseDouble(sim.getMySliderInfo().get(currentField));
             Slider slider = createSlider(slidersXPosition, k*40, Simulation.Bounds.valueOf(currentField).getMin(),
                     Simulation.Bounds.valueOf(currentField).getMax(), value);
             sliderMap.put(currentField, slider);
@@ -248,28 +261,25 @@ public class RunSimulation {
     }
 
     private void carryOutApply(Simulation sim){
-        Map<String, String> map = sim.getMyDataValues();
+        Map<String, String> dataValues = sim.getMyDataValues();
         boolean shouldReplace = false;
-        for(String s : map.keySet()){
-            if(!mySliders.containsKey(s)){
-                continue;
-            }
+        for(String s : mySliders.keySet()){
             // if one of the "foundational" sliders is edited, will need to create new simulation
-            if(sim.getMySpecialSliderInfo().containsKey(s) && sim.getMySpecialSliderInfo().get(s) != map.get(s)){
+            if(sim.getMySpecialSliderInfo().containsKey(s) && mySliders.get(s).getValue() != Double.parseDouble(dataValues.get(s))){
                 shouldReplace = true;
             }
-            map.put(s, Double.toString(mySliders.get(s).getValue()));
+            dataValues.put(s, Double.toString(mySliders.get(s).getValue()));
         }
+        sim.updateParameters();
+        Map<String, String> copy = new LinkedHashMap<>(dataValues);
         if(shouldReplace) {
-            String simType = currentSimulation.getSimType();
-            currentSimulation = Simulation.createNewSimulation(simType, map);
-            onInitialGrid = true;
-            Grid initialGrid = currentSimulation.getMyGrid();
-            newVisual = new Visualization(initialGrid.getHeight(), initialGrid.getWidth(), 1.0);
-            root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
-        }
-        else {
-            sim.updateParameters(map);
+            copy.put("generatorType", "probability");
+            System.out.println("sim " + Double.parseDouble(currentSimulation.getMyDataValues().get("treeRate")));
+            System.out.println("copy " + Double.parseDouble(copy.get("treeRate")));
+            currentSimulation = Simulation.createNewSimulation(currentSimulation.getSimType(), copy);
+            System.out.println("sim " + Double.parseDouble(currentSimulation.getMyDataValues().get("treeRate")));
+            System.out.println("copy " + Double.parseDouble(copy.get("treeRate")));
+            replaceSimulation(currentSimulation);
         }
     }
 

@@ -24,7 +24,15 @@ public abstract class Simulation {
         startEnergy(1,100),
         sharkReproductionMax(1,100),
         fishReproductionMax(1,100),
-        energyGain(1,10);
+        energyGain(1,10),
+        populatedRate(0,1),
+        openRate(0,1),
+        blueRate(0,1),
+        redRate(0,1),
+        treeRate(0,1),
+        burningRate(0,1),
+        fishRate(0,1),
+        sharkRate(0,1);
 
         private double min;
         private double max;
@@ -40,7 +48,6 @@ public abstract class Simulation {
 
     public Simulation(Map<String, String> dataValues, List<Cell> cells){
         myDataValues = dataValues;
-        setupSliderInfo();
         int numRows = Integer.parseInt(dataValues.get("rows"));
         int numCols = Integer.parseInt(dataValues.get("columns"));
         myGrid = createGrid(myDataValues.get("gridShape"), numRows, numCols, cells);
@@ -48,7 +55,6 @@ public abstract class Simulation {
 
     public Simulation(Map<String, String> dataValues){
         myDataValues = dataValues;
-        setupSliderInfo();
         setupGrid(myDataValues.get("generatorType"));
     }
 
@@ -148,13 +154,17 @@ public abstract class Simulation {
      * Updates the instance variable myDataValues defined within each Simulation subclass to match the given map.
      * It also updates all the parameters within a Simulation to match the values within the given map. This is always
      * called from within carryOutApply. The map passed is always created using the values from mySliders.
-     * @param map
+     * //@param map
      */
-    public void updateParameters(Map<String, String> map){
-//        for(String s : map.keySet()){
-//            myDataValues.put(s, map.get(s));
-//        }
-        mySliderInfo = map;
+    public void updateParameters(){
+        for(String s : myDataValues.keySet()){
+            if(mySliderInfo.containsKey(s)) {
+                mySliderInfo.put(s, myDataValues.get(s));
+                if(mySliderInfo.containsKey(s)) {
+                    mySpecialSliderInfo.put(s, myDataValues.get(s));
+                }
+            }
+        }
     }
 
     protected void setupSliderInfo(){
@@ -164,6 +174,7 @@ public abstract class Simulation {
         mySpecialSliderInfo.put("columns", myDataValues.get("columns"));
         mySliderInfo.put("rows", myDataValues.get("rows"));
         mySliderInfo.put("columns", myDataValues.get("columns"));
+        mySliderInfo.put("speed", myDataValues.get("speed"));
     }
 
     /**
