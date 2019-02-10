@@ -49,11 +49,7 @@ public class PercolationSimulation extends Simulation{
     @Override
     protected void setupSliderInfo() {
         super.setupSliderInfo();
-        if(!myDataValues.containsKey("openRate")){
-            mySliderInfo.put("openRate", "0");
-            mySpecialSliderInfo.put("openRate", "0");
-            myDataValues.put("openRate", "0");
-        }
+        addSliderInfo("openRate");
     }
 
     private Queue<Cell> openOne(){
@@ -80,11 +76,16 @@ public class PercolationSimulation extends Simulation{
 
     @Override
     protected Grid setupGridByProb(){
-        int rows = Integer.parseInt(myDataValues.get("rows"));
-        int cols = Integer.parseInt(myDataValues.get("columns"));
+        int rows = (int) Double.parseDouble(myDataValues.get("rows"));
+        int cols = (int) Double.parseDouble(myDataValues.get("columns"));
         double openRate = Double.parseDouble(myDataValues.get("openRate"));
         List<Cell> cells = new ArrayList<>();
         for(int i = 0; i < rows; i++){
+            if(i == 0){
+                // never want the first row to have any open cells
+                addFirstRow(cells, cols);
+                continue;
+            }
             for(int j = 0; j < cols; j++){
                 Cell cell;
                 if(evaluateOdds(openRate)){
@@ -101,8 +102,8 @@ public class PercolationSimulation extends Simulation{
 
     @Override
     protected Grid setupGridByQuota(){
-        int rows = Integer.parseInt(myDataValues.get("rows"));
-        int cols = Integer.parseInt(myDataValues.get("columns"));
+        int rows = (int) Double.parseDouble(myDataValues.get("rows"));
+        int cols = (int) Double.parseDouble(myDataValues.get("columns"));
         int openRate = (int) Double.parseDouble(myDataValues.get("openRate"));
         List<String> states = new ArrayList<>();
         List<Cell> cells = new ArrayList<>();
@@ -114,6 +115,11 @@ public class PercolationSimulation extends Simulation{
         }
         Collections.shuffle(states);
         for(int i = 0; i < rows; i++){
+            if(i == 0){
+                // never want the first row to have any open cells
+                addFirstRow(cells, cols);
+                continue;
+            }
             for(int j = 0; j < cols; j++){
                 String state = states.remove(0);
                 if(state.equals("OPEN") || state.equals("CLOSED")) {
@@ -125,6 +131,12 @@ public class PercolationSimulation extends Simulation{
             }
         }
         return createGrid(myDataValues.get("gridShape"), rows, cols, cells);
+    }
+
+    private void addFirstRow(List<Cell> cells, int columns){
+        for(int j = 0; j < columns; j++){
+            cells.add(new StateChangeCell(0, j, "CLOSED"));
+        }
     }
 
     @Override

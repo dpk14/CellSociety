@@ -265,20 +265,15 @@ public class RunSimulation {
         boolean shouldReplace = false;
         for(String s : mySliders.keySet()){
             // if one of the "foundational" sliders is edited, will need to create new simulation
-            if(sim.getMySpecialSliderInfo().containsKey(s) && mySliders.get(s).getValue() != Double.parseDouble(dataValues.get(s))){
+            if(sim.getMySpecialSliders().contains(s) && mySliders.get(s).getValue() != Double.parseDouble(dataValues.get(s))){
                 shouldReplace = true;
             }
             dataValues.put(s, Double.toString(mySliders.get(s).getValue()));
         }
         sim.updateParameters();
-        Map<String, String> copy = new LinkedHashMap<>(dataValues);
         if(shouldReplace) {
-            copy.put("generatorType", "probability");
-            System.out.println("sim " + Double.parseDouble(currentSimulation.getMyDataValues().get("treeRate")));
-            System.out.println("copy " + Double.parseDouble(copy.get("treeRate")));
-            currentSimulation = Simulation.createNewSimulation(currentSimulation.getSimType(), copy);
-            System.out.println("sim " + Double.parseDouble(currentSimulation.getMyDataValues().get("treeRate")));
-            System.out.println("copy " + Double.parseDouble(copy.get("treeRate")));
+            dataValues.put("generatorType", "probability");
+            currentSimulation = Simulation.createNewSimulation(currentSimulation.getSimType(), dataValues);
             replaceSimulation(currentSimulation);
         }
     }
