@@ -1,9 +1,12 @@
 package mainpackage;
 
+import cells.Cell;
+import grids.Grid;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -80,8 +83,16 @@ public class Main extends Application {
 
     private void handleMouseInput (double x, double y) {
         for (Map.Entry<Scene, RunSimulation> entry :  scenes.entrySet()) {
-            //RunSimulation y = entry.getValue();
-
+            RunSimulation s = entry.getValue();
+            Grid g = s.getThisSimulationGrid();
+            s.getThisVisualization().findShapeClicked(x,y);
+//            for (int i = 0; i < g.getHeight(); i++) {
+//                for (int j = 0; j < g.getWidth(); j++) {
+//                    Cell c = g.getCell(i,j);
+//
+////                    System.out.println(c.getMyColor());
+//                }
+//            }
         }
     }
 

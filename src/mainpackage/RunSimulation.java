@@ -25,7 +25,7 @@ public class RunSimulation {
     public static final int btnYPosition = 520;
     public static final int slidersXPosition = 510;
 
-    private String DATA_FILE = "data/locationConfig/spreadingfire_hexagon_36x36.xml";
+    private String DATA_FILE = "data/locationConfig/spreadingfire_rectangle_12x12.xml";
     private Timeline animation;
     private Group root = new Group();
     private Group root_grid = new Group();
@@ -115,6 +115,14 @@ public class RunSimulation {
 //        }
         graph = new PopulationGraph(initialGrid.getMapOfCellCount());
         root_graph.getChildren().add(graph.getGraphRootNode());
+    }
+
+    public Grid getThisSimulationGrid() {
+        return currentSimulation.getMyGrid();
+    }
+
+    public Visualization getThisVisualization() {
+        return newVisual;
     }
 
     private void createUIComponents() {
