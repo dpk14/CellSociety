@@ -12,7 +12,8 @@ import java.util.List;
 
 public class LangdonLoopSimulation extends Simulation{
 
-    public HashMap<Cell, Cell[]> mySplitLocations=new HashMap<Cell, Cell[]>();
+    private HashMap<Cell, Cell[]> mySplitLocations=new HashMap<Cell, Cell[]>();
+    private List<Cell> myPurpleCells=new ArrayList<Cell>();
 
     public Grid advanceSimulation() {
         myCellList.clear();
@@ -25,6 +26,15 @@ public class LangdonLoopSimulation extends Simulation{
                 }
             }
         myGrid.updateGrid(myCellList);
+            for(Cell key: mySplitLocations.keySet()){
+                ((LangdonCell) key).incrementCounter();
+                if(((LangdonCell) key).getCounter()==3){
+                    Cell[] cells=mySplitLocations.get(key);
+                    Cell[][] grid=myGrid.getMyCellArray();
+                    for(Cell cell: cells) grid[cell.getRow()][cell.getColumn()]=cell;
+                }
+            }
+            for (Cell purpleCell: myPurpleCells) movePurpleCell(purpleCell);
         return myGrid;
     }
 
@@ -32,10 +42,16 @@ public class LangdonLoopSimulation extends Simulation{
         List<Cell> neighbors = myGrid.getImmediateNeighbors(cell);
         int[] direction;
         if (((LangdonCell) cell).getState().equals("BLUE")) changeNeighborState(cell, neighbors, "BLACK", "BLUE");
-        else if (((LangdonCell) cell).getState().equals("BLACK")) changeNeighborState(cell, neighbors, "CYAN", "BLACK");
+        else if (((LangdonCell) cell).getState().equals("BLACK")) {
+            changeNeighborState(cell, neighbors, "CYAN", "BLACK");
+            changeNeighborState(cell, neighbors, "WHITE", "BLACK");
+        }
+        else if (((LangdonCell) cell).getState().equals("PURPLE") && !myPurpleCells.contains(cell)) myPurpleCells.add(cell);
+        else if (((LangdonCell) cell).getState().equals("WHITE")) changeNeighborState(cell, neighbors, "BLUE", "WHITE");
         else if (((LangdonCell) cell).getState().equals("CYAN")) {
             if (getTypedNeighbors(cell, "BLUE", neighbors).size() > 0)
                 changeNeighborState(cell, neighbors, "BLUE", "CYAN");
+            else if (getTypedNeighbors(cell, "PINK", neighbors).size() > 0);
             else {
                 direction = getDirection(cell, "BLACK", neighbors);
                 Cell ahead1 = myGrid.getCell(cell.getRow() + direction[0], cell.getColumn() + direction[1]);
@@ -95,10 +111,10 @@ public class LangdonLoopSimulation extends Simulation{
         return direction;
     }
 
-    private List<Cell> changeNeighborState(Cell cell, List<Cell> neighbors, String currentState, String newState){
+    private List<Cell> changeNeighborState(Cell cell, List<Cell> neighbors, String stateToChange, String newState){
         List<Cell> changedNeighbors=new ArrayList<Cell>();
         for(Cell neighbor: neighbors){
-            if(((LangdonCell) cell).getState().equals(currentState)){
+            if(((LangdonCell) cell).getState().equals(stateToChange)){
                 myCellList.add(new LangdonCell(neighbor.getRow(), neighbor.getColumn(), newState));
                 changedNeighbors.add(neighbor);
             }
