@@ -2,8 +2,10 @@ package simulations;
 
 import cells.Cell;
 import cells.StateChangeCell;
-import grids.*;
-import javafx.scene.control.Slider;
+import grids.Grid;
+import grids.HexagonalGrid;
+import grids.RectangularGrid;
+import grids.TriangularGrid;
 
 import java.util.*;
 
@@ -87,6 +89,10 @@ public abstract class Simulation {
                 return new SpreadingFireSimulation(dataValues);
             case GameOfLifeSimulation.DATA_TYPE:
                 return new GameOfLifeSimulation(dataValues);
+            case SugarScapeSimulation.DATA_TYPE:
+                return new SugarScapeSimulation(dataValues);
+            case LangdonLoopSimulation.DATA_TYPE:
+                return new LangdonLoopSimulation(dataValues);
         }
         throw new RuntimeException("not any kind of Simulation");
     }

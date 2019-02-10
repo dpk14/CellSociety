@@ -3,16 +3,30 @@ package simulations;
 import cells.Cell;
 import cells.LangdonCell;
 import cells.StateChangeCell;
-import cells.SugarPatch;
 import grids.Grid;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LangdonLoopSimulation extends Simulation{
 
+    public static final String DATA_TYPE = "LangdonLoopSimulation";
+
     public HashMap<Cell, Cell[]> mySplitLocations=new HashMap<Cell, Cell[]>();
+
+    public LangdonLoopSimulation(Map<String, String> dataValues, List<Cell> cells) {
+        super(dataValues, cells);
+        setupSliderInfo();
+
+    }
+
+    public LangdonLoopSimulation(Map<String, String> dataValues) {
+        super(dataValues);
+        setupSliderInfo();
+    }
+
 
     public Grid advanceSimulation() {
         myCellList.clear();
@@ -104,6 +118,21 @@ public class LangdonLoopSimulation extends Simulation{
             }
         }
         return changedNeighbors;
+    }
+
+    @Override
+    protected Grid setupGridByProb() {
+        return null;
+    }
+
+    @Override
+    protected Grid setupGridByQuota() {
+        return null;
+    }
+
+    @Override
+    public String getSimType() {
+        return null;
     }
 
 }
