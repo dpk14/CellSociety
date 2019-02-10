@@ -3,10 +3,7 @@ package simulations;
 import cells.Cell;
 import cells.EmptyCell;
 import cells.StateChangeCell;
-import cells.Cell;
-import cells.StateChangeCell;
 import grids.Grid;
-
 
 import java.util.*;
 

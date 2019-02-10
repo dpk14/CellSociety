@@ -4,16 +4,14 @@ import cells.Cell;
 import cells.EmptyCell;
 import cells.FishCell;
 import cells.SharkCell;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import grids.Grid;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import cells.Cell;
-import cells.StateChangeCell;
-import grids.Grid;
 
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class WatorWorldSimulation extends Simulation {
     private int myStartEnergy;
@@ -143,14 +141,11 @@ public class WatorWorldSimulation extends Simulation {
         return reducedNeighbors;
     }
 
-//    @Override
-//    public void updateParameters(Map<String, String> map) {
-//        super.updateParameters(map);
-//        myStartEnergy = (int) Double.parseDouble(map.get("startEnergy"));
-//        myEnergyGain = (int) Double.parseDouble(map.get("energyGain"));
-//        mySharkReprodMax = (int) Double.parseDouble(map.get("sharkReproductionMax"));
-//        mySharkReprodMax = (int) Double.parseDouble(map.get("fishReproductionMax"));
-//    }
+    @Override
+    public void updateParameters() {
+        super.updateParameters();
+        setValues();
+    }
 
     @Override
     protected Grid setupGridByProb(){

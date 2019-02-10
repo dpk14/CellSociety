@@ -5,8 +5,10 @@ import cells.Cell;
 import cells.EmptyCell;
 import grids.Grid;
 
-import javax.xml.parsers.SAXParser;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class SegregationSimulation extends Simulation {
     public static final String DATA_TYPE = "SegregationSimulation";
@@ -65,6 +67,12 @@ public class SegregationSimulation extends Simulation {
         mySliderInfo.put("satisfaction", myDataValues.get("satisfaction"));
         addSliderInfo("blueRate");
         addSliderInfo("redRate");
+    }
+
+    @Override
+    public void updateParameters() {
+        super.updateParameters();
+        mySatisfactionThreshold = Double.parseDouble(myDataValues.get("satisfaction"));
     }
 
     private void checkAndSortCells(Grid grid){
