@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 import java.util.List;
+import java.util.Map;
 
 public class EmptyCell extends Cell {
     public static final Paint COLOR_EMPTY = Color.WHITESMOKE;
@@ -17,7 +18,7 @@ public class EmptyCell extends Cell {
         super(row, column, COLOR_EMPTY);
     }
 
-    public EmptyCell(List<String> dataValues){
-        super(Integer.parseInt(dataValues.get(0)), Integer.parseInt(dataValues.get(1)),COLOR_EMPTY);
+    public EmptyCell(Map<String, String> dataValues){
+        super(Integer.parseInt(dataValues.get("row")), Integer.parseInt(dataValues.get("column")), COLOR_EMPTY);
     }
 }

@@ -1,8 +1,6 @@
 package simulations;
 
-import cells.AgentCell;
 import cells.Cell;
-import cells.EmptyCell;
 import cells.StateChangeCell;
 import grids.Grid;
 
@@ -42,16 +40,6 @@ public class GameOfLifeSimulation extends Simulation{
         return myGrid;
     }
 
-    @Override
-    protected void setupSliderInfo() {
-        super.setupSliderInfo();
-        if(!myDataValues.containsKey("populatedRate")){
-            myDataValues.put("populatedRate", "0");
-            mySliderInfo.put("populatedRate", "0");
-            mySpecialSliderInfo.put("populatedRate", "0");
-        }
-    }
-
     private String editState(Cell cell, String state){
         List<Cell> neighbors=myGrid.getAllNeighbors(cell);
         neighbors=getTypedNeighbors(cell, "POPULATED", neighbors);
@@ -61,9 +49,15 @@ public class GameOfLifeSimulation extends Simulation{
     }
 
     @Override
+    protected void setupSliderInfo() {
+        super.setupSliderInfo();
+        addSliderInfo("populatedRate");
+    }
+
+    @Override
     protected Grid setupGridByProb(){
-        int rows = Integer.parseInt(myDataValues.get("rows"));
-        int cols = Integer.parseInt(myDataValues.get("columns"));
+        int rows = (int) Double.parseDouble(myDataValues.get("rows"));
+        int cols = (int) Double.parseDouble(myDataValues.get("columns"));
         double populatedRate = Double.parseDouble(myDataValues.get("populatedRate"));
         List<Cell> cells = new ArrayList<>();
         for(int i = 0; i < rows; i++){
@@ -83,8 +77,8 @@ public class GameOfLifeSimulation extends Simulation{
 
     @Override
     protected Grid setupGridByQuota(){
-        int rows = Integer.parseInt(myDataValues.get("rows"));
-        int cols = Integer.parseInt(myDataValues.get("columns"));
+        int rows = (int) Double.parseDouble(myDataValues.get("rows"));
+        int cols = (int) Double.parseDouble(myDataValues.get("columns"));
         int populatedRate = (int) Double.parseDouble(myDataValues.get("populatedRate"));
         List<String> states = new ArrayList<>();
         List<Cell> cells = new ArrayList<>();

@@ -43,7 +43,7 @@ public class XMLParser {
 
     private Simulation createSimulation(String simType, Element root) {
         Element settings = (Element) root.getElementsByTagName("settings").item(0);
-        Map<String, String> dataValues = extractSimParameters(settings);
+        Map<String, String> dataValues = extractParameters(settings);
         switch(settings.getElementsByTagName("generatorType").item(0).getTextContent()){
             case "probability" : case "quota" :
                 return Simulation.createNewSimulation(simType, dataValues);
@@ -55,7 +55,7 @@ public class XMLParser {
 
     }
 
-    private Map<String, String> extractSimParameters(Node settings){
+    private Map<String, String> extractParameters(Node settings){
         HashMap<String, String> dataValues = new LinkedHashMap<>();
         NodeList nodeList = settings.getChildNodes();
         for(int k = 0; k < nodeList.getLength(); k++){
@@ -80,34 +80,11 @@ public class XMLParser {
     }
 
     private Cell createCell(int row, int col, String cellType,  Element root){
-        ArrayList<String> dataValues = new ArrayList<>();
-        dataValues.add(Integer.toString(row));
-        dataValues.add(Integer.toString(col));
-        dataValues.addAll(extractCellParameters(root));
-        switch (cellType) {
-            case AgentCell.DATA_TYPE :
-                return new AgentCell(dataValues);
-            case EmptyCell.DATA_TYPE :
-                return new EmptyCell(dataValues);
-            case FishCell.DATA_TYPE :
-                return new FishCell(dataValues);
-            case SharkCell.DATA_TYPE :
-                return new SharkCell(dataValues);
-            case StateChangeCell.DATA_TYPE :
-                return new StateChangeCell(dataValues);
-        }
-        throw new XMLException(CELL_ERROR_MESSAGE, cellType);
-    }
-
-    private List<String> extractCellParameters(Element grid){
-        List<String> cellValues = new ArrayList<>();
-        NodeList nodeList = grid.getChildNodes();
-        for(int k = 0; k < nodeList.getLength(); k++){
-            if (nodeList.item(k).getNodeType() == Node.ELEMENT_NODE) {
-                cellValues.add(nodeList.item(k).getTextContent());
-            }
-        }
-        return cellValues;
+        Map<String, String> dataValues = new HashMap<>();
+        dataValues = extractParameters(root);
+        dataValues.put("row", Integer.toString(row));
+        dataValues.put("column", Integer.toString(col));
+        return Cell.createNewCell(cellType, dataValues);
     }
 
     // Get root element of an XML file

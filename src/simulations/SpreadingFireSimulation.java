@@ -1,11 +1,8 @@
 package simulations;
 
-import cells.AgentCell;
 import cells.Cell;
-import cells.EmptyCell;
 import cells.StateChangeCell;
 import grids.Grid;
-
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,14 +21,13 @@ public class SpreadingFireSimulation extends Simulation{
 
     public SpreadingFireSimulation(Map<String, String> dataValues, List<Cell> cells) { // pass in list of strings representing rows, columns, sat threshold
         super(dataValues, cells);
-        myProbCatch = Double.parseDouble(dataValues.get("spreadRate"));
-        myProbGrow=Double.parseDouble(dataValues.get("growthRate"));
-        myProbLightning=Double.parseDouble(dataValues.get("lightningRate"));
+        setValues();
         setupSliderInfo();
     }
 
     public SpreadingFireSimulation(Map<String, String> dataValues){
         super(dataValues);
+        setValues();
         setupSliderInfo();
     }
 
@@ -57,19 +53,8 @@ public class SpreadingFireSimulation extends Simulation{
         mySliderInfo.put("spreadRate", myDataValues.get("spreadRate"));
         mySliderInfo.put("growthRate", myDataValues.get("growthRate"));
         mySliderInfo.put("lightningRate", myDataValues.get("lightningRate"));
-
-        if(!myDataValues.containsKey("treeRate")) {
-            System.out.println("DFGHJK");
-            mySliderInfo.put("treeRate", "0");
-            mySpecialSliderInfo.put("treeRate", "0");
-            myDataValues.put("treeRate", "0");
-        }
-        if(!myDataValues.containsKey("burningRate")) {
-            mySliderInfo.put("burningRate", "0");
-            mySpecialSliderInfo.put("burningRate", "0");
-            myDataValues.put("burningRate", "0");
-        }
-        
+        addSliderInfo("treeRate");
+        addSliderInfo("burningRate");
     }
 
     private String randomizeState(Cell cell, String state){
@@ -86,13 +71,11 @@ public class SpreadingFireSimulation extends Simulation{
         return state;
     }
 
-//    @Override
-//    public void updateParameters(Map<String, String> map) {
-//        super.updateParameters(map);
-//        myProbCatch = Double.parseDouble(map.get("spreadRate"));
-//        myProbGrow = Double.parseDouble(map.get("growthRate"));
-//        myProbLightning = Double.parseDouble(map.get("lightningRate"));
-//    }
+    @Override
+    public void updateParameters() {
+        super.updateParameters();
+        setValues();
+    }
 
     @Override
     protected Grid setupGridByProb(){
@@ -153,5 +136,11 @@ public class SpreadingFireSimulation extends Simulation{
     @Override
     public String getSimType(){
         return DATA_TYPE;
+    }
+
+    private void setValues(){
+        myProbCatch = Double.parseDouble(myDataValues.get("spreadRate"));
+        myProbGrow=Double.parseDouble(myDataValues.get("growthRate"));
+        myProbLightning=Double.parseDouble(myDataValues.get("lightningRate"));
     }
 }

@@ -5,7 +5,10 @@ import cells.Cell;
 import cells.EmptyCell;
 import grids.Grid;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class SegregationSimulation extends Simulation {
     public static final String DATA_TYPE = "SegregationSimulation";
@@ -32,6 +35,7 @@ public class SegregationSimulation extends Simulation {
 
     public SegregationSimulation(Map<String, String> dataValues){
         super(dataValues);
+        mySatisfactionThreshold = Double.parseDouble(dataValues.get("satisfaction"));
         setupSliderInfo();
     }
 
@@ -61,17 +65,14 @@ public class SegregationSimulation extends Simulation {
     protected void setupSliderInfo() {
         super.setupSliderInfo();
         mySliderInfo.put("satisfaction", myDataValues.get("satisfaction"));
-        mySliderInfo.put("blueRate", "0");
-        mySliderInfo.put("redRate", "0");
+        addSliderInfo("blueRate");
+        addSliderInfo("redRate");
+    }
 
-        if(!myDataValues.containsKey("blueRate")){
-            mySpecialSliderInfo.put("blueRate", "0");
-            myDataValues.put("blueRate", "0");
-        }
-        if(!myDataValues.containsKey("redRate")){
-            mySpecialSliderInfo.put("redRate", "0");
-            myDataValues.put("redRate", "0");
-        }
+    @Override
+    public void updateParameters() {
+        super.updateParameters();
+        mySatisfactionThreshold = Double.parseDouble(myDataValues.get("satisfaction"));
     }
 
     private void checkAndSortCells(Grid grid){
@@ -93,8 +94,8 @@ public class SegregationSimulation extends Simulation {
 
     @Override
     protected Grid setupGridByProb(){
-        int rows = Integer.parseInt(myDataValues.get("rows"));
-        int cols = Integer.parseInt(myDataValues.get("columns"));
+        int rows = (int) Double.parseDouble(myDataValues.get("rows"));
+        int cols = (int) Double.parseDouble(myDataValues.get("columns"));
         double redRate = Double.parseDouble(myDataValues.get("redRate"));
         double blueRate = Double.parseDouble(myDataValues.get("blueRate"));
         List<Cell> cells = new ArrayList<>();
@@ -118,8 +119,8 @@ public class SegregationSimulation extends Simulation {
 
     @Override
     protected Grid setupGridByQuota(){
-        int rows = Integer.parseInt(myDataValues.get("rows"));
-        int cols = Integer.parseInt(myDataValues.get("columns"));
+        int rows = (int) Double.parseDouble(myDataValues.get("rows"));
+        int cols = (int) Double.parseDouble(myDataValues.get("columns"));
         int redRate = (int) Double.parseDouble(myDataValues.get("redRate"));
         int blueRate = (int) Double.parseDouble(myDataValues.get("blueRate"));
         List<String> states = new ArrayList<>();

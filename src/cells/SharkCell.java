@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 import java.util.List;
+import java.util.Map;
 
 public class SharkCell extends Cell {
     public static final String DATA_TYPE = "SharkCell";
@@ -25,12 +26,12 @@ public class SharkCell extends Cell {
         this.myEnergyGain=energyGain;
     }
 
-    public SharkCell(List<String> dataValues){
+    public SharkCell(Map<String, String> dataValues){
         super(Integer.parseInt(dataValues.get(0)), Integer.parseInt(dataValues.get(1)), COLOR_SHARK);
-        this.myTurnsSurvived= 0;
-        this.myReproductionTime= Integer.parseInt(dataValues.get(2));
-        this.myEnergy=Integer.parseInt(dataValues.get(3));
-        this.myEnergyGain=Integer.parseInt(dataValues.get(4));
+        this.myTurnsSurvived=0;
+        this.myReproductionTime=Integer.parseInt(dataValues.get("reproductionTime"));
+        this.myEnergy=Integer.parseInt(dataValues.get("energy"));
+        this.myEnergyGain=Integer.parseInt(dataValues.get("energyGain"));
     }
 
     public boolean canReproduce(){
@@ -43,7 +44,7 @@ public class SharkCell extends Cell {
     }
 
     public void decrementEnergy(){
-        this.myEnergy--;
+        myEnergy--;
     }
 
     public void setMyTurnsSurvived(int tracker){ this.myTurnsSurvived = tracker; }
