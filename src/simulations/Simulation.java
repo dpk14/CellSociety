@@ -13,7 +13,7 @@ public abstract class Simulation {
     protected ArrayList<Cell> myTakenSpots=new ArrayList<>();
     protected Map<String, String> myDataValues;
     protected Map<String, String> mySliderInfo;
-    protected Map<String, String> mySpecialSliderInfo;
+    protected List<String> mySpecialSliders;
     public enum Bounds{
         rows(1, 100),
         columns(1,100),
@@ -51,12 +51,12 @@ public abstract class Simulation {
         myDataValues = dataValues;
         int numRows = Integer.parseInt(dataValues.get("rows"));
         int numCols = Integer.parseInt(dataValues.get("columns"));
-        myGrid = createGrid(myDataValues.get("gridShape"), numRows, numCols, cells);
+        myGrid = createGrid(dataValues.get("gridShape"), numRows, numCols, cells);
     }
 
     public Simulation(Map<String, String> dataValues){
         myDataValues = dataValues;
-        setupGrid(myDataValues.get("generatorType"));
+        setupGrid(dataValues.get("generatorType"));
     }
 
     public static Simulation createNewSimulation(String simType, Map<String, String> dataValues, List<Cell> cells){
@@ -105,8 +105,8 @@ public abstract class Simulation {
         return mySliderInfo;
     }
 
-    public Map<String, String> getMySpecialSliderInfo(){
-        return mySpecialSliderInfo;
+    public List<String> getMySpecialSliders(){
+        return mySpecialSliders;
     }
 
     /**
@@ -127,15 +127,12 @@ public abstract class Simulation {
         Grid grid;
         switch(gridShape){
             case "RectangularGrid":
-                System.out.println("RECT");
                 grid = new RectangularGrid(numRows, numCols, cells);
                 break;
             case "TriangularGrid":
-                System.out.println("TRI");
                 grid = new TriangularGrid(numRows, numCols, cells);
                 break;
             case "HexagonalGrid":
-                System.out.println("HEX");
                 grid = new HexagonalGrid(numRows, numCols, cells);
                 break;
             default:
@@ -154,21 +151,26 @@ public abstract class Simulation {
         for(String s : myDataValues.keySet()){
             if(mySliderInfo.containsKey(s)) {
                 mySliderInfo.put(s, myDataValues.get(s));
-                if(mySliderInfo.containsKey(s)) {
-                    mySpecialSliderInfo.put(s, myDataValues.get(s));
-                }
             }
         }
     }
 
     protected void setupSliderInfo(){
         mySliderInfo = new LinkedHashMap<>();
-        mySpecialSliderInfo = new LinkedHashMap<>();
-        mySpecialSliderInfo.put("rows", myDataValues.get("rows"));
-        mySpecialSliderInfo.put("columns", myDataValues.get("columns"));
+        mySpecialSliders = new ArrayList<>();
+        mySpecialSliders.add("rows");
+        mySpecialSliders.add("columns");
         mySliderInfo.put("rows", myDataValues.get("rows"));
         mySliderInfo.put("columns", myDataValues.get("columns"));
         mySliderInfo.put("speed", myDataValues.get("speed"));
+    }
+
+    protected void addSliderInfo(String field){
+        if(!myDataValues.containsKey(field)){
+            myDataValues.put(field, "0");
+        }
+        mySliderInfo.put(field, myDataValues.get(field));
+        mySpecialSliders.add(field);
     }
 
     /**

@@ -29,15 +29,13 @@ public class WatorWorldSimulation extends Simulation {
 
     public WatorWorldSimulation(Map<String, String> dataValues, List<Cell> cells){
         super(dataValues, cells);
-        myStartEnergy=Integer.parseInt(dataValues.get("startEnergy"));
-        myEnergyGain=Integer.parseInt(dataValues.get("energyGain"));
-        mySharkReprodMax=Integer.parseInt(dataValues.get("sharkReproductionMax"));
-        myFishReprodMax=Integer.parseInt(dataValues.get("fishReproductionMax"));
+        setValues();
         setupSliderInfo();
     }
 
     public WatorWorldSimulation(Map<String, String> dataValues){
         super(dataValues);
+        setValues();
         setupSliderInfo();
     }
 
@@ -79,19 +77,10 @@ public class WatorWorldSimulation extends Simulation {
         super.setupSliderInfo();
         mySliderInfo.put("startEnergy", myDataValues.get("startEnergy"));
         mySliderInfo.put("energyGain", myDataValues.get("energyGain"));
-        mySliderInfo.put("sharkReproductionMax", myDataValues.get("sharkReproductiveMax"));
+        mySliderInfo.put("sharkReproductionMax", myDataValues.get("sharkReproductionMax"));
         mySliderInfo.put("fishReproductionMax", myDataValues.get("fishReproductionMax"));
-
-        if(!myDataValues.containsKey("fishRate")) {
-            mySliderInfo.put("fishRate", "0");
-            mySpecialSliderInfo.put("fishRate", "0");
-            myDataValues.put("fishRate", "0");
-        }
-        if(!myDataValues.containsKey("sharkRate")) {
-            mySliderInfo.put("sharkRate", "0");
-            mySpecialSliderInfo.put("sharkRate", "0");
-            myDataValues.put("sharkRate", "0");
-        }
+        addSliderInfo("fishRate");
+        addSliderInfo("sharkRate");
     }
 
     public void fishMover(Cell fish, int currentRow, int currentCol) {
@@ -165,8 +154,8 @@ public class WatorWorldSimulation extends Simulation {
 
     @Override
     protected Grid setupGridByProb(){
-        int rows = Integer.parseInt(myDataValues.get("rows"));
-        int cols = Integer.parseInt(myDataValues.get("columns"));
+        int rows = (int) Double.parseDouble(myDataValues.get("rows"));
+        int cols = (int) Double.parseDouble(myDataValues.get("columns"));
         double fishRate = Double.parseDouble(myDataValues.get("fishRate"));
         double sharkRate = Double.parseDouble(myDataValues.get("sharkRate"));
         List<Cell> cells = new ArrayList<>();
@@ -174,11 +163,11 @@ public class WatorWorldSimulation extends Simulation {
             for(int j = 0; j < cols; j++){
                 Cell cell;
                 if(evaluateOdds(fishRate)){
-                    cell = new FishCell(i, j, Integer.parseInt(myDataValues.get("fishReproductionMax")));
+                    cell = new FishCell(i, j, (int) Double.parseDouble(myDataValues.get("fishReproductionMax")));
                 }
                 else if(evaluateOdds(sharkRate)){
-                    cell = new SharkCell(i, j, Integer.parseInt(myDataValues.get("sharkReproductionMax")),
-                            Integer.parseInt(myDataValues.get("startEnergy")), Integer.parseInt(myDataValues.get("energyGain")));
+                    cell = new SharkCell(i, j, (int) Double.parseDouble(myDataValues.get("sharkReproductionMax")),
+                            (int) Double.parseDouble(myDataValues.get("startEnergy")), (int) Double.parseDouble(myDataValues.get("energyGain")));
                 }
                 else{
                     cell = new EmptyCell(i, j);
@@ -191,8 +180,8 @@ public class WatorWorldSimulation extends Simulation {
 
     @Override
     protected Grid setupGridByQuota() {
-        int rows = Integer.parseInt(myDataValues.get("rows"));
-        int cols = Integer.parseInt(myDataValues.get("columns"));
+        int rows = (int) Double.parseDouble(myDataValues.get("rows"));
+        int cols = (int) Double.parseDouble(myDataValues.get("columns"));
         int fishRate = (int) Double.parseDouble(myDataValues.get("fishRate"));
         int sharkRate = (int) Double.parseDouble(myDataValues.get("sharkRate"));
         List<String> states = new ArrayList<>();
@@ -226,6 +215,14 @@ public class WatorWorldSimulation extends Simulation {
             }
         }
         return createGrid(myDataValues.get("gridShape"), rows, cols, cells);
+    }
+
+    private void setValues(){
+        myStartEnergy = (int) Double.parseDouble(myDataValues.get("startEnergy"));
+        myEnergyGain = (int) Double.parseDouble(myDataValues.get("energyGain"));
+        mySharkReprodMax = (int) Double.parseDouble(myDataValues.get("sharkReproductionMax"));
+        myFishReprodMax = (int) Double.parseDouble(myDataValues.get("fishReproductionMax"));
+
     }
 
     @Override
