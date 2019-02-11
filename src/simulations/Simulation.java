@@ -207,14 +207,14 @@ public abstract class Simulation {
         }
     }
 
-    protected List<Cell> initializeCellList(){
+    protected List<Cell> initializeCellList(boolean randomize){
         List<Cell> list=new ArrayList<Cell>();
         for(int i = 0; i < myGrid.getHeight(); i++) { // i = row number
             for (int j = 0; j < myGrid.getWidth(); j++) { // j = column number
                 list.add(myGrid.getCell(i, j));
             }
         }
-        Collections.shuffle(list);
+        if (randomize) Collections.shuffle(list);
         return list;
     }
 
