@@ -22,12 +22,14 @@ public class SpreadingFireSimulation extends Simulation{
         super(dataValues, cells);
         setValues();
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     public SpreadingFireSimulation(Map<String, String> dataValues){
         super(dataValues);
         setValues();
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     @Override
@@ -150,7 +152,6 @@ public class SpreadingFireSimulation extends Simulation{
         Cell c1 = new StateChangeCell(-1,-1, "TREE");
         Cell c2 = new StateChangeCell(-1,-1,"BURNING");
         Cell c3 = new StateChangeCell(-1,-1, "EMPTY");
-
 
         myCellChoices.add(c1);
         myCellChoices.add(c2);

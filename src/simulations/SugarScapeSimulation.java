@@ -20,11 +20,13 @@ public class SugarScapeSimulation extends Simulation{
     public SugarScapeSimulation(Map<String, String> dataValues, List<Cell> cells) {
         super(dataValues, cells);
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     public SugarScapeSimulation(Map<String, String> dataValues) {
         super(dataValues);
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     //sugar growback rate is 1-4, sugar growback Interval is arbitrary

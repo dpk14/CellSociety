@@ -29,12 +29,14 @@ public class SegregationSimulation extends Simulation {
         setupSliderInfo();
         //myBluePercentage = Double.parseDouble(dataValues.get("blueRate"));
         //myRedPercentage = Double.parseDouble(dataValues.get("redRate"));
+        createQueueOfCellChoices();
     }
 
     public SegregationSimulation(Map<String, String> dataValues){
         super(dataValues);
         mySatisfactionThreshold = Double.parseDouble(dataValues.get("satisfaction"));
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
 

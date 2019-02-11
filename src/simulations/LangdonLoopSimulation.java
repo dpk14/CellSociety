@@ -14,12 +14,13 @@ public class LangdonLoopSimulation extends Simulation{
     public LangdonLoopSimulation(Map<String, String> dataValues, List<Cell> cells) {
         super(dataValues, cells);
         setupSliderInfo();
-
+        createQueueOfCellChoices();
     }
 
     public LangdonLoopSimulation(Map<String, String> dataValues) {
         super(dataValues);
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
 

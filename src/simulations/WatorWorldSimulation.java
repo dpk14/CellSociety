@@ -23,12 +23,14 @@ public class WatorWorldSimulation extends Simulation {
         super(dataValues, cells);
         setValues();
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     public WatorWorldSimulation(Map<String, String> dataValues){
         super(dataValues);
         setValues();
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     @Override

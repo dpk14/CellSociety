@@ -220,7 +220,7 @@ public abstract class Simulation {
     public abstract Grid advanceSimulation();
 
 
-    protected abstract void createQueueOfCellChoices();
+    public abstract void createQueueOfCellChoices();
 
 
     protected abstract Grid setupGridByProb();

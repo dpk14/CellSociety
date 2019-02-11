@@ -26,7 +26,7 @@ public class RunSimulation {
     public static final int btnYPosition = 520;
     public static final int slidersXPosition = 510;
 
-    private String DATA_FILE = "data/locationConfig/gameoflife_rectangle_12x12.xml";
+    private String DATA_FILE = "data/locationConfig/spreadingfire_rectangle_12x12.xml";
     private Timeline animation;
     private Group root = new Group();
     private Group root_grid = new Group();
@@ -269,7 +269,7 @@ public class RunSimulation {
         currentSimulation.getMyGrid().replaceCellOnWithNew(oldCell.getRow(), oldCell.getColumn(), nextCell);
         nextCell.swapPosition(oldCell);
         oldCell.setNegativePosition();
-        ((GameOfLifeSimulation) currentSimulation).createQueueOfCellChoices();
+        currentSimulation.createQueueOfCellChoices();
 
         root_grid.getChildren().clear();
         Grid g = currentSimulation.getMyGrid();

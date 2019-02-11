@@ -15,11 +15,13 @@ public class PercolationSimulation extends Simulation{
     public PercolationSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
         super(dataValues, cells);
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     public PercolationSimulation(Map<String, String> dataValues){
         super(dataValues);
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     @Override
