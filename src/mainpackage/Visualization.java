@@ -39,6 +39,7 @@ public class Visualization {
     public static final Paint COLOR_FISH = Color.ORANGE;
 
     private Shape[][] shapes;
+    private boolean borderOn = true;
 
 
     public Visualization(int numRows, int numCols, double simSpeed) {
@@ -70,11 +71,11 @@ public class Visualization {
             root = renderHexGrid(currentGrid, root);
         }
         else{
+            // TODO
             // MAYBE THROW SOME EXCEPTION HERE JUST IN CASE
         }
         return root;
     }
-
 
 
     public int[] findLocOfShapeClicked (double x, double y, Grid currentGrid) {
@@ -176,8 +177,11 @@ public class Visualization {
         Polygon hex = new Polygon();
         hex.getPoints().addAll(new Double[]{x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6 });
         hex.setFill(p);
-        hex.setStroke(COLOR_BLACK);
-        hex.setStrokeType(StrokeType.INSIDE);
+
+        if (borderOn) {
+            hex.setStroke(COLOR_BLACK);
+            hex.setStrokeType(StrokeType.INSIDE);
+        }
         root.getChildren().add(hex);
         return hex;
     }
@@ -186,8 +190,11 @@ public class Visualization {
         Polygon tri = new Polygon();
         tri.getPoints().addAll(new Double[]{x1, y1, x2, y2, x3, y3 });
         tri.setFill(p);
-        tri.setStroke(COLOR_BLACK);
-        tri.setStrokeType(StrokeType.INSIDE);
+
+        if (borderOn) {
+            tri.setStroke(COLOR_BLACK);
+            tri.setStrokeType(StrokeType.INSIDE);
+        }
         root.getChildren().add(tri);
         return tri;
     }
@@ -199,9 +206,20 @@ public class Visualization {
         rec.setWidth(cellWidth);
         rec.setHeight(cellHeight);
         rec.setFill(p);
-        rec.setStroke(COLOR_BLACK);
-        rec.setStrokeType(StrokeType.INSIDE);
+
+        if (borderOn) {
+            rec.setStroke(COLOR_BLACK);
+            rec.setStrokeType(StrokeType.INSIDE);
+        }
         root.getChildren().add(rec);
         return rec;
+    }
+
+    public void turnBorderOn() {
+        borderOn = true;
+    }
+
+    public void turnBorderOff() {
+        borderOn = false;
     }
 }
