@@ -2,12 +2,9 @@ package mainpackage;
 
 import cells.Cell;
 import grids.Grid;
-
 import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -23,20 +20,15 @@ public class RunSimulation {
     public static final int btnXPosition = 10;
     public static final int btnYPosition = 520;
     public static final int slidersXPosition = 510;
-
     private String DATA_FILE = "data/locationConfig/spreadingfire_rectangle_12x12.xml";
     private Timeline animation;
     private Group root = new Group();
     private Group root_grid = new Group();
     private Group root_other = new Group();
     private Group root_graph = new Group();
-
     private PopulationGraph graph;
-
     private Visualization newVisual;
     private Simulation currentSimulation;
-
-    // UI components
     private Button myResetButton;
     private Button myStartButton;
     private Button myStopButton;
@@ -47,15 +39,8 @@ public class RunSimulation {
     private ToggleGroup myToggleGroup;
     private Map<String, Slider> mySliders;
     private CheckBox myGridOnCheckBox;
-
-
-
-
     private Stage s;
-
     private FileChooser fileChooser;
-
-    // state fields
     private boolean onInitialGrid = true;
     private boolean startedAnimation = false;
 
@@ -66,14 +51,11 @@ public class RunSimulation {
     public Group getNode() {
         setupSimulation();
         createUIComponents();
-
         root.getChildren().add(root_other);
         root.getChildren().add(root_grid);
         root.getChildren().add(root_graph);
         return root;
     }
-
-
 
     private void openFile(File f) {
         DATA_FILE = f.getAbsolutePath();
@@ -95,7 +77,7 @@ public class RunSimulation {
         onInitialGrid = true;
         currentSimulation = sim;
         Grid initialGrid = currentSimulation.getMyGrid();
-        newVisual = new Visualization(initialGrid.getHeight(), initialGrid.getWidth(), 1.0);
+        newVisual = new Visualization(initialGrid.getHeight(), initialGrid.getWidth());
         root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
         createUIComponents();
         root.getChildren().add(root_other);
@@ -110,33 +92,13 @@ public class RunSimulation {
         }
         catch(RuntimeException e){
             System.out.println("Staying on current simulation since specified file is invalid.");
-            // STAY ON CURRENT FILE
         }
         Grid initialGrid = currentSimulation.getMyGrid();
-        newVisual = new Visualization(initialGrid.getHeight(), initialGrid.getWidth(), 1.0);
+        newVisual = new Visualization(initialGrid.getHeight(), initialGrid.getWidth());
         root_grid.getChildren().add(newVisual.getRootNode(initialGrid));
-
         root_graph.getChildren().clear();
-
-//        for (Paint p : initialGrid.getMapOfCellCount().keySet()) {
-//            System.out.println(p + "||" + initialGrid.getMapOfCellCount().get(p));
-//        }
         graph = new PopulationGraph(initialGrid.getMapOfCellCount());
         root_graph.getChildren().add(graph.getGraphRootNode());
-    }
-
-    public Grid getThisSimulationGrid() {
-        Grid g = this.currentSimulation.getMyGrid();
-        return g;
-    }
-
-    public Simulation getThisSimulation() {
-        return currentSimulation;
-    }
-
-
-    public Visualization getThisVisualization() {
-        return newVisual;
     }
 
     private void createUIComponents() {
@@ -158,7 +120,7 @@ public class RunSimulation {
         myGridOnCheckBox.setLayoutY(myLoadFileButton.getLayoutY());
         myGridOnCheckBox.setSelected(true);
 
-
+        // TODO wrap this in a method
         myToggleGroup = new ToggleGroup();
         int x = 580;
         int y = 480;
@@ -201,7 +163,6 @@ public class RunSimulation {
         myApplyButton.setOnAction(event -> {
             animation.setRate(animation.getCycleDuration().toSeconds() * mySliders.get("speed").getValue());
             carryOutApply(currentSimulation);
-            //must update parameters
         });
         myLoadFileButton.setOnAction(e -> {
             fileChooser = new FileChooser();
@@ -214,27 +175,20 @@ public class RunSimulation {
         myNewWindowButton.setOnAction(event -> {
             // TODO: create new scene, have to talk to Main.java
         });
-
         myGridOnCheckBox.setOnAction(e -> {
             if (myGridOnCheckBox.isSelected()) {
-                System.out.println("ON");
                 newVisual.turnBorderOn();
             }
             else {
-                System.out.println("OFF");
                 newVisual.turnBorderOff();
             }
             refreshGridView();
         });
-
         myToggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
             public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
-
                 if (myToggleGroup.getSelectedToggle() != null) {
-
                     System.out.println(myToggleGroup.getSelectedToggle().getUserData().toString());
                     String selection = myToggleGroup.getSelectedToggle().getUserData().toString();
-
                     if (selection.equals("Triangle")) {
                         // TODO
 
@@ -250,11 +204,7 @@ public class RunSimulation {
 
                         refreshGridView();
                     }
-
-
-
                 }
-
             }
         });
 
@@ -348,46 +298,29 @@ public class RunSimulation {
     }
 
     public void renderNextIterationFromClick(double x, double y) {
-
-        int[] location = newVisual.findLocOfShapeClicked(x, y, currentSimulation.getMyGrid());
+        int[] location = newVisual.findLocOfShapeClicked(x, y);
         if (location == null) return;
-        int rowNum = location[0];
-        int colNum = location[1];
-
-        Cell oldCell = currentSimulation.getMyGrid().getCell(rowNum, colNum);
+        Cell oldCell = currentSimulation.getMyGrid().getCell(location[0], location[1]);
         Cell nextCell = currentSimulation.getNextCell(oldCell);
-
-        System.out.println("OLD: " + oldCell.getRow() + "|" + oldCell.getColumn());
-        System.out.println("NEW: " + nextCell.getMyColor());
-
+//        System.out.println("OLD: " + oldCell.getRow() + "|" + oldCell.getColumn());
+//        System.out.println("NEW: " + nextCell.getMyColor());
         currentSimulation.getMyGrid().replaceCellOnWithNew(oldCell.getRow(), oldCell.getColumn(), nextCell);
         nextCell.swapPosition(oldCell);
         oldCell.setNegativePosition();
         currentSimulation.createQueueOfCellChoices();
-
         refreshGridView();
     }
 
-
-
-
-
-
     public void stepThru(double elapsedTime){
-        // update grid
-        // receive a Node from visualization class
         myNextIterationButton.setDisable(startedAnimation);
         myResetButton.setDisable(onInitialGrid);
         myStartButton.setDisable(startedAnimation);
         myStopButton.setDisable(!startedAnimation);
-
         for (String s : mySliders.keySet()) {
             mySliders.get(s).setDisable(startedAnimation);
         }
-
         myApplyButton.setDisable(startedAnimation);
         if (startedAnimation) renderNextIteration();
     }
-    //create an interface of key and mouse inputs, which toggles a call to mainpackage.Simulation.initializeGrid
 
 }
