@@ -196,6 +196,7 @@ public class Visualization {
 
     private void addCircleToRoot(Group r, double centerX, double centerY) {
         Circle circle = new Circle();
+        circle.setFill(Color.rgb(0, 0, 0, 0.5));
         circle.setCenterX(centerX);
         circle.setCenterY(centerY);
         circle.setRadius(Math.min(cellHeight/2, cellWidth/2));
