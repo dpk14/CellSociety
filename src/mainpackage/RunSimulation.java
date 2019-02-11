@@ -4,14 +4,13 @@ import cells.Cell;
 import grids.Grid;
 
 import javafx.animation.Timeline;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -45,6 +44,7 @@ public class RunSimulation {
     private Button myNextIterationButton;
     private Button myLoadFileButton;
     private Button myNewWindowButton;
+    private ToggleGroup myToggleGroup;
     private Map<String, Slider> mySliders;
     private CheckBox myGridOnCheckBox;
 
@@ -148,23 +148,40 @@ public class RunSimulation {
         myStartButton = createButton("Start", btnXPosition + 100, btnYPosition, true);
         myStopButton = createButton("Stop", btnXPosition + 160, btnYPosition, true);
 
+
+        // TODO wrap this in a method
         myGridOnCheckBox = new CheckBox();
         Label gridLabel = new Label("Grid:");
         gridLabel.setLayoutY(myLoadFileButton.getLayoutY());
         gridLabel.setLayoutX(myLoadFileButton.getLayoutX() + 200);
-
         myGridOnCheckBox.setLayoutX(gridLabel.getLayoutX() + 30);
         myGridOnCheckBox.setLayoutY(myLoadFileButton.getLayoutY());
         myGridOnCheckBox.setSelected(true);
 
 
-
-
+        myToggleGroup = new ToggleGroup();
+        int x = 580;
+        int y = 480;
+        RadioButton r1 = createRadioButton(x, y, "Square");
+        RadioButton r2 = createRadioButton(x, y + 20, "Triangle");
+        RadioButton r3 = createRadioButton(x, y + 40,"Hexagon");
 
         root_other.getChildren().addAll(myLoadFileButton, myNextIterationButton,
                 myResetButton, myApplyButton, myStartButton,
-                myNewWindowButton, myStopButton, myGridOnCheckBox, gridLabel);
+                myNewWindowButton, myStopButton, myGridOnCheckBox, gridLabel,
+                r1, r2, r3);
         setButtonHandlers();
+    }
+
+    private RadioButton createRadioButton (int x, int y, String text) {
+        RadioButton r = new RadioButton(text);
+        r.setLayoutX(x);
+        r.setLayoutY(y);
+        r.setUserData(text);
+        r.setToggleGroup(myToggleGroup);
+        // TODO set the right one to true...
+        r.setSelected(true);
+        return r;
     }
 
     private void setButtonHandlers(){
@@ -195,34 +212,63 @@ public class RunSimulation {
             }
         });
         myNewWindowButton.setOnAction(event -> {
-            // TODO
+            // TODO: create new scene, have to talk to Main.java
         });
 
         myGridOnCheckBox.setOnAction(e -> {
             if (myGridOnCheckBox.isSelected()) {
                 System.out.println("ON");
                 newVisual.turnBorderOn();
-                root_grid.getChildren().clear();
-                Grid g = currentSimulation.getMyGrid();
-                g.updateGrid(currentSimulation.getMyCellList());
-                Map<Paint, Integer> m = g.getMapOfCellCount();
-                graph.addPoint(m);
-                Node n = newVisual.getRootNode(g);
-                root_grid.getChildren().add(n);
             }
             else {
                 System.out.println("OFF");
                 newVisual.turnBorderOff();
-                root_grid.getChildren().clear();
-                Grid g = currentSimulation.getMyGrid();
-                g.updateGrid(currentSimulation.getMyCellList());
-                Map<Paint, Integer> m = g.getMapOfCellCount();
-                graph.addPoint(m);
-                Node n = newVisual.getRootNode(g);
-                root_grid.getChildren().add(n);
+            }
+            refreshGridView();
+        });
+
+        myToggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
+            public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
+
+                if (myToggleGroup.getSelectedToggle() != null) {
+
+                    System.out.println(myToggleGroup.getSelectedToggle().getUserData().toString());
+                    String selection = myToggleGroup.getSelectedToggle().getUserData().toString();
+
+                    if (selection.equals("Triangle")) {
+                        // TODO
+
+                        refreshGridView();
+                    }
+                    else if (selection.equals("Square")) {
+                        // TODO
+
+                        refreshGridView();
+                    }
+                    else if (selection.equals("Hexagon")) {
+                        // TODO
+
+                        refreshGridView();
+                    }
+
+
+
+                }
+
             }
         });
 
+    }
+
+    private void refreshGridView() {
+        // incorporates changes when the simulation is not applied, e.g. grid on/off, clicks, etc.
+        root_grid.getChildren().clear();
+        Grid g = currentSimulation.getMyGrid();
+        g.updateGrid(currentSimulation.getMyCellList());
+        Map<Paint, Integer> m = g.getMapOfCellCount();
+        graph.addPoint(m);
+        Node n = newVisual.getRootNode(g);
+        root_grid.getChildren().add(n);
     }
 
     private Button createButton(String text, double x, double y, boolean setDisable){
@@ -319,13 +365,7 @@ public class RunSimulation {
         oldCell.setNegativePosition();
         currentSimulation.createQueueOfCellChoices();
 
-        root_grid.getChildren().clear();
-        Grid g = currentSimulation.getMyGrid();
-        g.updateGrid(currentSimulation.getMyCellList());
-        Map<Paint, Integer> m = g.getMapOfCellCount();
-        graph.addPoint(m);
-        Node n = newVisual.getRootNode(g);
-        root_grid.getChildren().add(n);
+        refreshGridView();
     }
 
 
