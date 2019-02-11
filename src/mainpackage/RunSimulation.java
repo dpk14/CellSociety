@@ -4,19 +4,18 @@ import cells.Cell;
 import grids.Grid;
 
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import simulations.GameOfLifeSimulation;
 import simulations.Simulation;
-
-import java.awt.*;
 import java.io.File;
 import java.util.*;
 
@@ -47,6 +46,10 @@ public class RunSimulation {
     private Button myLoadFileButton;
     private Button myNewWindowButton;
     private Map<String, Slider> mySliders;
+    private CheckBox myGridOnCheckBox;
+
+
+
 
     private Stage s;
 
@@ -54,7 +57,6 @@ public class RunSimulation {
 
     // state fields
     private boolean onInitialGrid = true;
-    private boolean startedSliding = false;
     private boolean startedAnimation = false;
 
     RunSimulation(Timeline a) {
@@ -146,8 +148,22 @@ public class RunSimulation {
         myStartButton = createButton("Start", btnXPosition + 100, btnYPosition, true);
         myStopButton = createButton("Stop", btnXPosition + 160, btnYPosition, true);
 
+        myGridOnCheckBox = new CheckBox();
+        Label gridLabel = new Label("Grid:");
+        gridLabel.setLayoutY(myLoadFileButton.getLayoutY());
+        gridLabel.setLayoutX(myLoadFileButton.getLayoutX() + 200);
+
+        myGridOnCheckBox.setLayoutX(gridLabel.getLayoutX() + 30);
+        myGridOnCheckBox.setLayoutY(myLoadFileButton.getLayoutY());
+        myGridOnCheckBox.setSelected(true);
+
+
+
+
+
         root_other.getChildren().addAll(myLoadFileButton, myNextIterationButton,
-                myResetButton, myApplyButton, myStartButton, myNewWindowButton, myStopButton);
+                myResetButton, myApplyButton, myStartButton,
+                myNewWindowButton, myStopButton, myGridOnCheckBox, gridLabel);
         setButtonHandlers();
     }
 
@@ -171,7 +187,7 @@ public class RunSimulation {
             //must update parameters
         });
         myLoadFileButton.setOnAction(e -> {
-            FileChooser fileChooser = new FileChooser();
+            fileChooser = new FileChooser();
             File selectedFile = fileChooser.showOpenDialog(s);
             if (selectedFile != null
                     && selectedFile.getName().substring(selectedFile.getName().lastIndexOf(".") + 1).equals("xml")) {
@@ -179,8 +195,34 @@ public class RunSimulation {
             }
         });
         myNewWindowButton.setOnAction(event -> {
-
+            // TODO
         });
+
+        myGridOnCheckBox.setOnAction(e -> {
+            if (myGridOnCheckBox.isSelected()) {
+                System.out.println("ON");
+                newVisual.turnBorderOn();
+                root_grid.getChildren().clear();
+                Grid g = currentSimulation.getMyGrid();
+                g.updateGrid(currentSimulation.getMyCellList());
+                Map<Paint, Integer> m = g.getMapOfCellCount();
+                graph.addPoint(m);
+                Node n = newVisual.getRootNode(g);
+                root_grid.getChildren().add(n);
+            }
+            else {
+                System.out.println("OFF");
+                newVisual.turnBorderOff();
+                root_grid.getChildren().clear();
+                Grid g = currentSimulation.getMyGrid();
+                g.updateGrid(currentSimulation.getMyCellList());
+                Map<Paint, Integer> m = g.getMapOfCellCount();
+                graph.addPoint(m);
+                Node n = newVisual.getRootNode(g);
+                root_grid.getChildren().add(n);
+            }
+        });
+
     }
 
     private Button createButton(String text, double x, double y, boolean setDisable){
