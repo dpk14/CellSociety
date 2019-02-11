@@ -158,5 +158,15 @@ public class SugarScapeSimulation extends Simulation{
     public void createQueueOfCellChoices () {
         myCellChoices = new LinkedList<>();
         // TODO
+
+        for (int i = 0; i <= MAX_SUGAR; i++) {
+            Cell c1 = new SugarPatch(-1,-1,i,1,5,false);
+            Cell c2 = new SugarPatch(-1,-1,i,1,5,true);
+            myCellChoices.add(c1);
+            myCellChoices.add(c2);
+        }
+
+        System.out.println("SIZE: " + myCellChoices.size());
+
     }
 }
