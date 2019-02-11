@@ -1,6 +1,7 @@
 package simulations;
 
 import cells.Cell;
+import cells.StateChangeCell;
 import cells.SugarAgent;
 import cells.SugarPatch;
 import grids.Grid;
@@ -22,11 +23,13 @@ public class SugarScapeSimulation extends Simulation{
     public SugarScapeSimulation(Map<String, String> dataValues, List<Cell> cells) {
         super(dataValues, cells);
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     public SugarScapeSimulation(Map<String, String> dataValues) {
         super(dataValues);
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     //sugar growback rate is 1-4, sugar growback Interval is arbitrary
@@ -145,5 +148,11 @@ public class SugarScapeSimulation extends Simulation{
     protected void setupSliderInfo() {
         super.setupSliderInfo();
         addSliderInfo("agentRate");
+    }
+
+    @Override
+    public void createQueueOfCellChoices () {
+        myCellChoices = new LinkedList<>();
+        // TODO
     }
 }

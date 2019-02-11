@@ -37,6 +37,7 @@ public class StateChangeCell extends Cell{
         else if (myState.equals("TREE")) { p = COLOR_TREE; }
         else if (myState.equals("BURNING")) { p = COLOR_BURNING; }
         else { p = COLOR_EMPTY; }
+        //TODO: possibly add exception here
         myColor = p;
     }
 

@@ -1,13 +1,12 @@
 package simulations;
 
+import cells.AgentCell;
 import cells.Cell;
+import cells.EmptyCell;
 import cells.StateChangeCell;
 import grids.Grid;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SpreadingFireSimulation extends Simulation{
     public static final String DATA_TYPE = "SpreadingFireSimulation";
@@ -29,12 +28,14 @@ public class SpreadingFireSimulation extends Simulation{
         super(dataValues, cells);
         setValues();
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     public SpreadingFireSimulation(Map<String, String> dataValues){
         super(dataValues);
         setValues();
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     @Override
@@ -148,5 +149,18 @@ public class SpreadingFireSimulation extends Simulation{
         myProbCatch = readInValue("spreadRate", SPREAD_RATE_DEFAULT);
         myProbGrow = readInValue("growthRate", GROWTH_RATE_DEFAULT);
         myProbLightning = readInValue("lightningRate", LIGHTNING_RATE_DEFAULT);
+    }
+
+    @Override
+    public void createQueueOfCellChoices () {
+        myCellChoices = new LinkedList<>();
+
+        Cell c1 = new StateChangeCell(-1,-1, "TREE");
+        Cell c2 = new StateChangeCell(-1,-1,"BURNING");
+        Cell c3 = new StateChangeCell(-1,-1, "EMPTY");
+
+        myCellChoices.add(c1);
+        myCellChoices.add(c2);
+        myCellChoices.add(c3);
     }
 }

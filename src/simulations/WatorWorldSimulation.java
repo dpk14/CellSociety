@@ -1,18 +1,13 @@
 package simulations;
 
-import cells.Cell;
-import cells.EmptyCell;
-import cells.FishCell;
-import cells.SharkCell;
+import cells.*;
 import grids.Grid;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
-import javax.print.DocFlavor;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
+
 
 public class WatorWorldSimulation extends Simulation {
     private int myStartEnergy;
@@ -37,12 +32,14 @@ public class WatorWorldSimulation extends Simulation {
         super(dataValues, cells);
         setValues();
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     public WatorWorldSimulation(Map<String, String> dataValues){
         super(dataValues);
         setValues();
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     @Override
@@ -226,6 +223,14 @@ public class WatorWorldSimulation extends Simulation {
         myEnergyGain = (int) readInValue("energyGain", ENERGY_GAIN_DEFAULT);
         mySharkReprodMax = (int) readInValue("sharkReproductionMax", SHARK_REPRODMAX_DEFAULT);
         myFishReprodMax = (int) readInValue("fishReproductionMax", FISH_REPRODMAX_DEFAULT);
+    }
+
+
+    @Override
+    public void createQueueOfCellChoices () {
+        myCellChoices = new LinkedList<>();
+
+        //TODO
     }
 
     @Override

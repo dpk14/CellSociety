@@ -1,21 +1,22 @@
 package mainpackage;
 
+import cells.Cell;
+import grids.Grid;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import simulations.Simulation;
 
 import java.sql.Time;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static javafx.application.Application.launch;
 
@@ -39,7 +40,7 @@ public class Main extends Application {
     public void start(Stage primaryStage){
         // attach scene to the stage and display it
         Scene myScene = setupGame(WIDTH, HEIGHT, BACKGROUND);
-//        Scene myScene2 = setupGame(WIDTH, HEIGHT, BACKGROUND);
+        Scene myScene2 = setupGame(WIDTH, HEIGHT, BACKGROUND);
 //        Scene myScene3 = setupGame(WIDTH, HEIGHT, BACKGROUND);
 
         for (Scene s : scenes.keySet()) {
@@ -59,6 +60,7 @@ public class Main extends Application {
 
         Scene scene = new Scene(root, width, height, background);
         scenes.put(scene, r);
+        scene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY(), r));
         return scene;
     }
 
@@ -75,6 +77,10 @@ public class Main extends Application {
             RunSimulation y = entry.getValue();
             y.stepThru(elapsedTime);
         }
+    }
+
+    private void handleMouseInput (double x, double y, RunSimulation s) {
+        s.renderNextIterationFromClick(x, y);
     }
 
     private void handleKeyInput (KeyCode code) {

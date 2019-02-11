@@ -16,11 +16,13 @@ public class PercolationSimulation extends Simulation{
     public PercolationSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
         super(dataValues, cells);
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     public PercolationSimulation(Map<String, String> dataValues){
         super(dataValues);
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     @Override
@@ -135,6 +137,20 @@ public class PercolationSimulation extends Simulation{
         for(int j = 0; j < columns; j++){
             cells.add(new StateChangeCell(0, j, "CLOSED"));
         }
+    }
+
+    @Override
+    public void createQueueOfCellChoices () {
+        myCellChoices = new LinkedList<>();
+
+        Cell c1 = new StateChangeCell(-1,-1, "OPEN");
+        Cell c2 = new StateChangeCell(-1,-1,"FULL");
+        Cell c3 = new StateChangeCell(-1,-1,"CLOSED");
+
+
+        myCellChoices.add(c1);
+        myCellChoices.add(c2);
+        myCellChoices.add(c3);
     }
 
     @Override

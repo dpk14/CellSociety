@@ -7,16 +7,13 @@ import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import simulations.GameOfLifeSimulation;
 import simulations.Simulation;
 
 import java.awt.*;
@@ -29,7 +26,7 @@ public class RunSimulation {
     public static final int btnYPosition = 520;
     public static final int slidersXPosition = 510;
 
-    private String DATA_FILE = "data/locationConfig/spreadingfire_hexagon_36x36.xml";
+    private String DATA_FILE = "data/locationConfig/spreadingfire_rectangle_12x12.xml";
     private Timeline animation;
     private Group root = new Group();
     private Group root_grid = new Group();
@@ -124,6 +121,20 @@ public class RunSimulation {
 //        }
         graph = new PopulationGraph(initialGrid.getMapOfCellCount());
         root_graph.getChildren().add(graph.getGraphRootNode());
+    }
+
+    public Grid getThisSimulationGrid() {
+        Grid g = this.currentSimulation.getMyGrid();
+        return g;
+    }
+
+    public Simulation getThisSimulation() {
+        return currentSimulation;
+    }
+
+
+    public Visualization getThisVisualization() {
+        return newVisual;
     }
 
     private void createUIComponents() {
@@ -244,14 +255,38 @@ public class RunSimulation {
         Grid g = currentSimulation.advanceSimulation();
         Map<Paint, Integer> m = g.getMapOfCellCount();
         graph.addPoint(m);
-
-//        for (Paint p : m.keySet()) {
-//            System.out.println(p + "||" + m.get(p));
-//        }
-
         Node n = newVisual.getRootNode(g);
         root_grid.getChildren().add(n);
     }
+
+    public void renderNextIterationFromClick(double x, double y) {
+
+        int[] location = newVisual.findLocOfShapeClicked(x, y, currentSimulation.getMyGrid());
+        if (location == null) return;
+        int rowNum = location[0];
+        int colNum = location[1];
+
+        Cell oldCell = currentSimulation.getMyGrid().getCell(rowNum, colNum);
+        Cell nextCell = currentSimulation.getNextCell(oldCell);
+
+        System.out.println("OLD: " + oldCell.getRow() + "|" + oldCell.getColumn());
+        System.out.println("NEW: " + nextCell.getMyColor());
+
+        currentSimulation.getMyGrid().replaceCellOnWithNew(oldCell.getRow(), oldCell.getColumn(), nextCell);
+        nextCell.swapPosition(oldCell);
+        oldCell.setNegativePosition();
+        currentSimulation.createQueueOfCellChoices();
+
+        root_grid.getChildren().clear();
+        Grid g = currentSimulation.getMyGrid();
+        g.updateGrid(currentSimulation.getMyCellList());
+        Map<Paint, Integer> m = g.getMapOfCellCount();
+        graph.addPoint(m);
+        Node n = newVisual.getRootNode(g);
+        root_grid.getChildren().add(n);
+    }
+
+
 
 
 

@@ -3,13 +3,12 @@ package simulations;
 import cells.AgentCell;
 import cells.Cell;
 import cells.EmptyCell;
+import cells.StateChangeCell;
 import grids.Grid;
 
-import javax.print.DocFlavor;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
+
 
 public class SegregationSimulation extends Simulation {
     public static final String DATA_TYPE = "SegregationSimulation";
@@ -33,12 +32,14 @@ public class SegregationSimulation extends Simulation {
         setupSliderInfo();
         //myBluePercentage = Double.parseDouble(dataValues.get("blueRate"));
         //myRedPercentage = Double.parseDouble(dataValues.get("redRate"));
+        createQueueOfCellChoices();
     }
 
     public SegregationSimulation(Map<String, String> dataValues){
         super(dataValues);
         mySatisfactionThreshold = readInValue("satisfaction", SATISFACTION_DEFAULT);
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
 
@@ -159,6 +160,20 @@ public class SegregationSimulation extends Simulation {
         return DATA_TYPE;
     }
 
+
+    @Override
+    public void createQueueOfCellChoices () {
+        myCellChoices = new LinkedList<>();
+
+        Cell c1 = new AgentCell(-1,-1, "RED");
+        Cell c2 = new AgentCell(-1,-1,"BLUE");
+        Cell c3 = new EmptyCell(-1,-1);
+
+
+        myCellChoices.add(c1);
+        myCellChoices.add(c2);
+        myCellChoices.add(c3);
+    }
 
 //    @Override
 //    public void changeCell() {
