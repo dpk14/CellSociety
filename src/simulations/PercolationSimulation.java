@@ -137,6 +137,20 @@ public class PercolationSimulation extends Simulation{
     }
 
     @Override
+    public void createQueueOfCellChoices () {
+        myCellChoices = new LinkedList<>();
+
+        Cell c1 = new StateChangeCell(-1,-1, "OPEN");
+        Cell c2 = new StateChangeCell(-1,-1,"FULL");
+        Cell c3 = new StateChangeCell(-1,-1,"CLOSED");
+
+
+        myCellChoices.add(c1);
+        myCellChoices.add(c2);
+        myCellChoices.add(c3);
+    }
+
+    @Override
     public String getSimType(){
         return DATA_TYPE;
     }

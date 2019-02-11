@@ -4,10 +4,7 @@ import cells.Cell;
 import cells.StateChangeCell;
 import grids.Grid;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GameOfLifeSimulation extends Simulation{
     public static final String DATA_TYPE = "GameOfLifeSimulation";
@@ -17,11 +14,13 @@ public class GameOfLifeSimulation extends Simulation{
     public GameOfLifeSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
         super(dataValues, cells);
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     public GameOfLifeSimulation(Map<String, String> dataValues){
         super(dataValues);
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     @Override
@@ -102,6 +101,20 @@ public class GameOfLifeSimulation extends Simulation{
         }
         return createGrid(myDataValues.get("gridShape"), rows, cols, cells);
     }
+
+    @Override
+    public void createQueueOfCellChoices () {
+        myCellChoices = new LinkedList<>();
+
+        Cell c1 = new StateChangeCell(-1,-1, "POPULATED");
+        Cell c2 = new StateChangeCell(-1,-1,"EMPTY");
+
+        myCellChoices.add(c1);
+        myCellChoices.add(c2);
+    }
+
+
+
 
     @Override
     public String getSimType(){

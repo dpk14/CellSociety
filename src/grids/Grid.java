@@ -36,7 +36,7 @@ public class Grid {
         return new ArrayList<Cell>();
     }
 
-    public Cell[][] getNewArray(int rows, int columns, List<Cell> list){
+    private Cell[][] getNewArray(int rows, int columns, List<Cell> list){
         Cell[][] newArray = new Cell[rows][columns];
         for(Cell cell : list){
             newArray[cell.getRow()][cell.getColumn()] = cell;
@@ -46,6 +46,10 @@ public class Grid {
 
     public void updateGrid(List<Cell> list){
         for(Cell cell : list){
+            if (cell.getRow() < 0 || cell.getColumn() < 0) {
+                //System.out.println("SWAPPING ERROR DUE TO CLICK");
+                return;
+            }
             myCellArray[cell.getRow()][cell.getColumn()] = cell;
         }
     }
@@ -61,6 +65,12 @@ public class Grid {
             }
         }
         return myCellList;
+    }
+
+    public void replaceCellOnWithNew(int row, int col, Cell neww) {
+        myCellArray[row][col] = neww;
+        System.out.println("row/col of old cell: " + row + "|" + col);
+        //System.out.println("didnt find cell to replace");
     }
 
     public Cell getCell(int row, int column){

@@ -1,5 +1,6 @@
 package simulations;
 
+import cells.AgentCell;
 import cells.Cell;
 import cells.StateChangeCell;
 import grids.Grid;
@@ -16,6 +17,10 @@ public abstract class Simulation {
     protected Map<String, String> myDataValues;
     protected Map<String, String> mySliderInfo;
     protected List<String> mySpecialSliders;
+
+    protected Queue<Cell> myCellChoices;
+
+
     public enum Bounds{
         rows(1, 100),
         columns(1,100),
@@ -40,7 +45,7 @@ public abstract class Simulation {
         private double min;
         private double max;
 
-        private Bounds(double min, double max){
+        Bounds(double min, double max){
             this.min = min;
             this.max = max;
         }
@@ -214,6 +219,10 @@ public abstract class Simulation {
      */
     public abstract Grid advanceSimulation();
 
+
+    protected abstract void createQueueOfCellChoices();
+
+
     protected abstract Grid setupGridByProb();
 
     protected List<Cell> getTypedNeighbors(Cell cell, String type, List<Cell> neighbors) {
@@ -234,9 +243,48 @@ public abstract class Simulation {
         return newLocation;
     }
 
+    public Cell getNextCell(Cell current) {
+        Queue<Cell> q = myCellChoices;
+        int num = q.size();
+        try {
+            while (num >= 0) {
+                Cell candidate = q.poll();
+                if ( (!(current instanceof StateChangeCell))
+                        && (!(current instanceof AgentCell))
+                        && current.getClass().equals(candidate.getClass())) {
+                    q.add(candidate);
+                    return q.peek();
+                }
+                else if (current instanceof StateChangeCell && candidate instanceof StateChangeCell
+                        && ((StateChangeCell) candidate).getState().equals(((StateChangeCell) current).getState())) {
+                    q.add(candidate);
+                    return q.peek();
+                }
+                else if (current instanceof AgentCell && candidate instanceof AgentCell
+                        && ((AgentCell) candidate).getType().equals(((AgentCell) current).getType())) {
+                    return q.peek();
+                }
+                else {
+                    q.add(candidate);
+                }
+                num--;
+            }
+        }
+        catch(Exception e) {
+            System.out.println("Queue not complete");
+        }
+        return null;
+    }
+
+    public List<Cell> getMyCellList() {
+        return myCellList;
+    }
+
     protected abstract Grid setupGridByQuota();
 
     public abstract String getSimType();
+
+
 
     //public abstract void changeCell();
 

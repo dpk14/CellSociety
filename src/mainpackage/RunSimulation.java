@@ -13,6 +13,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import simulations.GameOfLifeSimulation;
 import simulations.Simulation;
 
 import java.awt.*;
@@ -25,7 +26,7 @@ public class RunSimulation {
     public static final int btnYPosition = 520;
     public static final int slidersXPosition = 510;
 
-    private String DATA_FILE = "data/locationConfig/spreadingfire_rectangle_12x12.xml";
+    private String DATA_FILE = "data/locationConfig/gameoflife_rectangle_12x12.xml";
     private Timeline animation;
     private Group root = new Group();
     private Group root_grid = new Group();
@@ -118,8 +119,14 @@ public class RunSimulation {
     }
 
     public Grid getThisSimulationGrid() {
-        return currentSimulation.getMyGrid();
+        Grid g = this.currentSimulation.getMyGrid();
+        return g;
     }
+
+    public Simulation getThisSimulation() {
+        return currentSimulation;
+    }
+
 
     public Visualization getThisVisualization() {
         return newVisual;
@@ -243,14 +250,37 @@ public class RunSimulation {
         Grid g = currentSimulation.advanceSimulation();
         Map<Paint, Integer> m = g.getMapOfCellCount();
         graph.addPoint(m);
-
-//        for (Paint p : m.keySet()) {
-//            System.out.println(p + "||" + m.get(p));
-//        }
-
         Node n = newVisual.getRootNode(g);
         root_grid.getChildren().add(n);
     }
+
+    public void renderNextIterationFromClick(double x, double y) {
+
+        int[] location = newVisual.findLocOfShapeClicked(x, y, currentSimulation.getMyGrid());
+        int rowNum = location[0];
+        int colNum = location[1];
+
+        Cell oldCell = currentSimulation.getMyGrid().getCell(rowNum, colNum);
+        Cell nextCell = currentSimulation.getNextCell(oldCell);
+
+        System.out.println("OLD: " + oldCell.getRow() + "|" + oldCell.getColumn());
+        System.out.println("NEW: " + nextCell.getMyColor());
+
+        currentSimulation.getMyGrid().replaceCellOnWithNew(oldCell.getRow(), oldCell.getColumn(), nextCell);
+        nextCell.swapPosition(oldCell);
+        oldCell.setNegativePosition();
+        ((GameOfLifeSimulation) currentSimulation).createQueueOfCellChoices();
+
+        root_grid.getChildren().clear();
+        Grid g = currentSimulation.getMyGrid();
+        g.updateGrid(currentSimulation.getMyCellList());
+        Map<Paint, Integer> m = g.getMapOfCellCount();
+        graph.addPoint(m);
+        Node n = newVisual.getRootNode(g);
+        root_grid.getChildren().add(n);
+    }
+
+
 
 
 

@@ -77,15 +77,22 @@ public class Visualization {
 
 
 
-    public void findShapeClicked (double x, double y) {
+    public int[] findLocOfShapeClicked (double x, double y, Grid currentGrid) {
+        int[] out;
         for (int i = 0; i < shapes.length; i++) {
             for (int j = 0; j < shapes[0].length; j++) {
                 Shape curr = shapes[i][j];
                 if (curr.contains(x,y)) {
+                    //Cell[][] toChange = currentGrid.getMyCellArray();
                     System.out.println(i + "|" + j);
+                    out = new int[2];
+                    out[0] = i;
+                    out[1] = j;
+                    return out;
                 }
             }
         }
+        return null;
     }
 
     private Group renderSquareGrid(Grid currentGrid, Group root) {

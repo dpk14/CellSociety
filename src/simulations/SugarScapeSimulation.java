@@ -1,6 +1,7 @@
 package simulations;
 
 import cells.Cell;
+import cells.StateChangeCell;
 import cells.SugarAgent;
 import cells.SugarPatch;
 import grids.Grid;
@@ -136,5 +137,11 @@ public class SugarScapeSimulation extends Simulation{
     @Override
     public String getSimType() {
         return null;
+    }
+
+    @Override
+    public void createQueueOfCellChoices () {
+        myCellChoices = new LinkedList<>();
+        // TODO
     }
 }

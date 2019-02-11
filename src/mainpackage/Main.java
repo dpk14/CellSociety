@@ -13,12 +13,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import simulations.Simulation;
 
 import java.sql.Time;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static javafx.application.Application.launch;
 
@@ -42,7 +40,7 @@ public class Main extends Application {
     public void start(Stage primaryStage){
         // attach scene to the stage and display it
         Scene myScene = setupGame(WIDTH, HEIGHT, BACKGROUND);
-//        Scene myScene2 = setupGame(WIDTH, HEIGHT, BACKGROUND);
+        Scene myScene2 = setupGame(WIDTH, HEIGHT, BACKGROUND);
 //        Scene myScene3 = setupGame(WIDTH, HEIGHT, BACKGROUND);
 
         for (Scene s : scenes.keySet()) {
@@ -62,7 +60,7 @@ public class Main extends Application {
 
         Scene scene = new Scene(root, width, height, background);
         scenes.put(scene, r);
-        scene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
+        scene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY(), r));
         return scene;
     }
 
@@ -81,11 +79,12 @@ public class Main extends Application {
         }
     }
 
-    private void handleMouseInput (double x, double y) {
-        for (Map.Entry<Scene, RunSimulation> entry :  scenes.entrySet()) {
-            RunSimulation s = entry.getValue();
-            Grid g = s.getThisSimulationGrid();
-            s.getThisVisualization().findShapeClicked(x,y);
+    private void handleMouseInput (double x, double y, RunSimulation s) {
+        //for (Map.Entry<Scene, RunSimulation> entry : scenes.entrySet()) {
+            //RunSimulation s = entry.getValue();
+        s.renderNextIterationFromClick(x, y);
+
+
 //            for (int i = 0; i < g.getHeight(); i++) {
 //                for (int j = 0; j < g.getWidth(); j++) {
 //                    Cell c = g.getCell(i,j);
@@ -93,7 +92,7 @@ public class Main extends Application {
 ////                    System.out.println(c.getMyColor());
 //                }
 //            }
-        }
+        //}
     }
 
     private void handleKeyInput (KeyCode code) {

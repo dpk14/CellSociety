@@ -47,6 +47,12 @@ public class Cell {
         this.myColumn = tempCol;
     }
 
+    public void setNegativePosition() {
+        this.myRow = -1;
+        this.myColumn = -1;
+        return;
+    }
+
 
     public int getRow(){
         return myRow;

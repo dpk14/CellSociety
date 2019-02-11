@@ -1,14 +1,9 @@
 package simulations;
 
-import cells.Cell;
-import cells.LangdonCell;
-import cells.StateChangeCell;
+import cells.*;
 import grids.Grid;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class LangdonLoopSimulation extends Simulation{
 
@@ -135,4 +130,10 @@ public class LangdonLoopSimulation extends Simulation{
         return null;
     }
 
+
+    @Override
+    public void createQueueOfCellChoices () {
+        myCellChoices = new LinkedList<>();
+        // TODO
+    }
 }
