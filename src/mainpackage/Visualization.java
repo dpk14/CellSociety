@@ -9,10 +9,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
-import javafx.scene.shape.StrokeType;
+import javafx.scene.shape.*;
 import simulations.Simulation;
 
 import java.util.List;
@@ -79,7 +76,7 @@ public class Visualization {
                 Cell c = currentGrid.getCell(i, j);
                 double currentX = j * cellWidth;
                 double currentY = i * cellHeight;
-                shapes[i][j] = addRectToRoot(root, currentX, currentY, c.getMyColor());
+                shapes[i][j] = addRectToRoot(root, currentX, currentY, c.getMyColor(), c);
             }
         }
         return root;
@@ -97,14 +94,14 @@ public class Visualization {
                     double y1 = (i + 1) * cellHeight;
                     double y2 = (i + 1) * cellHeight;
                     double y3 = i * cellHeight;
-                    shapes[i][j] = addTriToRoot(root, x1, y1, x2, y2, x3, y3, c1.getMyColor());
-                    shapes[i][j+1] = addTriToRoot(root, x3, y3, x3 + cellWidth, y3, x2, y2, c2.getMyColor());
+                    shapes[i][j] = addTriToRoot(root, x1, y1, x2, y2, x3, y3, c1.getMyColor(), c1);
+                    shapes[i][j+1] = addTriToRoot(root, x3, y3, x3 + cellWidth, y3, x2, y2, c2.getMyColor(), c2);
                 } else {
                     double y1 = i * cellHeight;
                     double y2 = i * cellHeight;
                     double y3 = (i + 1) * cellHeight;
-                    shapes[i][j] = addTriToRoot(root, x1, y1, x2, y2, x3, y3, c1.getMyColor());
-                    shapes[i][j+1] =  addTriToRoot(root, x2, y2, x3, y3, x3 + cellWidth, y3, c2.getMyColor());
+                    shapes[i][j] = addTriToRoot(root, x1, y1, x2, y2, x3, y3, c1.getMyColor(), c1);
+                    shapes[i][j+1] =  addTriToRoot(root, x2, y2, x3, y3, x3 + cellWidth, y3, c2.getMyColor(), c2);
                 }
             }
         }
@@ -119,12 +116,14 @@ public class Visualization {
             for (int j = 0; j < currentGrid.getWidth(); j++) {
                 Cell c1 = currentGrid.getCell(i,j);
                 if (i % 2 != 0) {
+
                     shapes[i][j] = addHexToRoot(root,j * cellWidth + dx,i * cellHeight + dy - i * dy,
                             j * cellWidth + dx + dx,i * cellHeight- i * dy,
                             j * cellWidth + 2 * dx + dx, i * cellHeight + dy- i * dy,
                             j * cellWidth + 2 * dx + dx, i * cellHeight + dy + l- i * dy,
                             j * cellWidth + dx + dx, i * cellHeight + cellHeight- i * dy,
-                            j * cellWidth + dx, i * cellHeight + dy + l - i * dy, c1.getMyColor());
+                            j * cellWidth + dx, i * cellHeight + dy + l - i * dy, c1.getMyColor(),
+                            c1);
                 }
                 else {
                     shapes[i][j] = addHexToRoot(root,j * cellWidth,i * cellHeight + dy - i * dy,
@@ -132,7 +131,8 @@ public class Visualization {
                             j * cellWidth + 2 * dx, i * cellHeight + dy- i * dy,
                             j * cellWidth + 2 * dx, i * cellHeight + dy + l- i * dy,
                             j * cellWidth + dx, i * cellHeight + cellHeight- i * dy,
-                            j * cellWidth, i * cellHeight + dy + l- i * dy, c1.getMyColor());
+                            j * cellWidth, i * cellHeight + dy + l- i * dy, c1.getMyColor(),
+                            c1);
                 }
             }
         }
@@ -140,25 +140,33 @@ public class Visualization {
     }
 
     private Shape addHexToRoot (Group root, double x1, double y1, double x2, double y2, double x3, double y3,
-                               double x4, double y4, double x5, double y5, double x6, double y6, Paint p) {
+                               double x4, double y4, double x5, double y5, double x6, double y6, Paint p, Cell c) {
         Polygon hex = new Polygon();
         hex.getPoints().addAll(new Double[]{x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6 });
         hex.setFill(p);
         addBorderIfNeeded(hex);
         root.getChildren().add(hex);
+
+        if (c instanceof SugarPatch && ((SugarPatch) c).hasAgent()) {
+            addCircleToRoot(root, hex.getBoundsInLocal().getCenterX(), hex.getBoundsInLocal().getCenterY());
+        }
+
         return hex;
     }
 
-    private Shape addTriToRoot(Group root, double x1, double y1, double x2, double y2, double x3, double y3, Paint p) {
+    private Shape addTriToRoot(Group root, double x1, double y1, double x2, double y2, double x3, double y3, Paint p, Cell c) {
         Polygon tri = new Polygon();
         tri.getPoints().addAll(new Double[]{x1, y1, x2, y2, x3, y3 });
         tri.setFill(p);
         addBorderIfNeeded(tri);
         root.getChildren().add(tri);
+        if (c instanceof SugarPatch && ((SugarPatch) c).hasAgent()) {
+            addCircleToRoot(root, tri.getBoundsInLocal().getCenterX(), tri.getBoundsInLocal().getCenterY());
+        }
         return tri;
     }
 
-    private Shape addRectToRoot(Group root, double currentX, double currentY, Paint p) {
+    private Shape addRectToRoot(Group root, double currentX, double currentY, Paint p, Cell c) {
         Rectangle rec = new Rectangle();
         rec.setX(currentX);
         rec.setY(currentY);
@@ -167,6 +175,9 @@ public class Visualization {
         rec.setFill(p);
         addBorderIfNeeded(rec);
         root.getChildren().add(rec);
+        if (c instanceof SugarPatch && ((SugarPatch) c).hasAgent()) {
+            addCircleToRoot(root, rec.getBoundsInLocal().getCenterX(), rec.getBoundsInLocal().getCenterY());
+        }
         return rec;
     }
 
@@ -181,6 +192,15 @@ public class Visualization {
             tri.setStroke(COLOR_BLACK);
             tri.setStrokeType(StrokeType.INSIDE);
         }
+    }
+
+    private void addCircleToRoot(Group r, double centerX, double centerY) {
+        Circle circle = new Circle();
+        circle.setFill(Color.rgb(0, 0, 0, 0.5));
+        circle.setCenterX(centerX);
+        circle.setCenterY(centerY);
+        circle.setRadius(Math.min(cellHeight/2, cellWidth/2));
+        r.getChildren().add(circle);
     }
 
     public void turnBorderOn() {
