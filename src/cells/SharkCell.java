@@ -27,7 +27,7 @@ public class SharkCell extends Cell {
     }
 
     public SharkCell(Map<String, String> dataValues){
-        super(Integer.parseInt(dataValues.get(0)), Integer.parseInt(dataValues.get(1)), COLOR_SHARK);
+        super(Integer.parseInt(dataValues.get("row")), Integer.parseInt(dataValues.get("column")), COLOR_SHARK);
         this.myTurnsSurvived=0;
         this.myReproductionTime=Integer.parseInt(dataValues.get("reproductionTime"));
         this.myEnergy=Integer.parseInt(dataValues.get("energy"));

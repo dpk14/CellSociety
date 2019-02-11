@@ -11,6 +11,8 @@ public class GameOfLifeSimulation extends Simulation{
 //    public static final List<String> DATA_FIELDS = List.of(
 //            "title", "author", "cellShape", "gridShape", "rows", "columns", "speed", "populatedRate");
 
+    public static final double POPULATED_RATE_DEAFULT = 0.40;
+
     public GameOfLifeSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
         super(dataValues, cells);
         setupSliderInfo();
@@ -55,9 +57,9 @@ public class GameOfLifeSimulation extends Simulation{
 
     @Override
     protected Grid setupGridByProb(){
-        int rows = (int) Double.parseDouble(myDataValues.get("rows"));
-        int cols = (int) Double.parseDouble(myDataValues.get("columns"));
-        double populatedRate = Double.parseDouble(myDataValues.get("populatedRate"));
+        int rows = (int) readInValue("rows", ROW_DEFAULT);
+        int cols = (int) readInValue("columns", COL_DEFAULT);
+        double populatedRate = readInValue("populatedRate", POPULATED_RATE_DEAFULT);
         List<Cell> cells = new ArrayList<>();
         for(int i = 0; i < rows; i++){
             for(int j = 0; j < cols; j++){
@@ -76,9 +78,9 @@ public class GameOfLifeSimulation extends Simulation{
 
     @Override
     protected Grid setupGridByQuota(){
-        int rows = (int) Double.parseDouble(myDataValues.get("rows"));
-        int cols = (int) Double.parseDouble(myDataValues.get("columns"));
-        int populatedRate = (int) Double.parseDouble(myDataValues.get("populatedRate"));
+        int rows = (int) readInValue("rows", ROW_DEFAULT);
+        int cols = (int) readInValue("columns", COL_DEFAULT);
+        int populatedRate = (int) readInValue("populatedRate", POPULATED_RATE_DEAFULT*rows*cols);
         List<String> states = new ArrayList<>();
         List<Cell> cells = new ArrayList<>();
         for(int k = 0; k < (int) populatedRate; k++){

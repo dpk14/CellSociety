@@ -20,6 +20,9 @@ public abstract class Simulation {
 
     protected Queue<Cell> myCellChoices;
 
+    protected static final int ROW_DEFAULT = 36;
+    protected static final int COL_DEFAULT = 36;
+
 
     public enum Bounds{
         rows(1, 100),
@@ -40,7 +43,8 @@ public abstract class Simulation {
         treeRate(0,1),
         burningRate(0,1),
         fishRate(0,1),
-        sharkRate(0,1);
+        sharkRate(0,1),
+        agentRate(0,1);
 
         private double min;
         private double max;
@@ -79,6 +83,7 @@ public abstract class Simulation {
             case GameOfLifeSimulation.DATA_TYPE:
                 return new GameOfLifeSimulation(dataValues, cells);
         }
+        System.out.println("XML file contains invalid or unspecified SimulationType.");
         throw new RuntimeException("not any kind of Simulation");
     }
 
@@ -99,6 +104,7 @@ public abstract class Simulation {
             case LangdonLoopSimulation.DATA_TYPE:
                 return new LangdonLoopSimulation(dataValues);
         }
+        System.out.println("XML file contains invalid or unspecified SimulationType.");
         throw new RuntimeException("not any kind of Simulation");
     }
 
@@ -147,6 +153,7 @@ public abstract class Simulation {
                 grid = new HexagonalGrid(numRows, numCols, cells);
                 break;
             default:
+                System.out.println("XML file contains invalid or unspecified Grid Type.");
                 throw new RuntimeException("No such grid type.");
         }
         return grid;
@@ -285,6 +292,16 @@ public abstract class Simulation {
     public abstract String getSimType();
 
 
+    protected double readInValue(String dataField, double defaultValue){
+        try{
+            return Double.parseDouble(myDataValues.get(dataField));
+        }
+        catch(NullPointerException e){
+            myDataValues.put(dataField, Double.toString(defaultValue));
+            System.out.printf("%s not found in XML. Using default value %f instead \n", dataField, defaultValue);
+            return defaultValue;
+        }
+    }
 
     //public abstract void changeCell();
 

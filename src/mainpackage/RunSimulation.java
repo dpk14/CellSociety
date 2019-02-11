@@ -103,8 +103,13 @@ public class RunSimulation {
 
     private void setupSimulation() {
         onInitialGrid = true;
-        currentSimulation = new XMLParser("simType").getSimulation(new File(DATA_FILE));
-
+        try {
+            currentSimulation = new XMLParser("simType").getSimulation(new File(DATA_FILE));
+        }
+        catch(RuntimeException e){
+            System.out.println("Staying on current simulation since specified file is invalid.");
+            // STAY ON CURRENT FILE
+        }
         Grid initialGrid = currentSimulation.getMyGrid();
         newVisual = new Visualization(initialGrid.getHeight(), initialGrid.getWidth(), 1.0);
         root_grid.getChildren().add(newVisual.getRootNode(initialGrid));

@@ -17,6 +17,9 @@ public class SugarScapeSimulation extends Simulation{
 //            "title", "author", "rows", "columns", "cellShape", "gridShape", "speed", "rate",
 //            "interval");
 
+    public static final double AGENT_RATE_DEFAULT = 0.1;
+    public static final int GROWTH_RATE_DEFAULT = 4;
+
     public SugarScapeSimulation(Map<String, String> dataValues, List<Cell> cells) {
         super(dataValues, cells);
         setupSliderInfo();
@@ -110,20 +113,20 @@ public class SugarScapeSimulation extends Simulation{
 
     @Override
     protected Grid setupGridByProb() {
-        int rows = (int) Double.parseDouble(myDataValues.get("rows"));
-        int cols = (int) Double.parseDouble(myDataValues.get("columns"));
-        int agentRate = (int) Double.parseDouble(myDataValues.get("agentRate"));
+        int rows = (int) readInValue("rows", ROW_DEFAULT);
+        int cols = (int) readInValue("columns", COL_DEFAULT);
+        double agentRate = readInValue("agentRate", AGENT_RATE_DEFAULT);
         List<Cell> cells = new ArrayList<>();
         for(int i = 0; i < rows; i++){
             for(int j = 0; j < cols; j++){
                 Cell cell;
                 if(evaluateOdds(agentRate)){
-                    cell = new SugarPatch(i, j, 0, (int) Double.parseDouble(myDataValues.get("rate")),
-                            (int) Double.parseDouble(myDataValues.get("interval")),  true);
+                    cell = new SugarPatch(i, j, 4, (int) readInValue("rate", GROWTH_RATE_DEFAULT),
+                            (int) readInValue("interval", Math.random()*4+1),  true);
                 }
                 else {
-                    cell = new SugarPatch(i, j, 0, (int) Double.parseDouble(myDataValues.get("rate")),
-                            (int) Double.parseDouble(myDataValues.get("interval")),  false);
+                    cell = new SugarPatch(i, j, 4, (int) readInValue("rate", GROWTH_RATE_DEFAULT),
+                            (int) readInValue("interval", Math.random()*4+1),  false);
                 }
                 cells.add(cell);
             }
@@ -138,7 +141,13 @@ public class SugarScapeSimulation extends Simulation{
 
     @Override
     public String getSimType() {
-        return null;
+        return DATA_TYPE;
+    }
+
+    @Override
+    protected void setupSliderInfo() {
+        super.setupSliderInfo();
+        addSliderInfo("agentRate");
     }
 
     @Override
