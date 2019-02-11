@@ -257,6 +257,7 @@ public class RunSimulation {
     public void renderNextIterationFromClick(double x, double y) {
 
         int[] location = newVisual.findLocOfShapeClicked(x, y, currentSimulation.getMyGrid());
+        if (location == null) return;
         int rowNum = location[0];
         int colNum = location[1];
 

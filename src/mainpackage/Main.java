@@ -80,19 +80,7 @@ public class Main extends Application {
     }
 
     private void handleMouseInput (double x, double y, RunSimulation s) {
-        //for (Map.Entry<Scene, RunSimulation> entry : scenes.entrySet()) {
-            //RunSimulation s = entry.getValue();
         s.renderNextIterationFromClick(x, y);
-
-
-//            for (int i = 0; i < g.getHeight(); i++) {
-//                for (int j = 0; j < g.getWidth(); j++) {
-//                    Cell c = g.getCell(i,j);
-//
-////                    System.out.println(c.getMyColor());
-//                }
-//            }
-        //}
     }
 
     private void handleKeyInput (KeyCode code) {
