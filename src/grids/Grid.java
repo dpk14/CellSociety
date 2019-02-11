@@ -67,6 +67,16 @@ public class Grid {
         return myCellArray[row][column];
     }
 
+    public void setCell(Cell cell, int row, int column){
+        cell.setRow(row);
+        cell.setColumn(column);
+        myCellArray[row][column]=cell;
+    }
+
+    public void setCell(Cell cell){
+        myCellArray[cell.getRow()][cell.getColumn()]=cell;
+    }
+
     public int getHeight(){
         return myRows;
     }

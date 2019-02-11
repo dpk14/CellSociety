@@ -30,15 +30,37 @@ public class LangdonLoopSimulation extends Simulation{
                 ((LangdonCell) key).incrementCounter();
                 if(((LangdonCell) key).getCounter()==3){
                     Cell[] cells=mySplitLocations.get(key);
-                    Cell[][] grid=myGrid.getMyCellArray();
-                    for(Cell cell: cells) grid[cell.getRow()][cell.getColumn()]=cell;
+                    for(Cell cell: cells) myGrid.setCell(cell, cell.getRow(), cell.getColumn());
                 }
             }
-            for (Cell purpleCell: myPurpleCells) movePurpleCell(purpleCell);
+            for (Cell purpleCell: myPurpleCells) movePurpleCell(purpleCell, grid);
         return myGrid;
     }
 
-    public void updatePosition(Cell cell, String state) {
+    private void movePurpleCell(Cell purpleCell, Cell[][] grid){
+        int direction[]=((LangdonCell) purpleCell).getDirection();
+        if(((LangdonCell) purpleCell).getCounter()==0) {
+            myGrid.setCell(new LangdonCell(purpleCell.getRow()-direction[1], purpleCell.getColumn()+direction[0], "BLACK"));
+            myGrid.setCell(new LangdonCell(purpleCell.getRow(), purpleCell.getColumn(), "RED"));
+        }
+        else if(((LangdonCell) purpleCell).getCounter()==1) {
+            myGrid.setCell(new LangdonCell(purpleCell.getRow()-direction[1], purpleCell.getColumn()+direction[0], "BLACK"));
+            myGrid.setCell(new LangdonCell(purpleCell.getRow()+direction[1], purpleCell.getColumn()-direction[0], "BLACK"));
+            myGrid.setCell(new LangdonCell(purpleCell.getRow(), purpleCell.getColumn(), "BLACK"));
+        }
+        else if(((LangdonCell) purpleCell).getCounter()==2) {
+            direction=new int[]{direction[1], -direction[0]}; //rotates 90 degrees clockwise
+        }
+        else if(((LangdonCell) purpleCell).getCounter()>2){
+            myGrid.setCell(new LangdonCell(purpleCell.getRow(), purpleCell.getColumn(), "RED"));
+        }
+        myGrid.setCell(purpleCell, purpleCell.getRow()+direction[0], purpleCell.getColumn()+direction[1]);
+        ((LangdonCell) purpleCell).incrementCounter();
+    }
+
+
+
+    private void updatePosition(Cell cell, String state) {
         List<Cell> neighbors = myGrid.getImmediateNeighbors(cell);
         int[] direction;
         if (((LangdonCell) cell).getState().equals("BLUE")) changeNeighborState(cell, neighbors, "BLACK", "BLUE");
@@ -81,7 +103,7 @@ public class LangdonLoopSimulation extends Simulation{
     public void markForSplitting(Cell splitLocation, int[] direction) {
         int row = splitLocation.getRow();
         int col = splitLocation.getColumn();
-        Cell[] splitterCells = new Cell[3]; //{blue location, pink location, white location}
+        LangdonCell[] splitterCells = new LangdonCell[3]; //{blue location, pink location, white location}
         if (direction[0] > 0) {
             splitterCells[0] = new LangdonCell(row - 1, col, "BLUE");
             splitterCells[1] = new LangdonCell(row, col - 1, "PINK");
@@ -90,7 +112,7 @@ public class LangdonLoopSimulation extends Simulation{
             splitterCells[0] = new LangdonCell(row + 1, col, "BLUE");
             splitterCells[1] = new LangdonCell(row, col + 1, "PINK");
             splitterCells[2] = new LangdonCell(row, col - 1, "WHITE");
-        } else if (direction[1] > 0) {
+        } else if (direction[1] < 0) {
             splitterCells[0] = new LangdonCell(row, col + 1, "BLUE");
             splitterCells[1] = new LangdonCell(row - 1, col, "PINK");
             splitterCells[2] = new LangdonCell(row + 1, col, "WHITE");
@@ -99,6 +121,8 @@ public class LangdonLoopSimulation extends Simulation{
             splitterCells[1] = new LangdonCell(row + 1, col, "PINK");
             splitterCells[2] = new LangdonCell(row - 1, col, "WHITE");
         }
+        int[] purpleDirection={direction[1], -direction[0]}; //90 degrees clockwise
+        splitterCells[1].setDirection(purpleDirection);
         mySplitLocations.put(splitLocation, splitterCells);
     }
 

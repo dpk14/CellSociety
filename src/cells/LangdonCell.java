@@ -8,6 +8,7 @@ import java.util.List;
 public class LangdonCell extends Cell{
     private String myState;
     private int myCounter;
+    private int[] myDirection;
 
     public static final String DATA_TYPE = "LangdonCell";
     public static final List<String> DATA_FIELDS = List.of("state");
@@ -45,5 +46,12 @@ public class LangdonCell extends Cell{
     }
     public int getCounter(){
         return myCounter;
+    }
+
+    public void setDirection(int[] direction){
+        myDirection=direction;
+    }
+    public int[] getDirection(){
+        return myDirection;
     }
 }
