@@ -1,22 +1,38 @@
 package simulations;
 
-import cells.*;
+import cells.Cell;
+import cells.StateChangeCell;
+import cells.SugarAgent;
+import cells.SugarPatch;
 import grids.Grid;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
+
 import java.util.*;
-import java.util.List;
 
 
 public class SugarScapeSimulation extends Simulation{
     private final int MAX_SUGAR=4;
     public static final String DATA_TYPE = "SugarScapeSimulation";
-    public static final List<String> DATA_FIELDS = List.of(
-            "title", "author", "rows", "columns", "cellShape", "gridShape", "speed", "sugarGrowBackRate",
-            "getSugarGrowBackInterval");
+//    public static final List<String> DATA_FIELDS = List.of(
+//            "title", "author", "rows", "columns", "cellShape", "gridShape", "speed", "rate",
+//            "interval");
+
+    public static final double AGENT_RATE_DEFAULT = 0.1;
+    public static final int GROWTH_RATE_DEFAULT = 4;
+
+    public SugarScapeSimulation(Map<String, String> dataValues, List<Cell> cells) {
+        super(dataValues, cells);
+        setupSliderInfo();
+        createQueueOfCellChoices();
+    }
+
+    public SugarScapeSimulation(Map<String, String> dataValues) {
+        super(dataValues);
+        setupSliderInfo();
+        createQueueOfCellChoices();
+    }
 
     //sugar growback rate is 1-4, sugar growback Interval is arbitrary
-
     public Grid advanceSimulation() {
         myTakenSpots.clear();
         myCellList.clear();
@@ -40,28 +56,28 @@ public class SugarScapeSimulation extends Simulation{
         }
     };
 
-private void checkAgent(Cell patch, SugarAgent agent, int currentRow, int currentCol) {
-    List<Cell> goodNeighbors = getVisibleNeighbors(patch, agent.getMyVision());
-    List<Cell> bestNeighbors = new ArrayList<Cell>();
-    Collections.sort(goodNeighbors, SugarComparator);
-    Cell goodNeighbor=bestNeighbors.get(0);
-    int maxSugar=((SugarPatch) goodNeighbor).getSugar();
-    for (Cell neighbor : goodNeighbors) {
-        if (((SugarPatch) neighbor).getSugar()<maxSugar) break;
-        bestNeighbors.add(neighbor);
+    private void checkAgent(Cell patch, SugarAgent agent, int currentRow, int currentCol) {
+        List<Cell> goodNeighbors = getVisibleNeighbors(patch, agent.getMyVision());
+        List<Cell> bestNeighbors = new ArrayList<Cell>();
+        Collections.sort(goodNeighbors, SugarComparator);
+        Cell goodNeighbor=bestNeighbors.get(0);
+        int maxSugar=((SugarPatch) goodNeighbor).getSugar();
+        for (Cell neighbor : goodNeighbors) {
+            if (((SugarPatch) neighbor).getSugar()<maxSugar) break;
+            bestNeighbors.add(neighbor);
+        }
+        Cell otherPatch = move(bestNeighbors, patch);
+        Cell newLocation=new Cell(otherPatch.getRow(), otherPatch.getColumn(), Color.WHITE);
+        Cell updatedOtherPatch = ((SugarPatch) otherPatch).copyPatch();
+        if(!(newLocation.getRow()==currentRow && newLocation.getColumn()==currentCol)){
+            Cell updatedCurrentPatch = ((SugarPatch) otherPatch).copyPatch();
+            ((SugarPatch) updatedCurrentPatch).moveAgent(updatedOtherPatch);
+            myTakenSpots.add(newLocation);
+            myCellList.add(updatedOtherPatch);
+            myCellList.add(updatedCurrentPatch);
+        }
+        else myCellList.add(patch);
     }
-    Cell otherPatch = move(bestNeighbors, patch);
-    Cell newLocation=new Cell(otherPatch.getRow(), otherPatch.getColumn(), Color.WHITE);
-    Cell updatedOtherPatch = ((SugarPatch) otherPatch).copyPatch();
-    if(!(newLocation.getRow()==currentRow && newLocation.getColumn()==currentCol)){
-        Cell updatedCurrentPatch = ((SugarPatch) otherPatch).copyPatch();
-        ((SugarPatch) updatedCurrentPatch).moveAgent(updatedOtherPatch);
-        myTakenSpots.add(newLocation);
-        myCellList.add(updatedOtherPatch);
-        myCellList.add(updatedCurrentPatch);
-    }
-    else myCellList.add(patch);
-}
 
     public List<Cell> getVisibleNeighbors(Cell cell, int vision){
         Queue<Cell> qu=new LinkedList<Cell>();
@@ -96,7 +112,47 @@ private void checkAgent(Cell patch, SugarAgent agent, int currentRow, int curren
     }
 
     @Override
-    public List<String> getDataFields(){
-        return DATA_FIELDS;
+    protected Grid setupGridByProb() {
+        int rows = (int) readInValue("rows", ROW_DEFAULT);
+        int cols = (int) readInValue("columns", COL_DEFAULT);
+        double agentRate = readInValue("agentRate", AGENT_RATE_DEFAULT);
+        List<Cell> cells = new ArrayList<>();
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < cols; j++){
+                Cell cell;
+                if(evaluateOdds(agentRate)){
+                    cell = new SugarPatch(i, j, 4, (int) readInValue("rate", GROWTH_RATE_DEFAULT),
+                            (int) readInValue("interval", Math.random()*4+1),  true);
+                }
+                else {
+                    cell = new SugarPatch(i, j, 4, (int) readInValue("rate", GROWTH_RATE_DEFAULT),
+                            (int) readInValue("interval", Math.random()*4+1),  false);
+                }
+                cells.add(cell);
+            }
+        }
+        return createGrid(myDataValues.get("gridShape"), rows, cols, cells);
+    }
+
+    @Override
+    protected Grid setupGridByQuota() {
+        return null;
+    }
+
+    @Override
+    public String getSimType() {
+        return DATA_TYPE;
+    }
+
+    @Override
+    protected void setupSliderInfo() {
+        super.setupSliderInfo();
+        addSliderInfo("agentRate");
+    }
+
+    @Override
+    public void createQueueOfCellChoices () {
+        myCellChoices = new LinkedList<>();
+        // TODO
     }
 }

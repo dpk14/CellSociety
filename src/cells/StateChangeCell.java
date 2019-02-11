@@ -1,6 +1,8 @@
 package cells;
 
 import java.util.List;
+import java.util.Map;
+
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
@@ -35,12 +37,13 @@ public class StateChangeCell extends Cell{
         else if (myState.equals("TREE")) { p = COLOR_TREE; }
         else if (myState.equals("BURNING")) { p = COLOR_BURNING; }
         else { p = COLOR_EMPTY; }
+        //TODO: possibly add exception here
         myColor = p;
     }
 
-    public StateChangeCell(List<String> dataValues){
-        super(Integer.parseInt(dataValues.get(0)), Integer.parseInt(dataValues.get(1)), COLOR_EMPTY);
-        myState = dataValues.get(2);
+    public StateChangeCell(Map<String, String> dataValues){
+        super(Integer.parseInt(dataValues.get("row")), Integer.parseInt(dataValues.get("column")), COLOR_EMPTY);
+        myState = dataValues.get("state");
         setColor();
     }
 

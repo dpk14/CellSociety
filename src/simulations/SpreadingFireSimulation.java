@@ -6,11 +6,7 @@ import cells.EmptyCell;
 import cells.StateChangeCell;
 import grids.Grid;
 
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SpreadingFireSimulation extends Simulation{
     public static final String DATA_TYPE = "SpreadingFireSimulation";
@@ -22,17 +18,24 @@ public class SpreadingFireSimulation extends Simulation{
     private double myProbLightning;
     private double myProbGrow;
 
+    public static final double TREE_DEFAULT = 0.75;
+    public static final double BURNING_DEFAULT = 0.005;
+    public static final double SPREAD_RATE_DEFAULT = 0.33;
+    public static final double GROWTH_RATE_DEFAULT = 0.10;
+    public static final double LIGHTNING_RATE_DEFAULT = 0.005;
+
     public SpreadingFireSimulation(Map<String, String> dataValues, List<Cell> cells) { // pass in list of strings representing rows, columns, sat threshold
         super(dataValues, cells);
-        myProbCatch = Double.parseDouble(dataValues.get("spreadRate"));
-        myProbGrow=Double.parseDouble(dataValues.get("growthRate"));
-        myProbLightning=Double.parseDouble(dataValues.get("lightningRate"));
+        setValues();
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     public SpreadingFireSimulation(Map<String, String> dataValues){
         super(dataValues);
+        setValues();
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     @Override
@@ -57,19 +60,8 @@ public class SpreadingFireSimulation extends Simulation{
         mySliderInfo.put("spreadRate", myDataValues.get("spreadRate"));
         mySliderInfo.put("growthRate", myDataValues.get("growthRate"));
         mySliderInfo.put("lightningRate", myDataValues.get("lightningRate"));
-
-        if(!myDataValues.containsKey("treeRate")) {
-            System.out.println("DFGHJK");
-            mySliderInfo.put("treeRate", "0");
-            mySpecialSliderInfo.put("treeRate", "0");
-            myDataValues.put("treeRate", "0");
-        }
-        if(!myDataValues.containsKey("burningRate")) {
-            mySliderInfo.put("burningRate", "0");
-            mySpecialSliderInfo.put("burningRate", "0");
-            myDataValues.put("burningRate", "0");
-        }
-        
+        addSliderInfo("treeRate");
+        addSliderInfo("burningRate");
     }
 
     private String randomizeState(Cell cell, String state){
@@ -86,20 +78,18 @@ public class SpreadingFireSimulation extends Simulation{
         return state;
     }
 
-//    @Override
-//    public void updateParameters(Map<String, String> map) {
-//        super.updateParameters(map);
-//        myProbCatch = Double.parseDouble(map.get("spreadRate"));
-//        myProbGrow = Double.parseDouble(map.get("growthRate"));
-//        myProbLightning = Double.parseDouble(map.get("lightningRate"));
-//    }
+    @Override
+    public void updateParameters() {
+        super.updateParameters();
+        setValues();
+    }
 
     @Override
     protected Grid setupGridByProb(){
-        int rows = (int) Double.parseDouble(myDataValues.get("rows"));
-        int cols = (int) Double.parseDouble(myDataValues.get("columns"));
-        double treeRate = Double.parseDouble(myDataValues.get("treeRate"));
-        double burningRate = Double.parseDouble(myDataValues.get("burningRate"));
+        int rows = (int) readInValue("rows", ROW_DEFAULT);
+        int cols = (int) readInValue("columns", COL_DEFAULT);
+        double treeRate = readInValue("treeRate", 0.75);
+        double burningRate = readInValue("burningRate", 0.01);
         List<Cell> cells = new ArrayList<>();
         for(int i = 0; i < rows; i++){
             for(int j = 0; j < cols; j++){
@@ -121,10 +111,10 @@ public class SpreadingFireSimulation extends Simulation{
 
     @Override
     protected Grid setupGridByQuota() {
-        int rows = (int) Double.parseDouble(myDataValues.get("rows"));
-        int cols = (int) Double.parseDouble(myDataValues.get("columns"));
-        int treeRate = (int) Double.parseDouble(myDataValues.get("treeRate"));
-        int burningRate = (int) Double.parseDouble(myDataValues.get("burningRate"));
+        int rows = (int) readInValue("rows", ROW_DEFAULT);
+        int cols = (int) readInValue("columns", COL_DEFAULT);
+        int treeRate = (int) readInValue("treeRate", TREE_DEFAULT);
+        int burningRate = (int) readInValue("burningRate", BURNING_DEFAULT);
         List<String> states = new ArrayList<>();
         List<Cell> cells = new ArrayList<>();
         for (int k = 0; k < treeRate; k++) {
@@ -153,5 +143,24 @@ public class SpreadingFireSimulation extends Simulation{
     @Override
     public String getSimType(){
         return DATA_TYPE;
+    }
+
+    private void setValues(){
+        myProbCatch = readInValue("spreadRate", SPREAD_RATE_DEFAULT);
+        myProbGrow = readInValue("growthRate", GROWTH_RATE_DEFAULT);
+        myProbLightning = readInValue("lightningRate", LIGHTNING_RATE_DEFAULT);
+    }
+
+    @Override
+    public void createQueueOfCellChoices () {
+        myCellChoices = new LinkedList<>();
+
+        Cell c1 = new StateChangeCell(-1,-1, "TREE");
+        Cell c2 = new StateChangeCell(-1,-1,"BURNING");
+        Cell c3 = new StateChangeCell(-1,-1, "EMPTY");
+
+        myCellChoices.add(c1);
+        myCellChoices.add(c2);
+        myCellChoices.add(c3);
     }
 }

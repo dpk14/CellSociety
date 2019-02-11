@@ -1,9 +1,12 @@
 package simulations;
 
+import cells.AgentCell;
 import cells.Cell;
 import cells.StateChangeCell;
-import grids.*;
-import javafx.scene.control.Slider;
+import grids.Grid;
+import grids.HexagonalGrid;
+import grids.RectangularGrid;
+import grids.TriangularGrid;
 
 import java.util.*;
 
@@ -13,7 +16,14 @@ public abstract class Simulation {
     protected ArrayList<Cell> myTakenSpots=new ArrayList<>();
     protected Map<String, String> myDataValues;
     protected Map<String, String> mySliderInfo;
-    protected Map<String, String> mySpecialSliderInfo;
+    protected List<String> mySpecialSliders;
+
+    protected Queue<Cell> myCellChoices;
+
+    protected static final int ROW_DEFAULT = 36;
+    protected static final int COL_DEFAULT = 36;
+
+
     public enum Bounds{
         rows(1, 100),
         columns(1,100),
@@ -33,12 +43,13 @@ public abstract class Simulation {
         treeRate(0,1),
         burningRate(0,1),
         fishRate(0,1),
-        sharkRate(0,1);
+        sharkRate(0,1),
+        agentRate(0,1);
 
         private double min;
         private double max;
 
-        private Bounds(double min, double max){
+        Bounds(double min, double max){
             this.min = min;
             this.max = max;
         }
@@ -51,12 +62,12 @@ public abstract class Simulation {
         myDataValues = dataValues;
         int numRows = Integer.parseInt(dataValues.get("rows"));
         int numCols = Integer.parseInt(dataValues.get("columns"));
-        myGrid = createGrid(myDataValues.get("gridShape"), numRows, numCols, cells);
+        myGrid = createGrid(dataValues.get("gridShape"), numRows, numCols, cells);
     }
 
     public Simulation(Map<String, String> dataValues){
         myDataValues = dataValues;
-        setupGrid(myDataValues.get("generatorType"));
+        setupGrid(dataValues.get("generatorType"));
     }
 
     public static Simulation createNewSimulation(String simType, Map<String, String> dataValues, List<Cell> cells){
@@ -72,6 +83,7 @@ public abstract class Simulation {
             case GameOfLifeSimulation.DATA_TYPE:
                 return new GameOfLifeSimulation(dataValues, cells);
         }
+        System.out.println("XML file contains invalid or unspecified SimulationType.");
         throw new RuntimeException("not any kind of Simulation");
     }
 
@@ -87,7 +99,12 @@ public abstract class Simulation {
                 return new SpreadingFireSimulation(dataValues);
             case GameOfLifeSimulation.DATA_TYPE:
                 return new GameOfLifeSimulation(dataValues);
+            case SugarScapeSimulation.DATA_TYPE:
+                return new SugarScapeSimulation(dataValues);
+            case LangdonLoopSimulation.DATA_TYPE:
+                return new LangdonLoopSimulation(dataValues);
         }
+        System.out.println("XML file contains invalid or unspecified SimulationType.");
         throw new RuntimeException("not any kind of Simulation");
     }
 
@@ -105,8 +122,8 @@ public abstract class Simulation {
         return mySliderInfo;
     }
 
-    public Map<String, String> getMySpecialSliderInfo(){
-        return mySpecialSliderInfo;
+    public List<String> getMySpecialSliders(){
+        return mySpecialSliders;
     }
 
     /**
@@ -127,18 +144,16 @@ public abstract class Simulation {
         Grid grid;
         switch(gridShape){
             case "RectangularGrid":
-                System.out.println("RECT");
                 grid = new RectangularGrid(numRows, numCols, cells);
                 break;
             case "TriangularGrid":
-                System.out.println("TRI");
                 grid = new TriangularGrid(numRows, numCols, cells);
                 break;
             case "HexagonalGrid":
-                System.out.println("HEX");
                 grid = new HexagonalGrid(numRows, numCols, cells);
                 break;
             default:
+                System.out.println("XML file contains invalid or unspecified Grid Type.");
                 throw new RuntimeException("No such grid type.");
         }
         return grid;
@@ -154,21 +169,26 @@ public abstract class Simulation {
         for(String s : myDataValues.keySet()){
             if(mySliderInfo.containsKey(s)) {
                 mySliderInfo.put(s, myDataValues.get(s));
-                if(mySliderInfo.containsKey(s)) {
-                    mySpecialSliderInfo.put(s, myDataValues.get(s));
-                }
             }
         }
     }
 
     protected void setupSliderInfo(){
         mySliderInfo = new LinkedHashMap<>();
-        mySpecialSliderInfo = new LinkedHashMap<>();
-        mySpecialSliderInfo.put("rows", myDataValues.get("rows"));
-        mySpecialSliderInfo.put("columns", myDataValues.get("columns"));
+        mySpecialSliders = new ArrayList<>();
+        mySpecialSliders.add("rows");
+        mySpecialSliders.add("columns");
         mySliderInfo.put("rows", myDataValues.get("rows"));
         mySliderInfo.put("columns", myDataValues.get("columns"));
         mySliderInfo.put("speed", myDataValues.get("speed"));
+    }
+
+    protected void addSliderInfo(String field){
+        if(!myDataValues.containsKey(field)){
+            myDataValues.put(field, "0");
+        }
+        mySliderInfo.put(field, myDataValues.get(field));
+        mySpecialSliders.add(field);
     }
 
     /**
@@ -206,6 +226,10 @@ public abstract class Simulation {
      */
     public abstract Grid advanceSimulation();
 
+
+    public abstract void createQueueOfCellChoices();
+
+
     protected abstract Grid setupGridByProb();
 
     protected List<Cell> getTypedNeighbors(Cell cell, String type, List<Cell> neighbors) {
@@ -226,9 +250,58 @@ public abstract class Simulation {
         return newLocation;
     }
 
+    public Cell getNextCell(Cell current) {
+        Queue<Cell> q = myCellChoices;
+        int num = q.size();
+        try {
+            while (num >= 0) {
+                Cell candidate = q.poll();
+                if ( (!(current instanceof StateChangeCell))
+                        && (!(current instanceof AgentCell))
+                        && current.getClass().equals(candidate.getClass())) {
+                    q.add(candidate);
+                    return q.peek();
+                }
+                else if (current instanceof StateChangeCell && candidate instanceof StateChangeCell
+                        && ((StateChangeCell) candidate).getState().equals(((StateChangeCell) current).getState())) {
+                    q.add(candidate);
+                    return q.peek();
+                }
+                else if (current instanceof AgentCell && candidate instanceof AgentCell
+                        && ((AgentCell) candidate).getType().equals(((AgentCell) current).getType())) {
+                    return q.peek();
+                }
+                else {
+                    q.add(candidate);
+                }
+                num--;
+            }
+        }
+        catch(Exception e) {
+            System.out.println("Queue not complete");
+        }
+        return null;
+    }
+
+    public List<Cell> getMyCellList() {
+        return myCellList;
+    }
+
     protected abstract Grid setupGridByQuota();
 
     public abstract String getSimType();
+
+
+    protected double readInValue(String dataField, double defaultValue){
+        try{
+            return Double.parseDouble(myDataValues.get(dataField));
+        }
+        catch(NullPointerException e){
+            myDataValues.put(dataField, Double.toString(defaultValue));
+            System.out.printf("%s not found in XML. Using default value %f instead \n", dataField, defaultValue);
+            return defaultValue;
+        }
+    }
 
     //public abstract void changeCell();
 

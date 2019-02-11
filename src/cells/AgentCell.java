@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 import java.util.List;
+import java.util.Map;
 
 public class AgentCell extends Cell {
     private String myType;
@@ -20,9 +21,9 @@ public class AgentCell extends Cell {
         setImage();
     }
 
-    public AgentCell(List<String> dataValues){
-        super(Integer.parseInt(dataValues.get(0)), Integer.parseInt(dataValues.get(1)), COLOR_AGENT_RED);
-        this.myType = dataValues.get(2);
+    public AgentCell(Map<String, String> dataValues){
+        super(Integer.parseInt(dataValues.get("row")), Integer.parseInt(dataValues.get("column")), COLOR_AGENT_RED);
+        this.myType = dataValues.get("race");
         setImage();
     }
 

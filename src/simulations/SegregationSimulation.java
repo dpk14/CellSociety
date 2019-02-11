@@ -3,9 +3,12 @@ package simulations;
 import cells.AgentCell;
 import cells.Cell;
 import cells.EmptyCell;
+import cells.StateChangeCell;
 import grids.Grid;
 
+
 import java.util.*;
+
 
 public class SegregationSimulation extends Simulation {
     public static final String DATA_TYPE = "SegregationSimulation";
@@ -13,8 +16,9 @@ public class SegregationSimulation extends Simulation {
 //            "title", "author", "cellShape", "gridShape", "rows", "columns", "speed", "satisfaction", "redRate", "blueRate");
 
     public double mySatisfactionThreshold; // between 0 & 1
-//    private double myBluePercentage; // between 0 & 1, percentage made up by first Agent
-//    private double myRedPercentage; // between 0 & 1
+    public static final double SATISFACTION_DEFAULT = 0.50;
+    public static final double RED_RATE_DEFAULT = 0.33;
+    public static final double BLUE_RATE_DEFAULT = 0.33;
 
     private List<Cell> myEmptyCells = new ArrayList<>();
     private List<Cell> myCellsToMove = new ArrayList<>();
@@ -24,15 +28,18 @@ public class SegregationSimulation extends Simulation {
      */
     public SegregationSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
         super(dataValues, cells);
-        mySatisfactionThreshold = Double.parseDouble(dataValues.get("satisfaction"));
+        mySatisfactionThreshold = readInValue("satisfaction", SATISFACTION_DEFAULT);
         setupSliderInfo();
         //myBluePercentage = Double.parseDouble(dataValues.get("blueRate"));
         //myRedPercentage = Double.parseDouble(dataValues.get("redRate"));
+        createQueueOfCellChoices();
     }
 
     public SegregationSimulation(Map<String, String> dataValues){
         super(dataValues);
+        mySatisfactionThreshold = readInValue("satisfaction", SATISFACTION_DEFAULT);
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
 
@@ -61,17 +68,14 @@ public class SegregationSimulation extends Simulation {
     protected void setupSliderInfo() {
         super.setupSliderInfo();
         mySliderInfo.put("satisfaction", myDataValues.get("satisfaction"));
-        mySliderInfo.put("blueRate", "0");
-        mySliderInfo.put("redRate", "0");
+        addSliderInfo("blueRate");
+        addSliderInfo("redRate");
+    }
 
-        if(!myDataValues.containsKey("blueRate")){
-            mySpecialSliderInfo.put("blueRate", "0");
-            myDataValues.put("blueRate", "0");
-        }
-        if(!myDataValues.containsKey("redRate")){
-            mySpecialSliderInfo.put("redRate", "0");
-            myDataValues.put("redRate", "0");
-        }
+    @Override
+    public void updateParameters() {
+        super.updateParameters();
+        mySatisfactionThreshold = readInValue("satisfaction", SATISFACTION_DEFAULT);
     }
 
     private void checkAndSortCells(Grid grid){
@@ -93,10 +97,10 @@ public class SegregationSimulation extends Simulation {
 
     @Override
     protected Grid setupGridByProb(){
-        int rows = Integer.parseInt(myDataValues.get("rows"));
-        int cols = Integer.parseInt(myDataValues.get("columns"));
-        double redRate = Double.parseDouble(myDataValues.get("redRate"));
-        double blueRate = Double.parseDouble(myDataValues.get("blueRate"));
+        int rows = (int) readInValue("rows", ROW_DEFAULT);
+        int cols = (int) readInValue("columns", COL_DEFAULT);
+        double redRate = readInValue("redRate", RED_RATE_DEFAULT);
+        double blueRate = readInValue("blueRate", BLUE_RATE_DEFAULT);
         List<Cell> cells = new ArrayList<>();
         for(int i = 0; i < rows; i++){
             for(int j = 0; j < cols; j++){
@@ -118,10 +122,10 @@ public class SegregationSimulation extends Simulation {
 
     @Override
     protected Grid setupGridByQuota(){
-        int rows = Integer.parseInt(myDataValues.get("rows"));
-        int cols = Integer.parseInt(myDataValues.get("columns"));
-        int redRate = (int) Double.parseDouble(myDataValues.get("redRate"));
-        int blueRate = (int) Double.parseDouble(myDataValues.get("blueRate"));
+        int rows = (int) readInValue("rows", ROW_DEFAULT);
+        int cols = (int) readInValue("columns", COL_DEFAULT);
+        int redRate = (int) readInValue("redRate", RED_RATE_DEFAULT*rows*cols);
+        int blueRate = (int) readInValue("blueRate", BLUE_RATE_DEFAULT*rows*cols);
         List<String> states = new ArrayList<>();
         List<Cell> cells = new ArrayList<>();
         for(int k = 0; k < redRate; k++){
@@ -156,6 +160,20 @@ public class SegregationSimulation extends Simulation {
         return DATA_TYPE;
     }
 
+
+    @Override
+    public void createQueueOfCellChoices () {
+        myCellChoices = new LinkedList<>();
+
+        Cell c1 = new AgentCell(-1,-1, "RED");
+        Cell c2 = new AgentCell(-1,-1,"BLUE");
+        Cell c3 = new EmptyCell(-1,-1);
+
+
+        myCellChoices.add(c1);
+        myCellChoices.add(c2);
+        myCellChoices.add(c3);
+    }
 
 //    @Override
 //    public void changeCell() {

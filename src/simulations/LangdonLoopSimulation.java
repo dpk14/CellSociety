@@ -1,19 +1,27 @@
 package simulations;
 
-import cells.Cell;
-import cells.LangdonCell;
-import cells.StateChangeCell;
-import cells.SugarPatch;
+import cells.*;
 import grids.Grid;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class LangdonLoopSimulation extends Simulation{
 
     private HashMap<Cell, Cell[]> mySplitLocations=new HashMap<Cell, Cell[]>();
     private List<Cell> myPurpleCells=new ArrayList<Cell>();
+    public static final String DATA_TYPE = "LangdonLoopSimulation";
+    public LangdonLoopSimulation(Map<String, String> dataValues, List<Cell> cells) {
+        super(dataValues, cells);
+        setupSliderInfo();
+        createQueueOfCellChoices();
+    }
+
+    public LangdonLoopSimulation(Map<String, String> dataValues) {
+        super(dataValues);
+        setupSliderInfo();
+        createQueueOfCellChoices();
+    }
+
 
     public Grid advanceSimulation() {
         myCellList.clear();
@@ -146,4 +154,25 @@ public class LangdonLoopSimulation extends Simulation{
         return changedNeighbors;
     }
 
+    @Override
+    protected Grid setupGridByProb() {
+        return null;
+    }
+
+    @Override
+    protected Grid setupGridByQuota() {
+        return null;
+    }
+
+    @Override
+    public String getSimType() {
+        return null;
+    }
+
+
+    @Override
+    public void createQueueOfCellChoices () {
+        myCellChoices = new LinkedList<>();
+        // TODO
+    }
 }

@@ -5,12 +5,13 @@ import javafx.scene.paint.Paint;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class SugarPatch extends Cell implements Comparator<Cell> {
 
-  //  public static final String DATA_TYPE = "FishCell";
-    //public static final List<String> DATA_FIELDS = List.of("reproductionTime");
+    public static final String DATA_TYPE = "SugarPatch";
+    //public static final List<String> DATA_FIELDS = List.of("rate", "interval", "sugar", "agent");
     private int sugarGrowBackRate;
     private int getSugarGrowBackInterval;
     private boolean hasAgent;
@@ -18,20 +19,28 @@ public class SugarPatch extends Cell implements Comparator<Cell> {
     private int myTracker;
     private int mySugar;
     private final int MAX_SUGAR=4;
-    private int myRow;
-    private int myColumn;
 
     public SugarPatch(int row, int column, int sugar, int rate, int interval, boolean agent) {
         super(row, column, Color.WHITE);
-        myRow=row;
-        myColumn=column;
-        sugarGrowBackRate=rate;
-        getSugarGrowBackInterval=interval;
-        mySugar=sugar;
-        hasAgent=agent;
-        myTracker=0;
+        sugarGrowBackRate = rate;
+        getSugarGrowBackInterval = interval;
+        mySugar = sugar;
+        hasAgent = agent;
+        myTracker = 0;
+        Random rand = new Random();
+        if(hasAgent) myAgent = new SugarAgent(this, rand.nextInt(20)+5, rand.nextInt(5)+1, rand.nextInt(3)+1);
+        setColor();
+    }
+
+    public SugarPatch(Map<String, String> dataValues) {
+        super((int) Double.parseDouble(dataValues.get("row")), (int) Double.parseDouble(dataValues.get("column")), Color.WHITE);
+        sugarGrowBackRate = (int) Double.parseDouble(dataValues.get("rate"));
+        getSugarGrowBackInterval = (int) Double.parseDouble(dataValues.get("interval"));
+        mySugar = (int) Double.parseDouble(dataValues.get("sugar"));
+        hasAgent = Boolean.parseBoolean(dataValues.get("agent"));
+        myTracker = 0;
         Random rand=new Random();
-        if(hasAgent) myAgent=new SugarAgent(this, rand.nextInt(20)+5, rand.nextInt(5)+1, rand.nextInt(3)+1);
+        if(hasAgent) myAgent = new SugarAgent(this, rand.nextInt(20)+5, rand.nextInt(5)+1, rand.nextInt(3)+1);
         setColor();
     }
 

@@ -1,19 +1,13 @@
 package simulations;
 
-import cells.Cell;
-import cells.EmptyCell;
-import cells.FishCell;
-import cells.SharkCell;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import cells.*;
+import grids.Grid;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import cells.Cell;
-import cells.StateChangeCell;
-import grids.Grid;
 
 
 import java.util.*;
+
 
 public class WatorWorldSimulation extends Simulation {
     private int myStartEnergy;
@@ -22,6 +16,13 @@ public class WatorWorldSimulation extends Simulation {
     private int myFishReprodMax;
     public static final Paint COLOR_AGENT_RED = Color.RED;
 
+    public static final int ENERGY_DEFAULT = 5;
+    public static final int ENERGY_GAIN_DEFAULT = 5;
+    public static final int SHARK_REPRODMAX_DEFAULT = 15;
+    public static final int FISH_REPRODMAX_DEFAULT = 5;
+    public static final double SHARK_DEFAULT = .05;
+    public static final double FISH_DEFAULT = .3;
+
     public static final String DATA_TYPE = "WatorWorldSimulation";
 //    public static final List<String> DATA_FIELDS = List.of(
 //            "title", "author", "rows", "columns", "cellShape", "gridShape", "speed", "startEnergy",
@@ -29,16 +30,16 @@ public class WatorWorldSimulation extends Simulation {
 
     public WatorWorldSimulation(Map<String, String> dataValues, List<Cell> cells){
         super(dataValues, cells);
-        myStartEnergy=Integer.parseInt(dataValues.get("startEnergy"));
-        myEnergyGain=Integer.parseInt(dataValues.get("energyGain"));
-        mySharkReprodMax=Integer.parseInt(dataValues.get("sharkReproductionMax"));
-        myFishReprodMax=Integer.parseInt(dataValues.get("fishReproductionMax"));
+        setValues();
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     public WatorWorldSimulation(Map<String, String> dataValues){
         super(dataValues);
+        setValues();
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     @Override
@@ -79,19 +80,10 @@ public class WatorWorldSimulation extends Simulation {
         super.setupSliderInfo();
         mySliderInfo.put("startEnergy", myDataValues.get("startEnergy"));
         mySliderInfo.put("energyGain", myDataValues.get("energyGain"));
-        mySliderInfo.put("sharkReproductionMax", myDataValues.get("sharkReproductiveMax"));
+        mySliderInfo.put("sharkReproductionMax", myDataValues.get("sharkReproductionMax"));
         mySliderInfo.put("fishReproductionMax", myDataValues.get("fishReproductionMax"));
-
-        if(!myDataValues.containsKey("fishRate")) {
-            mySliderInfo.put("fishRate", "0");
-            mySpecialSliderInfo.put("fishRate", "0");
-            myDataValues.put("fishRate", "0");
-        }
-        if(!myDataValues.containsKey("sharkRate")) {
-            mySliderInfo.put("sharkRate", "0");
-            mySpecialSliderInfo.put("sharkRate", "0");
-            myDataValues.put("sharkRate", "0");
-        }
+        addSliderInfo("fishRate");
+        addSliderInfo("sharkRate");
     }
 
     public void fishMover(Cell fish, int currentRow, int currentCol) {
@@ -154,31 +146,29 @@ public class WatorWorldSimulation extends Simulation {
         return reducedNeighbors;
     }
 
-//    @Override
-//    public void updateParameters(Map<String, String> map) {
-//        super.updateParameters(map);
-//        myStartEnergy = (int) Double.parseDouble(map.get("startEnergy"));
-//        myEnergyGain = (int) Double.parseDouble(map.get("energyGain"));
-//        mySharkReprodMax = (int) Double.parseDouble(map.get("sharkReproductionMax"));
-//        mySharkReprodMax = (int) Double.parseDouble(map.get("fishReproductionMax"));
-//    }
+    @Override
+    public void updateParameters() {
+        super.updateParameters();
+        setValues();
+    }
 
     @Override
     protected Grid setupGridByProb(){
-        int rows = Integer.parseInt(myDataValues.get("rows"));
-        int cols = Integer.parseInt(myDataValues.get("columns"));
-        double fishRate = Double.parseDouble(myDataValues.get("fishRate"));
-        double sharkRate = Double.parseDouble(myDataValues.get("sharkRate"));
+        int rows = (int) readInValue("rows", ROW_DEFAULT);
+        int cols = (int) readInValue("columns", COL_DEFAULT);
+        double fishRate = readInValue("fishRate", FISH_DEFAULT);
+        double sharkRate = readInValue("sharkRate", SHARK_DEFAULT);
         List<Cell> cells = new ArrayList<>();
         for(int i = 0; i < rows; i++){
             for(int j = 0; j < cols; j++){
                 Cell cell;
                 if(evaluateOdds(fishRate)){
-                    cell = new FishCell(i, j, Integer.parseInt(myDataValues.get("fishReproductionMax")));
+                    cell = new FishCell(i, j, (int) readInValue("fishReproductionMax", FISH_REPRODMAX_DEFAULT));
                 }
                 else if(evaluateOdds(sharkRate)){
-                    cell = new SharkCell(i, j, Integer.parseInt(myDataValues.get("sharkReproductionMax")),
-                            Integer.parseInt(myDataValues.get("startEnergy")), Integer.parseInt(myDataValues.get("energyGain")));
+                    cell = new SharkCell(i, j, (int) readInValue("sharkReproductionMax", SHARK_REPRODMAX_DEFAULT),
+                            (int) readInValue("startEnergy", ENERGY_DEFAULT),
+                            (int) readInValue("energyGain", ENERGY_GAIN_DEFAULT));
                 }
                 else{
                     cell = new EmptyCell(i, j);
@@ -191,10 +181,10 @@ public class WatorWorldSimulation extends Simulation {
 
     @Override
     protected Grid setupGridByQuota() {
-        int rows = Integer.parseInt(myDataValues.get("rows"));
-        int cols = Integer.parseInt(myDataValues.get("columns"));
-        int fishRate = (int) Double.parseDouble(myDataValues.get("fishRate"));
-        int sharkRate = (int) Double.parseDouble(myDataValues.get("sharkRate"));
+        int rows = (int) readInValue("rows", ROW_DEFAULT);
+        int cols = (int) readInValue("columns", COL_DEFAULT);
+        int fishRate = (int) readInValue("fishRate", FISH_DEFAULT*rows*cols);
+        int sharkRate = (int) readInValue("sharkRate", SHARK_DEFAULT*rows*cols);
         List<String> states = new ArrayList<>();
         List<Cell> cells = new ArrayList<>();
         for (int k = 0; k < fishRate; k++) {
@@ -211,11 +201,11 @@ public class WatorWorldSimulation extends Simulation {
             for (int j = 0; j < cols; j++) {
                 String state = states.remove(0);
                 if (state.equals("FISH")) {
-                    cells.add(new FishCell(i, j, Integer.parseInt(myDataValues.get("fishReproductionMax"))));
+                    cells.add(new FishCell(i, j, (int) readInValue("fishReproductionMax", FISH_REPRODMAX_DEFAULT)));
                 }
                 else if (state.equals("SHARK")) {
-                    cells.add(new SharkCell(i, j, Integer.parseInt(myDataValues.get("sharkReproductionMax")),
-                            Integer.parseInt(myDataValues.get("startEnergy")), Integer.parseInt(myDataValues.get("energyGain"))));
+                    cells.add(new SharkCell(i, j, (int) readInValue("sharkReproductionMax", SHARK_REPRODMAX_DEFAULT),
+                            (int) readInValue("startEnergy", ENERGY_DEFAULT), (int) readInValue("energyGain", ENERGY_GAIN_DEFAULT)));
                 }
                 else if (state.equals("EMPTY")) {
                     cells.add(new EmptyCell(i, j));
@@ -226,6 +216,21 @@ public class WatorWorldSimulation extends Simulation {
             }
         }
         return createGrid(myDataValues.get("gridShape"), rows, cols, cells);
+    }
+
+    private void setValues(){
+        myStartEnergy = (int) readInValue("startEnergy", ENERGY_DEFAULT);
+        myEnergyGain = (int) readInValue("energyGain", ENERGY_GAIN_DEFAULT);
+        mySharkReprodMax = (int) readInValue("sharkReproductionMax", SHARK_REPRODMAX_DEFAULT);
+        myFishReprodMax = (int) readInValue("fishReproductionMax", FISH_REPRODMAX_DEFAULT);
+    }
+
+
+    @Override
+    public void createQueueOfCellChoices () {
+        myCellChoices = new LinkedList<>();
+
+        //TODO
     }
 
     @Override

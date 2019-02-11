@@ -2,7 +2,7 @@ package cells;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import java.util.List;
+import java.util.Map;
 
 public class FishCell extends Cell {
 
@@ -18,10 +18,10 @@ public class FishCell extends Cell {
         this.myReproductionTime=reproductionTime;
     }
 
-    public FishCell(List<String> dataValues) {
-        super(Integer.parseInt(dataValues.get(0)), Integer.parseInt(dataValues.get(1)), COLOR_FISH);
+    public FishCell(Map<String, String> dataValues){
+        super(Integer.parseInt(dataValues.get("row")), Integer.parseInt(dataValues.get("column")), COLOR_FISH);
         this.myTurnsSurvived=0;
-        this.myReproductionTime=Integer.parseInt(dataValues.get(2));
+        this.myReproductionTime=Integer.parseInt(dataValues.get("reproductionTime"));
     }
 
     public boolean canReproduce(){

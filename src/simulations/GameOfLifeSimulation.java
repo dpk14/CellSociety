@@ -1,29 +1,28 @@
 package simulations;
 
-import cells.AgentCell;
 import cells.Cell;
-import cells.EmptyCell;
 import cells.StateChangeCell;
 import grids.Grid;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GameOfLifeSimulation extends Simulation{
     public static final String DATA_TYPE = "GameOfLifeSimulation";
 //    public static final List<String> DATA_FIELDS = List.of(
 //            "title", "author", "cellShape", "gridShape", "rows", "columns", "speed", "populatedRate");
 
+    public static final double POPULATED_RATE_DEAFULT = 0.40;
+
     public GameOfLifeSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
         super(dataValues, cells);
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     public GameOfLifeSimulation(Map<String, String> dataValues){
         super(dataValues);
         setupSliderInfo();
+        createQueueOfCellChoices();
     }
 
     @Override
@@ -42,16 +41,6 @@ public class GameOfLifeSimulation extends Simulation{
         return myGrid;
     }
 
-    @Override
-    protected void setupSliderInfo() {
-        super.setupSliderInfo();
-        if(!myDataValues.containsKey("populatedRate")){
-            myDataValues.put("populatedRate", "0");
-            mySliderInfo.put("populatedRate", "0");
-            mySpecialSliderInfo.put("populatedRate", "0");
-        }
-    }
-
     private String editState(Cell cell, String state){
         List<Cell> neighbors=myGrid.getAllNeighbors(cell);
         neighbors=getTypedNeighbors(cell, "POPULATED", neighbors);
@@ -61,10 +50,16 @@ public class GameOfLifeSimulation extends Simulation{
     }
 
     @Override
+    protected void setupSliderInfo() {
+        super.setupSliderInfo();
+        addSliderInfo("populatedRate");
+    }
+
+    @Override
     protected Grid setupGridByProb(){
-        int rows = Integer.parseInt(myDataValues.get("rows"));
-        int cols = Integer.parseInt(myDataValues.get("columns"));
-        double populatedRate = Double.parseDouble(myDataValues.get("populatedRate"));
+        int rows = (int) readInValue("rows", ROW_DEFAULT);
+        int cols = (int) readInValue("columns", COL_DEFAULT);
+        double populatedRate = readInValue("populatedRate", POPULATED_RATE_DEAFULT);
         List<Cell> cells = new ArrayList<>();
         for(int i = 0; i < rows; i++){
             for(int j = 0; j < cols; j++){
@@ -83,9 +78,9 @@ public class GameOfLifeSimulation extends Simulation{
 
     @Override
     protected Grid setupGridByQuota(){
-        int rows = Integer.parseInt(myDataValues.get("rows"));
-        int cols = Integer.parseInt(myDataValues.get("columns"));
-        int populatedRate = (int) Double.parseDouble(myDataValues.get("populatedRate"));
+        int rows = (int) readInValue("rows", ROW_DEFAULT);
+        int cols = (int) readInValue("columns", COL_DEFAULT);
+        int populatedRate = (int) readInValue("populatedRate", POPULATED_RATE_DEAFULT*rows*cols);
         List<String> states = new ArrayList<>();
         List<Cell> cells = new ArrayList<>();
         for(int k = 0; k < (int) populatedRate; k++){
@@ -108,6 +103,20 @@ public class GameOfLifeSimulation extends Simulation{
         }
         return createGrid(myDataValues.get("gridShape"), rows, cols, cells);
     }
+
+    @Override
+    public void createQueueOfCellChoices () {
+        myCellChoices = new LinkedList<>();
+
+        Cell c1 = new StateChangeCell(-1,-1, "POPULATED");
+        Cell c2 = new StateChangeCell(-1,-1,"EMPTY");
+
+        myCellChoices.add(c1);
+        myCellChoices.add(c2);
+    }
+
+
+
 
     @Override
     public String getSimType(){
