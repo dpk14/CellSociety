@@ -11,6 +11,7 @@ public class PercolationSimulation extends Simulation{
     public static final String DATA_TYPE = "PercolationSimulation";
 //    public static final List<String> DATA_FIELDS = List.of(
 //            "title", "author", "rows", "columns", "cellShape", "gridShape", "speed", "openRate");
+    public static final double OPEN_RATE_DEFAULT = 0;
 
     public PercolationSimulation(Map<String, String> dataValues, List<Cell> cells){ // pass in list of strings representing rows, columns, sat threshold
         super(dataValues, cells);
@@ -73,9 +74,9 @@ public class PercolationSimulation extends Simulation{
 
     @Override
     protected Grid setupGridByProb(){
-        int rows = (int) Double.parseDouble(myDataValues.get("rows"));
-        int cols = (int) Double.parseDouble(myDataValues.get("columns"));
-        double openRate = Double.parseDouble(myDataValues.get("openRate"));
+        int rows = (int) readInValue("rows", ROW_DEFAULT);
+        int cols = (int) readInValue("columns", COL_DEFAULT);
+        double openRate = readInValue("openRate", OPEN_RATE_DEFAULT);
         List<Cell> cells = new ArrayList<>();
         for(int i = 0; i < rows; i++){
             if(i == 0){
@@ -99,9 +100,9 @@ public class PercolationSimulation extends Simulation{
 
     @Override
     protected Grid setupGridByQuota(){
-        int rows = (int) Double.parseDouble(myDataValues.get("rows"));
-        int cols = (int) Double.parseDouble(myDataValues.get("columns"));
-        int openRate = (int) Double.parseDouble(myDataValues.get("openRate"));
+        int rows = (int) readInValue("rows", ROW_DEFAULT);
+        int cols = (int) readInValue("columns", COL_DEFAULT);
+        int openRate = (int) readInValue("openRate", OPEN_RATE_DEFAULT*cols*rows);
         List<String> states = new ArrayList<>();
         List<Cell> cells = new ArrayList<>();
         for(int k = 0; k < openRate; k++){
