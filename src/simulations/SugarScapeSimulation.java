@@ -73,7 +73,7 @@ public class SugarScapeSimulation extends Simulation{
         if(!(newLocation.getRow()==currentRow && newLocation.getColumn()==currentCol)){
             Cell updatedCurrentPatch = ((SugarPatch) patch).copyPatch();
             ((SugarPatch) updatedCurrentPatch).moveAgent(updatedOtherPatch);
-            myTakenSpots.add(newLocation);
+            myTakenSpots.add(otherPatch);
             myCellList.add(updatedOtherPatch);
             myCellList.add(updatedCurrentPatch);
         }
@@ -92,7 +92,7 @@ public class SugarScapeSimulation extends Simulation{
         qu.add(cell);
         while(qu.size()!=0){
             Cell current=qu.remove();
-            if(!current.equals(cell)) {
+            if(!current.equals(cell) && !myTakenSpots.contains(current)) {
                 distanceOut = neighborMap.get(current);
                 if (distanceOut > vision) break; //if neighbor lies outside vision, don't consider it, get out of loop
                 sugar = ((SugarPatch) current).getSugar();
