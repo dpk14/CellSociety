@@ -110,7 +110,7 @@ public class RunSimulation {
             currentSimulation = new XMLParser("simType").getSimulation(new File(DATA_FILE));
         }
         catch(RuntimeException e){
-            System.out.println("EXCEPTION");
+            System.out.println("Staying on current simulation since specified file is invalid.");
             // STAY ON CURRENT FILE
         }
         Grid initialGrid = currentSimulation.getMyGrid();

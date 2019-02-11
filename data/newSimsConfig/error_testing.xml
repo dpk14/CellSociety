@@ -3,7 +3,7 @@
     <settings>
         <title></title>
         <author>group14</author>
-        <generatorType>probability</generatorType>
+        <generatorType>location</generatorType>
         <cellShape>Square</cellShape>
         <gridShape>RectangularGrid</gridShape>
         <speed>20</speed>
