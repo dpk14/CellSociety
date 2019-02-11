@@ -118,11 +118,11 @@ public class SugarScapeSimulation extends Simulation{
             for(int j = 0; j < cols; j++){
                 Cell cell;
                 if(evaluateOdds(agentRate)){
-                    cell = new SugarPatch(i, j, 0, (int) readInValue("rate", GROWTH_RATE_DEFAULT),
+                    cell = new SugarPatch(i, j, 4, (int) readInValue("rate", GROWTH_RATE_DEFAULT),
                             (int) readInValue("interval", Math.random()*4+1),  true);
                 }
                 else {
-                    cell = new SugarPatch(i, j, 0, (int) readInValue("rate", GROWTH_RATE_DEFAULT),
+                    cell = new SugarPatch(i, j, 4, (int) readInValue("rate", GROWTH_RATE_DEFAULT),
                             (int) readInValue("interval", Math.random()*4+1),  false);
                 }
                 cells.add(cell);
@@ -138,6 +138,12 @@ public class SugarScapeSimulation extends Simulation{
 
     @Override
     public String getSimType() {
-        return null;
+        return DATA_TYPE;
+    }
+
+    @Override
+    protected void setupSliderInfo() {
+        super.setupSliderInfo();
+        addSliderInfo("agentRate");
     }
 }

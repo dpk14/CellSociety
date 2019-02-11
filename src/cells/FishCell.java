@@ -2,7 +2,6 @@ package cells;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import java.util.List;
 import java.util.Map;
 
 public class FishCell extends Cell {

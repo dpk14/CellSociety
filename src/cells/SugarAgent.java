@@ -6,9 +6,9 @@ public class SugarAgent {
     private int myMetabolism;
 
     SugarAgent(Cell cell, int sugar, int vision, int metabolism ){
-        sugar=mySugar;
-        vision=myVision;
-        metabolism=myMetabolism;
+        mySugar=sugar;
+        myVision=vision;
+        myMetabolism=metabolism;
     }
 
     public boolean isDead(){
