@@ -44,12 +44,10 @@ public class WatorWorldSimulation extends Simulation {
 
     @Override
     public Grid advanceSimulation() {
-        initializeCellList();
-        Collections.shuffle(myCellList);
-        List<Cell> randomizedList=new ArrayList<>(myCellList);
+        List<Cell> iterationList=initializeCellList(true);
         myCellList.clear();
         myTakenSpots.clear();
-        for(Cell cell: randomizedList) {
+        for(Cell cell: iterationList) {
             if (cell instanceof SharkCell) {
                 myTakenSpots.add(cell);
                 ((SharkCell) cell).updateMyTurnsSurvived();
@@ -59,12 +57,10 @@ public class WatorWorldSimulation extends Simulation {
             }
         }
         myGrid.updateGrid(myCellList);
-        initializeCellList();
-        Collections.shuffle(myCellList);
-        randomizedList=new ArrayList<Cell>(myCellList);
+        iterationList=initializeCellList(true);
         myCellList.clear();
         myTakenSpots.clear();
-        for(Cell cell: randomizedList) {
+        for(Cell cell: iterationList) {
             if(cell instanceof FishCell) {
                 myTakenSpots.add(cell);
                 ((FishCell) cell).updateMyTurnsSurvived();

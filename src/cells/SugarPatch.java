@@ -13,7 +13,7 @@ public class SugarPatch extends Cell implements Comparator<Cell> {
     public static final String DATA_TYPE = "SugarPatch";
     //public static final List<String> DATA_FIELDS = List.of("rate", "interval", "sugar", "agent");
     private int sugarGrowBackRate;
-    private int getSugarGrowBackInterval;
+    private int sugarGrowBackInterval;
     private boolean hasAgent;
     private SugarAgent myAgent;
     private int myTracker;
@@ -23,7 +23,7 @@ public class SugarPatch extends Cell implements Comparator<Cell> {
     public SugarPatch(int row, int column, int sugar, int rate, int interval, boolean agent) {
         super(row, column, Color.WHITE);
         sugarGrowBackRate = rate;
-        getSugarGrowBackInterval = interval;
+        sugarGrowBackInterval = interval;
         mySugar = sugar;
         hasAgent = agent;
         myTracker = 0;
@@ -35,7 +35,7 @@ public class SugarPatch extends Cell implements Comparator<Cell> {
     public SugarPatch(Map<String, String> dataValues) {
         super((int) Double.parseDouble(dataValues.get("row")), (int) Double.parseDouble(dataValues.get("column")), Color.WHITE);
         sugarGrowBackRate = (int) Double.parseDouble(dataValues.get("rate"));
-        getSugarGrowBackInterval = (int) Double.parseDouble(dataValues.get("interval"));
+        sugarGrowBackInterval = (int) Double.parseDouble(dataValues.get("interval"));
         mySugar = (int) Double.parseDouble(dataValues.get("sugar"));
         hasAgent = Boolean.parseBoolean(dataValues.get("agent"));
         myTracker = 0;
@@ -46,9 +46,10 @@ public class SugarPatch extends Cell implements Comparator<Cell> {
 
     private void setColor() {
         Paint p;
-        if (mySugar==1) { p = Color.WHITESMOKE; }
-        else if (mySugar==2) { p=Color.LIGHTCORAL; }
-        else if (mySugar==3) { p = Color.ORANGE; }
+        if (mySugar==0) { p = Color.WHITESMOKE; }
+        else if (mySugar==1) { p=Color.ORANGE; }
+        else if (mySugar==2) { p = Color.DARKORANGE; }
+        else if (mySugar==3) { p = Color.ORANGERED; }
         else if (mySugar==4) { p = Color.RED; }
         else { p = Color.BLACK; }
         myColor = p;
@@ -60,32 +61,33 @@ public class SugarPatch extends Cell implements Comparator<Cell> {
     }
 
     public SugarPatch copyPatch(){
-        SugarPatch copy=new SugarPatch(myRow, myColumn, mySugar, sugarGrowBackRate, getSugarGrowBackInterval, false);
+        SugarPatch copy=new SugarPatch(myRow, myColumn, mySugar, sugarGrowBackRate, sugarGrowBackInterval, false);
         copy.setAgent(myAgent);
         copy.setMyTracker(myTracker);
         return copy;
     }
 
-    public SugarPatch updateState(){
-        int prevSugar=mySugar;
+    public void updateState(){
         myTracker++;
-        if (myTracker==getSugarGrowBackInterval) {
+        if (myTracker==sugarGrowBackInterval) {
             myTracker=0;
             mySugar+=sugarGrowBackRate;
             if (mySugar>MAX_SUGAR) mySugar=4;
+            setColor();
         }
         if(hasAgent) {
             myAgent.metabolize();
+            mySugar=0;
+            setColor();
             if (myAgent.isDead()) {
                 hasAgent = false;
                 myAgent = null;
             }
         }
-        return copyPatch();
     }
 
     public void moveAgent(Cell newPatch){
-        SugarAgent agent=myAgent;
+        SugarAgent agent=new SugarAgent(myAgent);
         hasAgent=false;
         myAgent=null;
         agent.addSugar(((SugarPatch) newPatch).getSugar());

@@ -41,11 +41,11 @@ public class LangdonLoopSimulation extends Simulation{
                     for(Cell cell: cells) myGrid.setCell(cell, cell.getRow(), cell.getColumn());
                 }
             }
-            for (Cell purpleCell: myPurpleCells) movePurpleCell(purpleCell, grid);
+            for (Cell purpleCell: myPurpleCells) movePurpleCell(purpleCell);
         return myGrid;
     }
 
-    private void movePurpleCell(Cell purpleCell, Cell[][] grid){
+    private void movePurpleCell(Cell purpleCell){
         int direction[]=((LangdonCell) purpleCell).getDirection();
         if(((LangdonCell) purpleCell).getCounter()==0) {
             myGrid.setCell(new LangdonCell(purpleCell.getRow()-direction[1], purpleCell.getColumn()+direction[0], "BLACK"));
