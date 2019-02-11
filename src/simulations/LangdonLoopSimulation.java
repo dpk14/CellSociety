@@ -41,7 +41,7 @@ public class LangdonLoopSimulation extends Simulation{
                     for(Cell cell: cells) myGrid.setCell(cell, cell.getRow(), cell.getColumn());
                 }
             }
-            for (Cell purpleCell: myPurpleCells) movePurpleCell(purpleCell, grid);
+            //for (Cell purpleCell: myPurpleCells) movePurpleCell(purpleCell, grid);
         return myGrid;
     }
 
