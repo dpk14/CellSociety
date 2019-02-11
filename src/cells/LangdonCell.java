@@ -6,7 +6,9 @@ import javafx.scene.paint.Paint;
 import java.util.List;
 
 public class LangdonCell extends Cell{
-    String myState;
+    private String myState;
+    private int myCounter;
+    private int[] myDirection;
 
     public static final String DATA_TYPE = "LangdonCell";
     public static final List<String> DATA_FIELDS = List.of("state");
@@ -14,6 +16,7 @@ public class LangdonCell extends Cell{
     public LangdonCell(int row, int column, String state) {
         super(row, column, Color.WHITE);
         myState=state;
+        myCounter=0;
         setColor();
     }
 
@@ -36,5 +39,19 @@ public class LangdonCell extends Cell{
     }
     public String getState(){
         return myState;
+    }
+
+    public void incrementCounter(){
+        myCounter++;
+    }
+    public int getCounter(){
+        return myCounter;
+    }
+
+    public void setDirection(int[] direction){
+        myDirection=direction;
+    }
+    public int[] getDirection(){
+        return myDirection;
     }
 }

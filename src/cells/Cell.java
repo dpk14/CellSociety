@@ -62,6 +62,14 @@ public class Cell {
         return myColumn;
     }
 
+    public void setRow(int row){
+        myRow=row;
+    }
+
+    public void setColumn(int col){
+        myColumn=col;
+    }
+
     public Paint getMyColor() {
         return myColor;
     }
