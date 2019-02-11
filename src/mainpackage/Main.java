@@ -26,19 +26,15 @@ public class Main extends Application {
     public static final int WIDTH = 810;
     public static final int HEIGHT = 810;
     public static final Paint BACKGROUND = Color.AZURE;
-
     private int FRAMES_PER_SECOND = 15;
     private int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-
-
     private Map<Scene, RunSimulation> scenes = new HashMap<>();
     private Timeline animation = new Timeline();
     private Group root;
 
     @Override
     public void start(Stage primaryStage){
-        // attach scene to the stage and display it
         Scene myScene = setupGame(WIDTH, HEIGHT, BACKGROUND);
         Scene myScene2 = setupGame(WIDTH, HEIGHT, BACKGROUND);
 //        Scene myScene3 = setupGame(WIDTH, HEIGHT, BACKGROUND);
@@ -54,10 +50,8 @@ public class Main extends Application {
 
     private Scene setupGame(int width, int height, Paint background){
         root = new Group();
-
         RunSimulation r = new RunSimulation(animation);
         root = r.getNode();
-
         Scene scene = new Scene(root, width, height, background);
         scenes.put(scene, r);
         scene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY(), r));
