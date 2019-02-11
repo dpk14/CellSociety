@@ -11,6 +11,12 @@ public class SugarAgent {
         myMetabolism=metabolism;
     }
 
+    SugarAgent(SugarAgent another) {
+        this.mySugar = another.mySugar;
+        this.myVision = another.myVision;
+        this.myMetabolism = another.myMetabolism;
+    }
+
     public boolean isDead(){
         if (mySugar<=0) return true;
         else return false;
