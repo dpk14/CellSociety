@@ -67,7 +67,7 @@ public class SugarPatch extends Cell implements Comparator<Cell> {
         return copy;
     }
 
-    public void updateState(){
+    public SugarPatch updateState(){
         myTracker++;
         if (myTracker==sugarGrowBackInterval) {
             myTracker=0;
@@ -84,6 +84,7 @@ public class SugarPatch extends Cell implements Comparator<Cell> {
                 myAgent = null;
             }
         }
+        return this;
     }
 
     public void moveAgent(Cell newPatch){
