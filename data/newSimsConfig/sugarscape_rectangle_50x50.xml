@@ -9,8 +9,8 @@
         <rows>50</rows>
         <columns>50</columns>
         <speed>25</speed>
-        <rate>1</rate>
-        <interval>5</interval>
+        <sugarGrowthRate>1</sugarGrowthRate>
+        <growthInterval>5</growthInterval>
         <agentRate>0.05</agentRate>>
         <sugar>4</sugar>
     </settings>
