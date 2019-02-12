@@ -289,6 +289,7 @@ public class RunSimulation {
         Cell nextCell = currentSimulation.getNextCell(oldCell);
 //        System.out.println("OLD: " + oldCell.getRow() + "|" + oldCell.getColumn());
 //        System.out.println("NEW: " + nextCell.getMyColor());
+        if (oldCell == null || nextCell == null) return;
         currentSimulation.getMyGrid().replaceCellOnWithNew(oldCell.getRow(), oldCell.getColumn(), nextCell);
         nextCell.swapPosition(oldCell);
         oldCell.setNegativePosition();

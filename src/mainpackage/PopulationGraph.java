@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PopulationGraph {
-    public static final int MAX_GRAPH_POINTS = 400;
+    public static final int MAX_GRAPH_POINTS = 200;
     private List<XYChart.Series> plots;
     private int counter;
     private CategoryAxis xAxis = new CategoryAxis();
