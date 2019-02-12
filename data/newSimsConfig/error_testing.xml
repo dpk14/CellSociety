@@ -1,11 +1,1 @@
 <?xml version = "1.0"?>
-<data simType = "WatorWorldSimulation">
-    <settings>
-        <title></title>
-        <author>group14</author>
-        <generatorType>location</generatorType>
-        <cellShape>Square</cellShape>
-        <gridShape>RectangularGrid</gridShape>
-        <speed>20</speed>
-    </settings>
-</data>
