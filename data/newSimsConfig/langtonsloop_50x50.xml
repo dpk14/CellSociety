@@ -9,5 +9,7 @@
         <rows>50</rows>
         <columns>50</columns>
         <speed>25</speed>
+        <startRow>20</startRow>
+        <startColumn>20</startColumn>
     </settings>
 </data>
