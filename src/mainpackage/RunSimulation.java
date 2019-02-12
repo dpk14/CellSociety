@@ -74,6 +74,7 @@ public class RunSimulation {
     private void replaceSimulation(Simulation sim){
         root_other.getChildren().clear();
         root_grid.getChildren().clear();
+        root_graph.getChildren().clear();
         root.getChildren().clear();
         onInitialGrid = true;
         currentSimulation = sim;
@@ -84,6 +85,8 @@ public class RunSimulation {
         root.getChildren().add(root_other);
         root.getChildren().add(root_grid);
         root.getChildren().add(root_graph);
+        graph = new PopulationGraph(initialGrid.getMapOfCellCount());
+        root_graph.getChildren().add(graph.getGraphRootNode());
     }
 
     private void setupSimulation() {
@@ -91,7 +94,7 @@ public class RunSimulation {
         try {
             currentSimulation = new XMLParser("simType").getSimulation(new File(DATA_FILE));
         }
-        catch(RuntimeException e){
+        catch(Exception e){
             System.out.println("Staying on current simulation since specified file is invalid.");
         }
         Grid initialGrid = currentSimulation.getMyGrid();
