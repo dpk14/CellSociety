@@ -258,7 +258,6 @@ public class LangdonLoopSimulation extends Simulation{
     @Override
     public void createQueueOfCellChoices () {
         myCellChoices = new LinkedList<>();
-        // TODO
     }
 
     public void placeLoop(Grid grid, int x, int y){

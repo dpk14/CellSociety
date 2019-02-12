@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PopulationGraph {
+    public static final int MAX_GRAPH_POINTS = 200;
     private List<XYChart.Series> plots;
     private int counter;
     private CategoryAxis xAxis = new CategoryAxis();
@@ -23,7 +24,6 @@ public class PopulationGraph {
         for (Paint p : m.keySet()) {
             XYChart.Series s = new XYChart.Series();
             s.setName(p.toString());
-
             plots.add(s);
             lineChart.getData().add(s);
         }
@@ -42,6 +42,9 @@ public class PopulationGraph {
         for (Paint p : m.keySet()) {
             for (XYChart.Series s : plots) {
                 if (s.getName().equals(p.toString())) {
+                    if (s.getData().size() > MAX_GRAPH_POINTS) {
+                        s.getData().clear();
+                    }
                     s.getData().add(new XYChart.Data(Integer.toString(counter), m.get(p)));
                 }
             }
@@ -57,7 +60,6 @@ public class PopulationGraph {
         }
         return false;
     }
-
 
     public Node getGraphRootNode() {
         lineChart.setLayoutX(0);
