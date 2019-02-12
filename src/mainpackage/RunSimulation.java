@@ -283,8 +283,8 @@ public class RunSimulation {
         shouldReplace = shouldReplace || updateGridShape();
         if(shouldReplace) {
             dataValues.put("generatorType", "probability");
-            System.out.println("from dataValues: " + dataValues.get("gridShape"));
-            System.out.println("from myDataValues: " + currentSimulation.getMyDataValues().get("gridShape"));
+            System.out.println("from dataValues: " + dataValues.get("rows"));
+            System.out.println("from myDataValues: " + currentSimulation.getMyDataValues().get("rows"));
             currentSimulation = Simulation.createNewSimulation(currentSimulation.getSimType(), dataValues);
             replaceSimulation(currentSimulation);
         }

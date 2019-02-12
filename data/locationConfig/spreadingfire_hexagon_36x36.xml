@@ -8,7 +8,7 @@
         <gridShape>HexagonalGrid</gridShape>
         <rows>36</rows>
         <columns>36</columns>
-        <speed>25</speed>
+        <speed>15</speed>
         <spreadRate>0.50</spreadRate>
         <growthRate>0.10</growthRate>
         <lightningRate>0.0005</lightningRate>

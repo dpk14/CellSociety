@@ -7,11 +7,8 @@ import java.util.*;
 
 public class LangdonLoopSimulation extends Simulation{
 
-    public static double START_ROW_DEFAULT = 0;
-    public static double START_COL_DEFAULT = 0;
-
-    private HashMap<Cell, Cell[]> mySplitLocations=new HashMap<Cell, Cell[]>();
-    private List<Cell> mypinkCells=new ArrayList<Cell>();
+    private HashMap<Cell, Cell[]> mySplitLocations=new HashMap<>();
+    private List<Cell> mypinkCells=new ArrayList<>();
     public static final String DATA_TYPE = "LangdonLoopSimulation";
     public LangdonLoopSimulation(Map<String, String> dataValues, List<Cell> cells) {
         super(dataValues, cells);
@@ -204,11 +201,10 @@ public class LangdonLoopSimulation extends Simulation{
 
     @Override
     public void setupGrid(String generationType){
+        int startRow = (int) Double.parseDouble(myDataValues.get("rows"))/2-5;
+        int startCol = (int) Double.parseDouble(myDataValues.get("columns"))/2-5;
         super.setupGrid("probability");
-        START_ROW_DEFAULT = (int) readInValue("row", ROW_DEFAULT)/2-5;
-        START_COL_DEFAULT = (int) readInValue("row", COL_DEFAULT)/2-5;
-        placeLoop(myGrid, (int) readInValue("startRow", START_ROW_DEFAULT),
-                (int) readInValue("startColumn", START_COL_DEFAULT));
+        placeLoop(myGrid, startRow, startCol);
     }
 
     @Override

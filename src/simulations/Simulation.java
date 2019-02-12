@@ -25,8 +25,8 @@ public abstract class Simulation {
 
 
     public enum Bounds{
-        rows(1, 100),
-        columns(1,100),
+        rows(1, 200),
+        columns(1,200),
         speed (1, 30),
         satisfaction (0, 1),
         spreadRate(0,1),
