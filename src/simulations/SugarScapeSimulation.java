@@ -15,11 +15,11 @@ public class SugarScapeSimulation extends Simulation{
     public static final String DATA_TYPE = "SugarScapeSimulation";
 //    public static final List<String> DATA_FIELDS = List.of(
 //            "title", "author", "rows", "columns", "cellShape", "gridShape", "speed", "rate",
-//            "interval");
+//            "growthInterval");
 
     public static final double AGENT_RATE_DEFAULT = 0.1;
     public static final int GROWTH_RATE_DEFAULT = 1;
-    public static final int GROWTH_INTERVAL_DEFAULT = 1;
+    public static final int GROWTH_growthInterval_DEFAULT = 1;
 
     public SugarScapeSimulation(Map<String, String> dataValues, List<Cell> cells) {
         super(dataValues, cells);
@@ -33,7 +33,7 @@ public class SugarScapeSimulation extends Simulation{
         createQueueOfCellChoices();
     }
 
-    //sugar growback rate is 1-4, sugar growback Interval is arbitrary
+    //sugar growback rate is 1-4, sugar growback growthInterval is arbitrary
     public Grid advanceSimulation() {
         myTakenSpots.clear();
         myCellList.clear();
@@ -125,12 +125,12 @@ public class SugarScapeSimulation extends Simulation{
                 Cell cell;
                 Random rand= new Random();
                 if(evaluateOdds(agentRate)) {
-                    cell = new SugarPatch(i, j, rand.nextInt(4), (int) readInValue("rate", GROWTH_RATE_DEFAULT),
-                            (int) readInValue("interval", GROWTH_INTERVAL_DEFAULT), true);
+                    cell = new SugarPatch(i, j, rand.nextInt(4), (int) readInValue("sugarGrowthRate", GROWTH_RATE_DEFAULT),
+                            (int) readInValue("growthInterval", GROWTH_growthInterval_DEFAULT), true);
                 }
                 else {
-                    cell = new SugarPatch(i, j, rand.nextInt(4), (int) readInValue("rate", GROWTH_RATE_DEFAULT),
-                            (int) readInValue("interval", GROWTH_INTERVAL_DEFAULT),  false);
+                    cell = new SugarPatch(i, j, rand.nextInt(4), (int) readInValue("sugarGrowthRate", GROWTH_RATE_DEFAULT),
+                            (int) readInValue("growthInterval", GROWTH_growthInterval_DEFAULT),  false);
                 }
                 cells.add(cell);
             }
@@ -152,6 +152,8 @@ public class SugarScapeSimulation extends Simulation{
     protected void setupSliderInfo() {
         super.setupSliderInfo();
         addSliderInfo("agentRate");
+        addSliderInfo("sugarGrowthRate");
+        addSliderInfo("growthInterval");
     }
 
     @Override

@@ -44,7 +44,9 @@ public abstract class Simulation {
         burningRate(0,1),
         fishRate(0,1),
         sharkRate(0,1),
-        agentRate(0,1);
+        agentRate(0,1),
+        sugarGrowthRate(1,4),
+        growthInterval(1,10);
 
         private double min;
         private double max;

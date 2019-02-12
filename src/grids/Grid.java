@@ -69,7 +69,7 @@ public class Grid {
 
     public void replaceCellOnWithNew(int row, int col, Cell neww) {
         myCellArray[row][col] = neww;
-        System.out.println("row/col of old cell: " + row + "|" + col);
+//        System.out.println("row/col of old cell: " + row + "|" + col);
         //System.out.println("didnt find cell to replace");
     }
 
@@ -114,6 +114,4 @@ public class Grid {
         }
         return m;
     }
-
-
 }
