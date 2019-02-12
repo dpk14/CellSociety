@@ -124,14 +124,13 @@ public class RunSimulation {
         myToggleGroup = new ToggleGroup();
         int x = 580;
         int y = 480;
-        RadioButton r1 = createRadioButton(x, y, "Square");
-        RadioButton r2 = createRadioButton(x, y + 20, "Triangle");
-        RadioButton r3 = createRadioButton(x, y + 40,"Hexagon");
-
+        RadioButton squareButton = createRadioButton(x, y, "RectangularGrid");
+        RadioButton triangleButton = createRadioButton(x, y + 20, "TriangularGrid");
+        RadioButton hexagonButton = createRadioButton(x, y + 40,"HexagonalGrid");
         root_other.getChildren().addAll(myLoadFileButton, myNextIterationButton,
                 myResetButton, myApplyButton, myStartButton,
                 myNewWindowButton, myStopButton, myGridOnCheckBox, gridLabel,
-                r1, r2, r3);
+                squareButton, triangleButton, hexagonButton);
         setButtonHandlers();
     }
 
@@ -142,7 +141,9 @@ public class RunSimulation {
         r.setUserData(text);
         r.setToggleGroup(myToggleGroup);
         // TODO set the right one to true...
-        r.setSelected(true);
+        if(currentSimulation.getMyDataValues().get("gridShape").equals(text)) {
+            r.setSelected(true);
+        }
         return r;
     }
 
@@ -184,29 +185,28 @@ public class RunSimulation {
             }
             refreshGridView();
         });
-        myToggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
-            public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
-                if (myToggleGroup.getSelectedToggle() != null) {
-                    System.out.println(myToggleGroup.getSelectedToggle().getUserData().toString());
-                    String selection = myToggleGroup.getSelectedToggle().getUserData().toString();
-                    if (selection.equals("Triangle")) {
-                        // TODO
-
-                        refreshGridView();
-                    }
-                    else if (selection.equals("Square")) {
-                        // TODO
-
-                        refreshGridView();
-                    }
-                    else if (selection.equals("Hexagon")) {
-                        // TODO
-
-                        refreshGridView();
-                    }
-                }
-            }
-        });
+//        myToggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
+//            public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
+//                if (myToggleGroup.getSelectedToggle() != null) {
+//                    //System.out.println(myToggleGroup.getSelectedToggle().getUserData().toString());
+//                    String selection = myToggleGroup.getSelectedToggle().getUserData().toString();
+//                    if (selection.equals("TriangularGrid")) {
+//                        // TODO
+//                        refreshGridView();
+//                    }
+//                    else if (selection.equals("RectangularGrid")) {
+//                        // TODO
+//
+//                        refreshGridView();
+//                    }
+//                    else if (selection.equals("HexagonalGrid")) {
+//                        // TODO
+//
+//                        refreshGridView();
+//                    }
+//                }
+//            }
+//        });
 
     }
 
@@ -280,11 +280,23 @@ public class RunSimulation {
             dataValues.put(s, Double.toString(mySliders.get(s).getValue()));
         }
         sim.updateParameters();
+        shouldReplace = shouldReplace || updateGridShape();
         if(shouldReplace) {
             dataValues.put("generatorType", "probability");
+            System.out.println("from dataValues: " + dataValues.get("gridShape"));
+            System.out.println("from myDataValues: " + currentSimulation.getMyDataValues().get("gridShape"));
             currentSimulation = Simulation.createNewSimulation(currentSimulation.getSimType(), dataValues);
             replaceSimulation(currentSimulation);
         }
+    }
+
+    private boolean updateGridShape(){
+        if(!myToggleGroup.getSelectedToggle().getUserData().equals(currentSimulation.getMyDataValues().get("gridShape"))){
+            currentSimulation.getMyDataValues().put("gridShape", myToggleGroup.getSelectedToggle().getUserData().toString());
+            //System.out.println( myToggleGroup.getSelectedToggle().getUserData().toString());
+            return true;
+        }
+        return false;
     }
 
     private void renderNextIteration() {

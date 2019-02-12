@@ -7,6 +7,9 @@ import java.util.*;
 
 public class LangdonLoopSimulation extends Simulation{
 
+    public static double START_ROW_DEAFULT = 0;
+    public static double START_COL_DEAFULT = 0;
+
     private HashMap<Cell, Cell[]> mySplitLocations=new HashMap<Cell, Cell[]>();
     private List<Cell> myPurpleCells=new ArrayList<Cell>();
     public static final String DATA_TYPE = "LangdonLoopSimulation";
@@ -155,8 +158,23 @@ public class LangdonLoopSimulation extends Simulation{
     }
 
     @Override
+    public void setupGrid(String generationType){
+        super.setupGrid("probability");
+        placeLoop(myGrid, (int) readInValue("startRow", START_ROW_DEAFULT),
+                (int) readInValue("startColumn", START_COL_DEAFULT));
+    }
+
+    @Override
     protected Grid setupGridByProb() {
-        return null;
+        int rows = (int) readInValue("rows", ROW_DEFAULT);
+        int cols = (int) readInValue("columns", COL_DEFAULT);
+        List<Cell> cells = new ArrayList<>();
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < cols; j++){
+                cells.add(new LangdonCell(i, j, "BLACK"));
+            }
+        }
+        return createGrid("RectangularGrid", rows, cols, cells);
     }
 
     @Override
@@ -166,7 +184,7 @@ public class LangdonLoopSimulation extends Simulation{
 
     @Override
     public String getSimType() {
-        return null;
+        return DATA_TYPE;
     }
 
 
@@ -175,4 +193,61 @@ public class LangdonLoopSimulation extends Simulation{
         myCellChoices = new LinkedList<>();
         // TODO
     }
+
+    public void placeLoop(Grid grid, int x, int y){
+        for(int k = 0; k < 8; k++){
+            placeLangdonCell(grid, x, y+1+k, "RED");
+            placeLangdonCell(grid, x+9, y+1+k, "RED");
+            placeLangdonCell(grid, x+2, y+1+k, "RED");
+            placeLangdonCell(grid, x+7, y+1+k, "RED");
+        }
+        for(int k = 0; k < 8; k++){
+            placeLangdonCell(grid, x+1+k, y, "RED");
+            placeLangdonCell(grid, x+1+k, y+9, "RED");
+            placeLangdonCell(grid, x+1+k, y+2, "RED");
+            placeLangdonCell(grid, x+1+k, y+7, "RED");
+        }
+        for(int k = 0; k < 5; k++){
+            placeLangdonCell(grid, x+7, y+9+k, "RED");
+            placeLangdonCell(grid, x+9, y+9+k, "RED");
+        }
+        List<String> instructions = new ArrayList(Arrays.asList(
+                "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "BLACK", "GREEN",
+                "WHITE", "BLACK", "GREEN", "WHITE", "BLACK", "YELLOW", "WHITE",
+                "BLACK", "YELLOW", "WHITE", "BLACK", "YELLOW", "WHITE", "BLACK",
+                "YELLOW", "WHITE", "BLACK", "YELLOW", "WHITE", "BLACK", "YELLOW",
+                "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "RED"));
+        List<LangdonCell> interior = getLoopInterior(x+7, y+8, instructions);
+        for(LangdonCell c : interior){
+
+            placeLangdonCell(myGrid, c.getRow(), c.getColumn(), c.getState());
+        }
+    }
+
+    public void placeLangdonCell(Grid grid, int row, int col, String state){
+        if(row >= 0 && row <= myGrid.getWidth() - 1 && col >= 0 && col <= myGrid.getWidth() - 1) {
+            grid.replaceCellOnWithNew(row, col, new LangdonCell(row, col, state));
+        }
+    }
+
+    public List<LangdonCell> getLoopInterior(int row, int column, List<String> instructions){
+        List<LangdonCell> cells = new ArrayList<>();
+        for(int k = 0; k < 7; k++){
+            cells.add(new LangdonCell(row--, column, instructions.remove(0)));
+        }
+        row++; column--;
+        for(int k = 0; k < 7; k++){
+            cells.add(new LangdonCell(row, column--, instructions.remove(0)));
+        }
+        column++; row++;
+        for(int k = 0; k < 7; k++){
+            cells.add(new LangdonCell(row++, column, instructions.remove(0)));
+        }
+        row--; column++;
+        for(int k = 0; k < 13; k++){
+            cells.add(new LangdonCell(row, column++, instructions.remove(0)));
+        }
+        return cells;
+    }
+
 }
