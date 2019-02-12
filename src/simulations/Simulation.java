@@ -2,6 +2,7 @@ package simulations;
 
 import cells.AgentCell;
 import cells.Cell;
+import cells.LangdonCell;
 import cells.StateChangeCell;
 import grids.Grid;
 import grids.HexagonalGrid;
@@ -237,10 +238,17 @@ public abstract class Simulation {
     protected List<Cell> getTypedNeighbors(Cell cell, String type, List<Cell> neighbors) {
         List<Cell> specificNeighbors=new ArrayList<Cell>();
         for(Cell neighbor: neighbors){
-            if (((StateChangeCell) neighbor).getState().equals(type)) specificNeighbors.add(neighbor);
+            if ((neighbor instanceof StateChangeCell) && ((StateChangeCell) neighbor).getState().equals(type)){
+                specificNeighbors.add(neighbor);
+            }
+            else if ((neighbor instanceof LangdonCell) && ((LangdonCell) neighbor).getState().equals(type)){
+                specificNeighbors.add(neighbor);
+            }
         }
         return specificNeighbors;
     }
+
+
 
     protected Cell move(List<Cell> movable_spots, Cell current){
         Cell newLocation;
