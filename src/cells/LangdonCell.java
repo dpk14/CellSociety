@@ -47,6 +47,9 @@ public class LangdonCell extends Cell{
     public int getCounter(){
         return myCounter;
     }
+    public void setCounter(int counter){
+        myCounter=counter;
+    }
 
     public void setDirection(int[] direction){
         myDirection=direction;
