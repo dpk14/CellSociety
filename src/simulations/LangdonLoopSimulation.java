@@ -212,11 +212,11 @@ public class LangdonLoopSimulation extends Simulation{
             placeLangdonCell(grid, x+9, y+9+k, "RED");
         }
         List<String> instructions = new ArrayList(Arrays.asList(
-                "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "BLACK", "GREEN",
-                "WHITE", "BLACK", "GREEN", "WHITE", "BLACK", "YELLOW", "WHITE",
-                "BLACK", "YELLOW", "WHITE", "BLACK", "YELLOW", "WHITE", "BLACK",
-                "YELLOW", "WHITE", "BLACK", "YELLOW", "WHITE", "BLACK", "YELLOW",
-                "WHITE", "WHITE", "WHITE", "WHITE", "WHITE", "RED"));
+                "BLUE", "BLUE", "BLUE", "BLUE", "BLUE", "BLACK", "YELLOW",
+                "BLUE", "BLACK", "YELLOW", "BLUE", "BLACK", "CYAN", "BLUE",
+                "BLACK", "CYAN", "BLUE", "BLACK", "CYAN", "BLUE", "BLACK",
+                "CYAN", "BLUE", "BLACK", "CYAN", "BLUE", "BLACK", "CYAN",
+                "BLUE", "BLUE", "BLUE", "BLUE", "BLUE", "RED"));
         List<LangdonCell> interior = getLoopInterior(x+7, y+8, instructions);
         for(LangdonCell c : interior){
 
