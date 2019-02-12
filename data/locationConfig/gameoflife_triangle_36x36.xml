@@ -8,7 +8,7 @@
         <gridShape>TriangularGrid</gridShape>
         <rows>72</rows>
         <columns>72</columns>
-        <speed>25</speed>
+        <speed>15</speed>
     </settings>
 
     <grid>

@@ -2,6 +2,7 @@ package simulations;
 
 import cells.AgentCell;
 import cells.Cell;
+import cells.LangdonCell;
 import cells.StateChangeCell;
 import cells.SugarPatch;
 import grids.Grid;
@@ -24,8 +25,8 @@ public abstract class Simulation {
 
 
     public enum Bounds{
-        rows(1, 100),
-        columns(1,100),
+        rows(1, 200),
+        columns(1,200),
         speed (1, 30),
         satisfaction (0, 1),
         spreadRate(0,1),
@@ -235,10 +236,17 @@ public abstract class Simulation {
     protected List<Cell> getTypedNeighbors(Cell cell, String type, List<Cell> neighbors) {
         List<Cell> specificNeighbors=new ArrayList<>();
         for(Cell neighbor: neighbors){
-            if (((StateChangeCell) neighbor).getState().equals(type)) specificNeighbors.add(neighbor);
+            if ((neighbor instanceof StateChangeCell) && ((StateChangeCell) neighbor).getState().equals(type)){
+                specificNeighbors.add(neighbor);
+            }
+            else if ((neighbor instanceof LangdonCell) && ((LangdonCell) neighbor).getState().equals(type)){
+                specificNeighbors.add(neighbor);
+            }
         }
         return specificNeighbors;
     }
+
+
 
     protected Cell move(List<Cell> movable_spots, Cell current){
         Cell newLocation;
