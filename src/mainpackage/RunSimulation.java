@@ -35,7 +35,6 @@ public class RunSimulation {
     private Button myApplyButton;
     private Button myNextIterationButton;
     private Button myLoadFileButton;
-    private Button myNewWindowButton;
     private ToggleGroup myToggleGroup;
     private Map<String, Slider> mySliders;
     private CheckBox myGridOnCheckBox;
@@ -129,7 +128,7 @@ public class RunSimulation {
         RadioButton hexagonButton = createRadioButton(x, y + 40,"HexagonalGrid");
         root_other.getChildren().addAll(myLoadFileButton, myNextIterationButton,
                 myResetButton, myApplyButton, myStartButton,
-                myNewWindowButton, myStopButton, myGridOnCheckBox, gridLabel,
+                myStopButton, myGridOnCheckBox, gridLabel,
                 squareButton, triangleButton, hexagonButton);
         setButtonHandlers();
     }
@@ -173,9 +172,7 @@ public class RunSimulation {
                 openFile(selectedFile);
             }
         });
-        myNewWindowButton.setOnAction(event -> {
-            // TODO: create new scene, have to talk to Main.java
-        });
+
         myGridOnCheckBox.setOnAction(e -> {
             if (myGridOnCheckBox.isSelected()) {
                 newVisual.turnBorderOn();
@@ -185,29 +182,6 @@ public class RunSimulation {
             }
             refreshGridView();
         });
-//        myToggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
-//            public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
-//                if (myToggleGroup.getSelectedToggle() != null) {
-//                    //System.out.println(myToggleGroup.getSelectedToggle().getUserData().toString());
-//                    String selection = myToggleGroup.getSelectedToggle().getUserData().toString();
-//                    if (selection.equals("TriangularGrid")) {
-//                        // TODO
-//                        refreshGridView();
-//                    }
-//                    else if (selection.equals("RectangularGrid")) {
-//                        // TODO
-//
-//                        refreshGridView();
-//                    }
-//                    else if (selection.equals("HexagonalGrid")) {
-//                        // TODO
-//
-//                        refreshGridView();
-//                    }
-//                }
-//            }
-//        });
-
     }
 
     private void refreshGridView() {
@@ -265,7 +239,7 @@ public class RunSimulation {
         }
         myApplyButton = createButton("Apply", slidersXPosition, 40*k, false);
         k++;
-        myNewWindowButton = createButton("New Window", slidersXPosition, 40*k, false);
+
         return sliderMap;
     }
 

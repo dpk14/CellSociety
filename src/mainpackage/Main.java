@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -32,18 +33,17 @@ public class Main extends Application {
     private Map<Scene, RunSimulation> scenes = new HashMap<>();
     private Timeline animation = new Timeline();
     private Group root;
+    private Stage startStage;
 
     @Override
     public void start(Stage primaryStage){
-        Scene myScene = setupGame(WIDTH, HEIGHT, BACKGROUND);
-        Scene myScene2 = setupGame(WIDTH, HEIGHT, BACKGROUND);
-//        Scene myScene3 = setupGame(WIDTH, HEIGHT, BACKGROUND);
-
+        setupGame(WIDTH, HEIGHT, BACKGROUND);
         for (Scene s : scenes.keySet()) {
-            Stage s2 = new Stage();
-            s2.setScene(s);
-            s2.setTitle(TITLE);
-            s2.show();
+            Stage stage = new Stage();
+            startStage = stage;
+            stage.setScene(s);
+            stage.setTitle(TITLE);
+            stage.show();
             attachGameLoop();
         }
     }
@@ -52,10 +52,24 @@ public class Main extends Application {
         root = new Group();
         RunSimulation r = new RunSimulation(animation);
         root = r.getNode();
+        Button newWinButton = createButton("New Window", 700,700);
+        newWinButton.setOnAction(event -> createAndInitializeNewWindow());
+        root.getChildren().add(newWinButton);
         Scene scene = new Scene(root, width, height, background);
         scenes.put(scene, r);
         scene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY(), r));
         return scene;
+    }
+
+    private void createAndInitializeNewWindow() {
+        Scene newScene = setupGame(WIDTH, HEIGHT, BACKGROUND);
+        Stage stage = new Stage();
+        stage.setScene(newScene);
+        stage.setX(startStage.getX() + scenes.size() * 40);
+        stage.setY(startStage.getY() + scenes.size() * 40);
+        stage.setTitle(TITLE);
+        stage.show();
+        attachGameLoop();
     }
 
     private void attachGameLoop() {
@@ -77,8 +91,11 @@ public class Main extends Application {
         s.renderNextIterationFromClick(x, y);
     }
 
-    private void handleKeyInput (KeyCode code) {
-        if (code == KeyCode.RIGHT) { }
+    private Button createButton(String text, double x, double y){
+        Button button = new Button(text);
+        button.setLayoutX(x);
+        button.setLayoutY(y);
+        return button;
     }
 
     public static void main(String[] args){
