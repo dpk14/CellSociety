@@ -4,6 +4,7 @@ import cells.AgentCell;
 import cells.Cell;
 import cells.LangdonCell;
 import cells.StateChangeCell;
+import cells.SugarPatch;
 import grids.Grid;
 import grids.HexagonalGrid;
 import grids.RectangularGrid;
@@ -268,6 +269,7 @@ public abstract class Simulation {
                 Cell candidate = q.poll();
                 if ( (!(current instanceof StateChangeCell))
                         && (!(current instanceof AgentCell))
+                        && (!(current instanceof SugarPatch))
                         && current.getClass().equals(candidate.getClass())) {
                     q.add(candidate);
                     return q.peek();
@@ -279,6 +281,14 @@ public abstract class Simulation {
                 }
                 else if (current instanceof AgentCell && candidate instanceof AgentCell
                         && ((AgentCell) candidate).getType().equals(((AgentCell) current).getType())) {
+                    q.add(candidate);
+                    return q.peek();
+                }
+                else if (current instanceof SugarPatch && candidate instanceof SugarPatch
+                    && ((SugarPatch) current).getSugar() == ((SugarPatch) candidate).getSugar()
+                    && ((SugarPatch) current).hasAgent() == ((SugarPatch) candidate).hasAgent()) {
+                    q.add(candidate);
+                    System.out.println("FOUND");
                     return q.peek();
                 }
                 else {

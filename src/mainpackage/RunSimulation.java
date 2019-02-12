@@ -3,8 +3,6 @@ package mainpackage;
 import cells.Cell;
 import grids.Grid;
 import javafx.animation.Timeline;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -20,6 +18,10 @@ public class RunSimulation {
     public static final int btnXPosition = 10;
     public static final int btnYPosition = 520;
     public static final int slidersXPosition = 510;
+
+    public static final int RADIOX = 580;
+    public static final int RADIOY = 480;
+
     private String DATA_FILE = "data/locationConfig/spreadingfire_rectangle_12x12.xml";
     private Timeline animation;
     private Group root = new Group();
@@ -35,7 +37,6 @@ public class RunSimulation {
     private Button myApplyButton;
     private Button myNextIterationButton;
     private Button myLoadFileButton;
-    private Button myNewWindowButton;
     private ToggleGroup myToggleGroup;
     private Map<String, Slider> mySliders;
     private CheckBox myGridOnCheckBox;
@@ -109,29 +110,22 @@ public class RunSimulation {
         myResetButton = createButton("Reset", btnXPosition + 40, btnYPosition, false);
         myStartButton = createButton("Start", btnXPosition + 100, btnYPosition, true);
         myStopButton = createButton("Stop", btnXPosition + 160, btnYPosition, true);
+        createCheckBoxes(myLoadFileButton.getLayoutX() + 200, myLoadFileButton.getLayoutY());
+        root_other.getChildren().addAll(myLoadFileButton, myNextIterationButton,
+                myResetButton, myApplyButton, myStartButton,
+                myStopButton);
+        setButtonHandlers();
+    }
 
-
-        // TODO wrap this in a method
+    private void createCheckBoxes(double x, double y) {
         myGridOnCheckBox = new CheckBox();
         Label gridLabel = new Label("Grid:");
-        gridLabel.setLayoutY(myLoadFileButton.getLayoutY());
-        gridLabel.setLayoutX(myLoadFileButton.getLayoutX() + 200);
+        gridLabel.setLayoutX(x);
+        gridLabel.setLayoutY(y);
         myGridOnCheckBox.setLayoutX(gridLabel.getLayoutX() + 30);
         myGridOnCheckBox.setLayoutY(myLoadFileButton.getLayoutY());
         myGridOnCheckBox.setSelected(true);
-
-        // TODO wrap this in a method
-        myToggleGroup = new ToggleGroup();
-        int x = 580;
-        int y = 480;
-        RadioButton squareButton = createRadioButton(x, y, "RectangularGrid");
-        RadioButton triangleButton = createRadioButton(x, y + 20, "TriangularGrid");
-        RadioButton hexagonButton = createRadioButton(x, y + 40,"HexagonalGrid");
-        root_other.getChildren().addAll(myLoadFileButton, myNextIterationButton,
-                myResetButton, myApplyButton, myStartButton,
-                myNewWindowButton, myStopButton, myGridOnCheckBox, gridLabel,
-                squareButton, triangleButton, hexagonButton);
-        setButtonHandlers();
+        root_other.getChildren().addAll(gridLabel, myGridOnCheckBox);
     }
 
     private RadioButton createRadioButton (int x, int y, String text) {
@@ -140,7 +134,6 @@ public class RunSimulation {
         r.setLayoutY(y);
         r.setUserData(text);
         r.setToggleGroup(myToggleGroup);
-        // TODO set the right one to true...
         if(currentSimulation.getMyDataValues().get("gridShape").equals(text)) {
             r.setSelected(true);
         }
@@ -173,9 +166,7 @@ public class RunSimulation {
                 openFile(selectedFile);
             }
         });
-        myNewWindowButton.setOnAction(event -> {
-            // TODO: create new scene, have to talk to Main.java
-        });
+
         myGridOnCheckBox.setOnAction(e -> {
             if (myGridOnCheckBox.isSelected()) {
                 newVisual.turnBorderOn();
@@ -185,29 +176,6 @@ public class RunSimulation {
             }
             refreshGridView();
         });
-//        myToggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
-//            public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
-//                if (myToggleGroup.getSelectedToggle() != null) {
-//                    //System.out.println(myToggleGroup.getSelectedToggle().getUserData().toString());
-//                    String selection = myToggleGroup.getSelectedToggle().getUserData().toString();
-//                    if (selection.equals("TriangularGrid")) {
-//                        // TODO
-//                        refreshGridView();
-//                    }
-//                    else if (selection.equals("RectangularGrid")) {
-//                        // TODO
-//
-//                        refreshGridView();
-//                    }
-//                    else if (selection.equals("HexagonalGrid")) {
-//                        // TODO
-//
-//                        refreshGridView();
-//                    }
-//                }
-//            }
-//        });
-
     }
 
     private void refreshGridView() {
@@ -250,7 +218,6 @@ public class RunSimulation {
      */
     private HashMap<String, Slider> createMySliders(Simulation sim, Group root){
         HashMap<String, Slider> sliderMap = new LinkedHashMap<>();
-        double applyButtonY = 0;
         int k = 1;
         for(String currentField : sim.getMySliderInfo().keySet()){
             double value = Double.parseDouble(sim.getMySliderInfo().get(currentField));
@@ -263,10 +230,18 @@ public class RunSimulation {
             root.getChildren().addAll(label, slider);
             k++;
         }
-        myApplyButton = createButton("Apply", slidersXPosition, 40*k, false);
-        k++;
-        myNewWindowButton = createButton("New Window", slidersXPosition, 40*k, false);
+        createRadioButtonsApplyButton(k);
         return sliderMap;
+    }
+
+    private void createRadioButtonsApplyButton (int positionCounter) {
+        myToggleGroup = new ToggleGroup();
+        RadioButton squareButton = createRadioButton(slidersXPosition, 40*positionCounter++, "RectangularGrid");
+        RadioButton triangleButton = createRadioButton(slidersXPosition, 40*positionCounter++, "TriangularGrid");
+        RadioButton hexagonButton = createRadioButton(slidersXPosition, 40*positionCounter++,"HexagonalGrid");
+        root_other.getChildren().addAll(squareButton, triangleButton, hexagonButton);
+        myApplyButton = createButton("Apply", slidersXPosition, 40*positionCounter++, false);
+
     }
 
     private void carryOutApply(Simulation sim){
@@ -291,9 +266,9 @@ public class RunSimulation {
     }
 
     private boolean updateGridShape(){
+        System.out.println(myToggleGroup.getSelectedToggle().getUserData().toString());
         if(!myToggleGroup.getSelectedToggle().getUserData().equals(currentSimulation.getMyDataValues().get("gridShape"))){
             currentSimulation.getMyDataValues().put("gridShape", myToggleGroup.getSelectedToggle().getUserData().toString());
-            //System.out.println( myToggleGroup.getSelectedToggle().getUserData().toString());
             return true;
         }
         return false;
@@ -323,7 +298,7 @@ public class RunSimulation {
         refreshGridView();
     }
 
-    public void stepThru(double elapsedTime){
+    public void stepThru(){
         myNextIterationButton.setDisable(startedAnimation);
         myResetButton.setDisable(onInitialGrid);
         myStartButton.setDisable(startedAnimation);
