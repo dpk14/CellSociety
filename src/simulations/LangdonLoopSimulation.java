@@ -7,6 +7,11 @@ import java.util.*;
 
 public class LangdonLoopSimulation extends Simulation{
 
+    private final int BEGIN_ARM=10;
+    private final int STALL_ARM=15;
+    private final int SEAL_ARM=27;
+    private final int TERMINATE_ARM=28;
+
     private HashMap<Cell, Cell[]> mySplitLocations=new HashMap<>();
     private List<Cell> mypinkCells=new ArrayList<>();
     public static final String DATA_TYPE = "LangdonLoopSimulation";
@@ -69,7 +74,15 @@ public class LangdonLoopSimulation extends Simulation{
             }
             for(Cell toBeRemoved: pinksToBeRemoved) mySplitLocations.remove(toBeRemoved);
             List<Cell> iterationList=new ArrayList<Cell>(mypinkCells);
-            for(Cell pinkCell: iterationList) movepinkCell(pinkCell);
+            for(Cell pinkCell: iterationList) {
+                int[] direction = ((LangdonCell) pinkCell).getDirection();
+                Cell ahead2 = myGrid.getCell(pinkCell.getRow() + 2 * direction[0], pinkCell.getColumn() + 2 * direction[1]);
+                Cell ahead3 = myGrid.getCell(pinkCell.getRow() + 3 * direction[0], pinkCell.getColumn() + 3 * direction[1]);
+                if (!((((LangdonCell) ahead2).getState().equals("RED") || ((LangdonCell) ahead3).getState().equals("RED")) && ((LangdonCell) pinkCell).getCounter() == BEGIN_ARM)) {
+                    //if pink cell is in MOVE_ARM position but a wall lies ahead, stall cell permanently so that cell never grows again
+                    movepinkCell(pinkCell, direction);
+                }
+            }
         return myGrid;
     }
 
@@ -146,8 +159,7 @@ public class LangdonLoopSimulation extends Simulation{
         mySplitLocations.put(splitLocation, splitterCells);
     }
 
-    private void movepinkCell(Cell pinkCell){
-        int direction[]=((LangdonCell) pinkCell).getDirection();
+    private void movepinkCell(Cell pinkCell, int[] direction){
         int row=pinkCell.getRow();
         int col=pinkCell.getColumn();
         int counter=((LangdonCell) pinkCell).getCounter();
@@ -163,11 +175,11 @@ public class LangdonLoopSimulation extends Simulation{
             myGrid.setCell(new LangdonCell(row+direction[1], col-direction[0], "BLACK"));
             myGrid.setCell(new LangdonCell(row, col, "BLACK"));
         }
-        else if (counter==28) {
+        else if (counter==TERMINATE_ARM) {
             closeArm(pinkCell, row, col, direction);
             return;
         }
-        else if(counter>=10) direction=makeNewArm(pinkCell, row, col, direction, counter);
+        else if(counter>=BEGIN_ARM) direction=makeNewArm(pinkCell, row, col, direction, counter);
         else myGrid.setCell(new LangdonCell(row, col, "RED"));
 
         myGrid.setCell(pinkCell, row+direction[0], col+direction[1]);
@@ -177,7 +189,7 @@ public class LangdonLoopSimulation extends Simulation{
     private int[] makeNewArm(Cell pinkCell, int row, int col, int[] direction, int counter){
         myGrid.setCell(new LangdonCell(row-direction[1], col+direction[0], "BLUE"));
         myGrid.setCell(new LangdonCell(row-(2*direction[1]), col+(2*direction[0]), "RED"));
-        if(counter>=15 && counter<27){
+        if(counter>=STALL_ARM && counter<SEAL_ARM){
             int[] stop={0, 0};
             return stop; //pink cell stops temporarily, waiting at end of new arm to cut away incoming yellows and blacks
         }
@@ -197,11 +209,11 @@ public class LangdonLoopSimulation extends Simulation{
         int counter=((LangdonCell) whiteCell).getCounter();
         int[] direction=((LangdonCell) whiteCell).getDirection();
         Cell ahead=myGrid.getCell(row+direction[0], col+direction[1]);
-        if(counter==9){
+        if(counter==BEGIN_ARM-1){
             myCellList.add(new LangdonCell(ahead.getRow()-direction[1], ahead.getColumn()+direction[0], "RED"));
             myCellList.add(new LangdonCell(ahead.getRow()+direction[1], ahead.getColumn()-direction[0], "PINK"));
             Cell pinkCell=myCellList.get(myCellList.size()-1);
-            ((LangdonCell) pinkCell).setCounter(13); //arm has been completed, now a stopped pink cell is set, which will filter out incoming yellows
+            ((LangdonCell) pinkCell).setCounter(STALL_ARM-2); //arm has been completed, now a stopped pink cell is set, which will filter out incoming yellows
             ((LangdonCell) pinkCell).setDirection(direction);
             mypinkCells.add(pinkCell);
         }
