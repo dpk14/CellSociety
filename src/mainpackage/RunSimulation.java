@@ -107,21 +107,21 @@ public class RunSimulation {
         myResetButton = createButton("Reset", btnXPosition + GAP_BETWEEN_COMPONENTS, btnYPosition, false);
         myStartButton = createButton("Start", btnXPosition + 3 * GAP_BETWEEN_COMPONENTS, btnYPosition, true);
         myStopButton = createButton("Stop", btnXPosition + 5 * GAP_BETWEEN_COMPONENTS, btnYPosition, true);
-        createCheckBoxes(myLoadFileButton.getLayoutX() + 200, myLoadFileButton.getLayoutY());
+        createCheckBox(myLoadFileButton.getLayoutX() + 200, myLoadFileButton.getLayoutY());
         root_other.getChildren().addAll(myLoadFileButton, myNextIterationButton,
                 myResetButton, myApplyButton, myStartButton,
                 myStopButton);
         setButtonHandlers();
     }
 
-    private void createCheckBoxes(double x, double y) {
+    private void createCheckBox(double x, double y) {
         myGridOnCheckBox = new CheckBox();
         Label gridLabel = new Label("Grid:");
         gridLabel.setLayoutX(x);
         gridLabel.setLayoutY(y);
         myGridOnCheckBox.setLayoutX(gridLabel.getLayoutX() + GAP_BETWEEN_COMPONENTS);
         myGridOnCheckBox.setLayoutY(myLoadFileButton.getLayoutY());
-        myGridOnCheckBox.setSelected(true);
+        myGridOnCheckBox.setSelected(false);
         root_other.getChildren().addAll(gridLabel, myGridOnCheckBox);
     }
 

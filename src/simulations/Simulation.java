@@ -261,6 +261,7 @@ public abstract class Simulation {
     public Cell getNextCell(Cell current) {
         Queue<Cell> q = myCellChoices;
         int num = q.size();
+        if (num == 0) return null;
         try {
             while (num >= 0) {
                 Cell candidate = q.poll();
