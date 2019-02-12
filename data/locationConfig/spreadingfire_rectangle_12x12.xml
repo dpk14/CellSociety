@@ -76,7 +76,7 @@
                 <state>TREE</state>
             </Cell>
             <Cell cellType = "StateChangeCell">
-                <state>BURNING</state>
+                <state>TREE</state>
             </Cell>
             <Cell cellType = "StateChangeCell">
                 <state>TREE</state>
