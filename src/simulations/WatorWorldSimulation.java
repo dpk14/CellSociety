@@ -225,8 +225,12 @@ public class WatorWorldSimulation extends Simulation {
     @Override
     public void createQueueOfCellChoices () {
         myCellChoices = new LinkedList<>();
-
-        //TODO
+        Cell c1 = new SharkCell(-1,-1,20,5,5);
+        Cell c2 = new FishCell(-1,-1,5);
+        Cell c3 = new EmptyCell(-1,-1);
+        myCellChoices.add(c1);
+        myCellChoices.add(c2);
+        myCellChoices.add(c3);
     }
 
     @Override

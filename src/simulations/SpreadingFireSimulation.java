@@ -154,11 +154,9 @@ public class SpreadingFireSimulation extends Simulation{
     @Override
     public void createQueueOfCellChoices () {
         myCellChoices = new LinkedList<>();
-
         Cell c1 = new StateChangeCell(-1,-1, "TREE");
         Cell c2 = new StateChangeCell(-1,-1,"BURNING");
         Cell c3 = new StateChangeCell(-1,-1, "EMPTY");
-
         myCellChoices.add(c1);
         myCellChoices.add(c2);
         myCellChoices.add(c3);

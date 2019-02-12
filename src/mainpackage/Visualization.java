@@ -22,7 +22,7 @@ public class Visualization {
     private double cellHeight;
     public static final Paint COLOR_BLACK = Color.BLACK;
     private Shape[][] shapes;
-    private boolean borderOn = true;
+    private boolean borderOn = false;
 
     public Visualization(int numRows, int numCols) {
         this.cellHeight = VISUALIZATION_HEIGHT / numRows;

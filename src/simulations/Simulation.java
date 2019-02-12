@@ -19,9 +19,7 @@ public abstract class Simulation {
     protected Map<String, String> myDataValues;
     protected Map<String, String> mySliderInfo;
     protected List<String> mySpecialSliders;
-
     protected Queue<Cell> myCellChoices;
-
     protected static final int ROW_DEFAULT = 36;
     protected static final int COL_DEFAULT = 36;
 
@@ -131,13 +129,12 @@ public abstract class Simulation {
     }
 
     /**
-     * Returns grid at start of initialization just so I can check we have the right grid to begin with
+     * Returns grid just after initialization before simulation
      * @return
      */
     public Grid getMyGrid() {
         return myGrid;
     }
-
 
     protected boolean evaluateOdds(double probability){
         double rand = Math.random();
@@ -237,7 +234,7 @@ public abstract class Simulation {
     protected abstract Grid setupGridByProb();
 
     protected List<Cell> getTypedNeighbors(Cell cell, String type, List<Cell> neighbors) {
-        List<Cell> specificNeighbors=new ArrayList<Cell>();
+        List<Cell> specificNeighbors=new ArrayList<>();
         for(Cell neighbor: neighbors){
             if ((neighbor instanceof StateChangeCell) && ((StateChangeCell) neighbor).getState().equals(type)){
                 specificNeighbors.add(neighbor);
@@ -264,6 +261,7 @@ public abstract class Simulation {
     public Cell getNextCell(Cell current) {
         Queue<Cell> q = myCellChoices;
         int num = q.size();
+        if (num == 0) return null;
         try {
             while (num >= 0) {
                 Cell candidate = q.poll();
@@ -311,7 +309,6 @@ public abstract class Simulation {
 
     public abstract String getSimType();
 
-
     protected double readInValue(String dataField, double defaultValue){
         try{
             return Double.parseDouble(myDataValues.get(dataField));
@@ -322,8 +319,4 @@ public abstract class Simulation {
             return defaultValue;
         }
     }
-
-    //public abstract void changeCell();
-
-
 }
