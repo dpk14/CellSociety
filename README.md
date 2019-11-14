@@ -1,7 +1,6 @@
 Design Review 
 ===
-
-# Author: Daniel Kingsbury
+Author: Daniel Kingsbury
 
 ## Overall Design:
 
