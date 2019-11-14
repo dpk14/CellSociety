@@ -2,6 +2,10 @@ Design Review
 ===
 Author: Daniel Kingsbury
 
+## Summary:
+
+A cellular automata simulator capable of supporting a variety of configurations and criteria: Langton's Loop, Conway's Game of Life, Spreading of Fire, Wa-Tor World, Sugar Scape, percolation, Schelling's model of segregation, and more! Cellular automata consist of a regular grid of cells, each in one of a finite number of states (such as on and off). Simulations start with all cells in an initial state and are run by updating each cell based on a set of fixed rules described in terms of the cell's current state and the states of its immediate neighbors. Though this model is simply described, it can be used to simulate a wide variety of complex phenomena, such as ant foraging to economic theory to the whole universe!
+
 ## Overall Design:
 
 The simulation runs by continually updating a Grid object composed of Cell objects according to the relative placement and orientation of the cell objects within the Grid. The Grid is essentially just a 2D array with general methods for placing and filling cells and determining what is in the neighborhood of a cell, according to the Grid type. The Grid type is extended into subclasses with different kinds of shapes, and thereby different neighbor relations. Cells are a class defined by a location in the Grid, and are extended into subclasses with state and type variables based off the simulation rules.
